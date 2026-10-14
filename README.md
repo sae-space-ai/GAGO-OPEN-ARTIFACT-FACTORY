@@ -2,13 +2,13 @@
 
 **Factoría abierta de artefactos digitales y aplicaciones de inteligencia artificial**
 
-Versión: 0.1.1 | Fase 0.1 | Licencia: MIT
+Versión: 9.0.0 | Fase 9 | Licencia: MIT
 
 ## Descripción
 
 GAGO Open Artifact Factory es una plataforma abierta de desarrollo de software y artefactos digitales. Permite gestionar proyectos, tareas, artefactos y evidencias técnicas, además de generar instrucciones estructuradas para modelos de inteligencia artificial como Qwen Coder.
 
-La Fase Cero establece los fundamentos técnicos: una aplicación web funcional con persistencia local, arquitectura modular y preparación para integraciones futuras.
+La Fase 9 implementa JOULE FREE TRAINING AND DONATION SYSTEM, un sistema completo de entrenamiento gratuito y limitado para algoritmos de IA, junto con un mecanismo opcional de donaciones voluntarias para sostener el servicio.
 
 ## Características
 
@@ -29,6 +29,65 @@ La Fase Cero establece los fundamentos técnicos: una aplicación web funcional 
 - **Panel de Progreso**: Indicadores calculados a partir de datos reales
 - **Integración Qwen**: Selección de requisitos para generar órdenes de desarrollo
 - **Migración Compatible**: Preserva datos de la Fase 0 mediante migración de esquema
+
+### Fase 1 — JOULE Adaptive Resource Optimization Engine
+- **Motor JOULE**: 7 componentes coordinados (Observe, Profile, Predict, Optimize, Execute, Verify, Learn)
+- **Modo Shadow**: Observación sin modificación del comportamiento funcional
+- **Modo Canary**: Activación gradual con evidencia requerida
+- **Kill Switch**: Interruptor de reversión inmediata
+- **Políticas de Recursos**: Catálogo con políticas Reference, Conservative, Shadow y Canary
+- **Centro de Mando JOULE**: Panel con métricas, decisiones y controles
+- **Algoritmo de Optimización**: Selección adaptativa de rutas con restricciones de seguridad
+- **Mapa de Experiencia**: Registro histórico que solo aprende de observaciones verificadas
+- **Métrica Central**: Coste por resultado correcto (incluye todos los intentos)
+
+### Fase 2 — Universal API Integration and Zero Cost Orchestration
+- **Universal API Fabric**: Infraestructura común de conectividad para todos los módulos
+- **Connector Registry**: Registro central con catálogo de APIs (GitHub, Vercel, Qwen, Ollama, JOULE, Supabase, Google Drive, n8n)
+- **Capability Discovery Engine**: Descubrimiento automático de capacidades necesarias
+- **Free Tier Policy Engine**: Política de coste cero por defecto (presupuesto = 0 EUR)
+- **Quota and Budget Manager**: Gestión de cuotas y límites de uso
+- **Integration Orchestrator**: Coordinador de operaciones de integración
+- **API Control Center**: Centro de control visual de todas las integraciones
+- **Modo Offline-First**: La aplicación funciona sin conexiones externas
+- **Seguridad**: Las credenciales nunca se almacenan en el frontend
+
+### Fase 3 — Automatic Configuration and Connection Recovery
+- **Motor de Autoconfiguración**: Verificación real de conectividad para todas las integraciones
+- **Motor de Recuperación**: Diagnóstico automático de errores y planes de recuperación
+- **Centro de Control de Conexiones**: Interfaz unificada para gestionar todas las conexiones
+- **Verificación de GitHub**: Comprobación de acceso público a la API
+- **Verificación de Vercel**: Comprobación de configuración local
+- **Verificación de Ollama**: Comprobación de disponibilidad del servicio local
+- **Verificación de JOULE**: Comprobación del estado del motor de optimización
+- **Sistema de Diagnóstico**: Clasificación de errores por severidad
+- **Botón "Conectar Todo"**: Verificación masiva de todas las conexiones
+- **Pruebas Automatizadas**: Tests completos para autoconfiguración y recuperación
+
+### Fase 4 — JOULE MATS (Multi Agent Training System)
+- **15 Agentes Especializados**: Data Curator, Telemetry Analyst, Task Classifier, Synthetic Lab, Labeling and Evidence, Feature Engineer, Baseline Scientist, Policy Trainer, Cost Optimizer, Latency Optimizer, Energy Optimizer, Quality and Reliability, Adversarial Trainer, Independent Evaluator, Training Governor
+- **Orquestador Central**: Coordinación de ciclos de entrenamiento completos
+- **Algoritmo de Bandido Contextual**: Aprendizaje adaptativo con restricciones de calidad
+- **Centro de Entrenamiento**: Visualización en tiempo real de los 15 agentes
+- **Objetivo J25**: Reducir 25% el coste por resultado correcto manteniendo calidad
+- **Modos Shadow/Canary/Activo**: Despliegue progresivo de políticas entrenadas
+- **Evaluación Independiente**: Validación rigurosa antes de aprobar políticas
+- **Pruebas Unitarias**: Cobertura completa de agentes y orquestador
+
+### Fase 9 — JOULE FREE TRAINING AND DONATION SYSTEM
+- **JOULE FREE TRAINING CENTER**: Sistema completo de entrenamiento gratuito y limitado
+- **10 Algoritmos de Entrenamiento**: Optimización de políticas, bandido contextual, clasificación, regresión, estimación de coste, predicción de latencia, selección de rutas, aprendizaje incremental, evaluación de políticas, referencia determinista
+- **3 Modalidades de Entrenamiento**: Local (navegador), Local (Node.js), Compartido
+- **Sistema de Cuotas**: Control estricto por usuario y modalidad
+- **Control de Presupuesto Global**: Reserva atómica de recursos compartidos
+- **Planificador de Trabajos**: Cola con prioridades y gestión de estados
+- **Ejecutor en Navegador**: Implementaciones de algoritmos sin dependencia de servidor
+- **Motor de Evaluación**: Evaluación específica por algoritmo con métricas
+- **Algoritmo de Admisión**: Validación completa de solicitudes
+- **Sistema de Donaciones Voluntarias**: Preparado pero deshabilitado por defecto
+- **Panel de Transparencia**: Información sobre donaciones y sostenibilidad
+- **Interfaz Profesional**: Centro de entrenamiento con 3 pestañas funcionales
+- **Pruebas Unitarias**: Cobertura completa de todos los componentes
 
 ## Requisitos
 

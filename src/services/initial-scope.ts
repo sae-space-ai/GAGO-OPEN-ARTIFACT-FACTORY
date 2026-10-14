@@ -24,6 +24,24 @@ export const INITIAL_SCOPE_IDS: Record<ScopeModule, string> = {
   M16: 'scope-m16-publishing',
 };
 
+// Phase 1 — JOULE requirements
+export const JOULE_SCOPE_IDS = {
+  J01: 'scope-j01-observe',
+  J02: 'scope-j02-profile',
+  J03: 'scope-j03-predict',
+  J04: 'scope-j04-optimize',
+  J05: 'scope-j05-execute',
+  J06: 'scope-j06-verify',
+  J07: 'scope-j07-learn',
+  J08: 'scope-j08-engine',
+  J09: 'scope-j09-policies',
+  J10: 'scope-j10-dashboard',
+  J11: 'scope-j11-shadow',
+  J12: 'scope-j12-canary',
+  J13: 'scope-j13-killswitch',
+  J14: 'scope-j14-integration',
+};
+
 function makeRequirement(
   code: ScopeModule,
   name: string,
@@ -317,12 +335,238 @@ export function getInitialScopeRequirements(): ScopeRequirement[] {
 }
 
 /**
+ * Requisitos de la Fase 3 - Automatic Configuration and Connection Recovery
+ */
+const PHASE3_SCOPE_IDS = {
+  P3_01: 'scope-p3-01-connection-verification',
+  P3_02: 'scope-p3-02-auto-configuration',
+  P3_03: 'scope-p3-03-error-recovery',
+  P3_04: 'scope-p3-04-connection-control-center',
+  P3_05: 'scope-p3-05-github-integration',
+  P3_06: 'scope-p3-06-vercel-integration',
+  P3_07: 'scope-p3-07-ollama-integration',
+  P3_08: 'scope-p3-08-joule-connection',
+  P3_09: 'scope-p3-09-security-validation',
+  P3_10: 'scope-p3-10-testing',
+};
+
+function getPhase3ScopeRequirements(): ScopeRequirement[] {
+  const now = new Date().toISOString();
+
+  function makePhase3Req(
+    id: string,
+    name: string,
+    description: string,
+    objective: string,
+    priority: 'critical' | 'high' | 'medium' | 'low',
+    dependencies: string[]
+  ): ScopeRequirement {
+    return {
+      id,
+      code: 'M01',
+      phase: '3',
+      module: 'Conexiones',
+      name,
+      functionalDescription: description,
+      technicalObjective: objective,
+      priority,
+      dependencies,
+      executor: 'human',
+      implementationStatus: 'implemented',
+      testStatus: 'not_tested',
+      verificationStatus: 'not_verified',
+      acceptanceCriteria: [],
+      evidenceIds: [],
+      relatedProjectIds: [],
+      relatedTaskIds: [],
+      relatedArtifactIds: [],
+      actionType: 'local_ui',
+      actionReference: 'src/services/auto-config.ts',
+      blockers: [],
+      observations: '',
+      versionRef: 'phase-3-connections',
+      createdAt: now,
+      updatedAt: now,
+      archived: false,
+    };
+  }
+
+  return [
+    makePhase3Req(PHASE3_SCOPE_IDS.P3_01, 'Verificación de Conexiones', 'Verificar conectividad real', 'Implementar sistema de verificación de conexiones', 'critical', []),
+    makePhase3Req(PHASE3_SCOPE_IDS.P3_02, 'Autoconfiguración', 'Configuración automática segura', 'Implementar Automatic Configuration Engine', 'critical', [PHASE3_SCOPE_IDS.P3_01]),
+    makePhase3Req(PHASE3_SCOPE_IDS.P3_03, 'Recuperación de Errores', 'Diagnóstico y reparación automática', 'Implementar Connection Recovery Engine', 'high', [PHASE3_SCOPE_IDS.P3_01]),
+    makePhase3Req(PHASE3_SCOPE_IDS.P3_04, 'Centro de Control de Conexiones', 'Interfaz de gestión de conexiones', 'Implementar Connection Control Center', 'high', [PHASE3_SCOPE_IDS.P3_02, PHASE3_SCOPE_IDS.P3_03]),
+    makePhase3Req(PHASE3_SCOPE_IDS.P3_05, 'Integración GitHub', 'Verificación de API pública', 'Implementar verificación de GitHub', 'high', [PHASE3_SCOPE_IDS.P3_01]),
+    makePhase3Req(PHASE3_SCOPE_IDS.P3_06, 'Integración Vercel', 'Verificación de configuración', 'Implementar verificación de Vercel', 'medium', [PHASE3_SCOPE_IDS.P3_01]),
+    makePhase3Req(PHASE3_SCOPE_IDS.P3_07, 'Integración Ollama', 'Verificación de servicio local', 'Implementar verificación de Ollama', 'high', [PHASE3_SCOPE_IDS.P3_01]),
+    makePhase3Req(PHASE3_SCOPE_IDS.P3_08, 'Conexión JOULE', 'Verificación del motor', 'Implementar verificación de JOULE', 'critical', [PHASE3_SCOPE_IDS.P3_01]),
+    makePhase3Req(PHASE3_SCOPE_IDS.P3_09, 'Validación de Seguridad', 'Protección de credenciales', 'Implementar validaciones de seguridad', 'critical', [PHASE3_SCOPE_IDS.P3_02]),
+    makePhase3Req(PHASE3_SCOPE_IDS.P3_10, 'Pruebas de Fase 3', 'Validación de funcionalidades', 'Implementar pruebas de conexiones', 'critical', [PHASE3_SCOPE_IDS.P3_01, PHASE3_SCOPE_IDS.P3_02, PHASE3_SCOPE_IDS.P3_03]),
+  ];
+}
+
+/**
  * Instala los requisitos iniciales de forma idempotente.
  * No duplica registros si ya existen.
  */
 export function installInitialScope(existing: ScopeRequirement[]): ScopeRequirement[] {
   const existingIds = new Set(existing.map(r => r.id));
-  const initial = getInitialScopeRequirements();
+  const initial = [
+    ...getInitialScopeRequirements(),
+    ...getJouleScopeRequirements(),
+    ...getAPIFabricScopeRequirements(),
+    ...getPhase3ScopeRequirements()
+  ];
   const toAdd = initial.filter(r => !existingIds.has(r.id));
   return [...existing, ...toAdd];
+}
+
+// Phase 2 — API Fabric requirements
+export const API_FABRIC_SCOPE_IDS = {
+  API201: 'scope-api201-capability-inventory',
+  API202: 'scope-api202-connector-registry',
+  API203: 'scope-api203-auto-discovery',
+  API204: 'scope-api204-auth-manager',
+  API205: 'scope-api205-zero-cost-policy',
+  API206: 'scope-api206-quota-manager',
+  API207: 'scope-api207-github-adapter',
+  API208: 'scope-api208-vercel-adapter',
+  API209: 'scope-api209-qwen-adapter',
+  API210: 'scope-api210-ollama-adapter',
+  API211: 'scope-api211-browser-inference',
+  API212: 'scope-api212-joule-connection',
+  API213: 'scope-api213-document-connectors',
+  API214: 'scope-api214-orchestrator',
+  API215: 'scope-api215-fallback',
+  API216: 'scope-api216-health-monitor',
+  API217: 'scope-api217-control-center',
+  API218: 'scope-api218-tests-security',
+};
+
+/**
+ * Requisitos de API Fabric (Fase 2).
+ */
+function getAPIFabricScopeRequirements(): ScopeRequirement[] {
+  const now = new Date().toISOString();
+
+  function makeAPIReq(
+    id: string,
+    name: string,
+    description: string,
+    objective: string,
+    priority: 'critical' | 'high' | 'medium' | 'low',
+    dependencies: string[]
+  ): ScopeRequirement {
+    return {
+      id,
+      code: 'M01',
+      phase: '2',
+      module: 'API Fabric',
+      name,
+      functionalDescription: description,
+      technicalObjective: objective,
+      priority,
+      dependencies,
+      executor: 'human',
+      implementationStatus: 'implemented',
+      testStatus: 'not_tested',
+      verificationStatus: 'not_verified',
+      acceptanceCriteria: [],
+      evidenceIds: [],
+      relatedProjectIds: [],
+      relatedTaskIds: [],
+      relatedArtifactIds: [],
+      actionType: 'local_ui',
+      actionReference: 'src/services/api-fabric/',
+      blockers: [],
+      observations: '',
+      versionRef: 'phase-2-api-fabric',
+      createdAt: now,
+      updatedAt: now,
+      archived: false,
+    };
+  }
+
+  return [
+    makeAPIReq(API_FABRIC_SCOPE_IDS.API201, 'Inventario de Capacidades', 'Descubrir capacidades de módulos', 'Implementar Capability Discovery Engine', 'critical', []),
+    makeAPIReq(API_FABRIC_SCOPE_IDS.API202, 'Registro de Conectores', 'Catálogo central de APIs', 'Implementar Connector Registry', 'critical', []),
+    makeAPIReq(API_FABRIC_SCOPE_IDS.API203, 'Descubrimiento Automático', 'Autoconexión de servicios gratuitos', 'Implementar autoConnectAvailableProviders', 'high', [API_FABRIC_SCOPE_IDS.API201, API_FABRIC_SCOPE_IDS.API202]),
+    makeAPIReq(API_FABRIC_SCOPE_IDS.API204, 'Gestión de Autenticación', 'Manejo seguro de credenciales', 'Implementar Authentication Manager', 'critical', []),
+    makeAPIReq(API_FABRIC_SCOPE_IDS.API205, 'Política de Coste Cero', 'Bloqueo de operaciones pagadas', 'Implementar Free Tier Policy Engine', 'critical', []),
+    makeAPIReq(API_FABRIC_SCOPE_IDS.API206, 'Control de Cuotas', 'Gestión de límites de uso', 'Implementar Quota and Budget Manager', 'high', []),
+    makeAPIReq(API_FABRIC_SCOPE_IDS.API207, 'Adaptador GitHub', 'Integración con GitHub API', 'Implementar conector para GitHub', 'high', [API_FABRIC_SCOPE_IDS.API202]),
+    makeAPIReq(API_FABRIC_SCOPE_IDS.API208, 'Adaptador Vercel', 'Integración con Vercel API', 'Implementar conector para Vercel', 'medium', [API_FABRIC_SCOPE_IDS.API202]),
+    makeAPIReq(API_FABRIC_SCOPE_IDS.API209, 'Adaptador Qwen', 'Integración con Qwen API', 'Implementar conector para Qwen', 'high', [API_FABRIC_SCOPE_IDS.API202, API_FABRIC_SCOPE_IDS.API204]),
+    makeAPIReq(API_FABRIC_SCOPE_IDS.API210, 'Adaptador Ollama', 'Integración con Ollama local', 'Implementar conector para Ollama', 'high', [API_FABRIC_SCOPE_IDS.API202]),
+    makeAPIReq(API_FABRIC_SCOPE_IDS.API211, 'Inferencia en Navegador', 'Ejecución local de modelos', 'Evaluar WebGPU y alternativas', 'medium', [API_FABRIC_SCOPE_IDS.API210]),
+    makeAPIReq(API_FABRIC_SCOPE_IDS.API212, 'Conexión JOULE', 'Integración con motor JOULE', 'Conectar API Fabric con JOULE', 'critical', [API_FABRIC_SCOPE_IDS.API202]),
+    makeAPIReq(API_FABRIC_SCOPE_IDS.API213, 'Conectores Documentales', 'Google Drive y almacenamiento', 'Implementar conectores opcionales', 'low', [API_FABRIC_SCOPE_IDS.API202, API_FABRIC_SCOPE_IDS.API204]),
+    makeAPIReq(API_FABRIC_SCOPE_IDS.API214, 'Orquestador de Integraciones', 'Coordinación de operaciones', 'Implementar Integration Orchestrator', 'critical', [API_FABRIC_SCOPE_IDS.API201, API_FABRIC_SCOPE_IDS.API202, API_FABRIC_SCOPE_IDS.API205]),
+    makeAPIReq(API_FABRIC_SCOPE_IDS.API215, 'Sistema de Fallback', 'Recuperación ante fallos', 'Implementar Fallback Manager', 'high', [API_FABRIC_SCOPE_IDS.API214]),
+    makeAPIReq(API_FABRIC_SCOPE_IDS.API216, 'Monitor de Conectividad', 'Verificación de salud', 'Implementar API Health Monitor', 'medium', [API_FABRIC_SCOPE_IDS.API202]),
+    makeAPIReq(API_FABRIC_SCOPE_IDS.API217, 'Centro de Control', 'Interfaz de gestión', 'Implementar API Control Center', 'high', [API_FABRIC_SCOPE_IDS.API214]),
+    makeAPIReq(API_FABRIC_SCOPE_IDS.API218, 'Pruebas y Seguridad', 'Validación continua', 'Implementar pruebas y auditoría', 'critical', [API_FABRIC_SCOPE_IDS.API214]),
+  ];
+}
+
+/**
+ * Requisitos de JOULE (Fase 1).
+ */
+function getJouleScopeRequirements(): ScopeRequirement[] {
+  const now = new Date().toISOString();
+
+  function makeJouleReq(
+    id: string,
+    name: string,
+    description: string,
+    objective: string,
+    priority: 'critical' | 'high' | 'medium' | 'low',
+    dependencies: string[]
+  ): ScopeRequirement {
+    return {
+      id,
+      code: 'M01', // Se asignará el código correcto según el ID
+      phase: '1',
+      module: 'JOULE',
+      name,
+      functionalDescription: description,
+      technicalObjective: objective,
+      priority,
+      dependencies,
+      executor: 'human',
+      implementationStatus: 'implemented',
+      testStatus: 'not_tested',
+      verificationStatus: 'not_verified',
+      acceptanceCriteria: [],
+      evidenceIds: [],
+      relatedProjectIds: [],
+      relatedTaskIds: [],
+      relatedArtifactIds: [],
+      actionType: 'local_ui',
+      actionReference: 'src/services/joule/',
+      blockers: [],
+      observations: '',
+      versionRef: 'phase-1-joule',
+      createdAt: now,
+      updatedAt: now,
+      archived: false,
+    };
+  }
+
+  return [
+    makeJouleReq(JOULE_SCOPE_IDS.J01, 'JOULE OBSERVE', 'Medición de operaciones reales', 'Implementar componente de observación', 'critical', []),
+    makeJouleReq(JOULE_SCOPE_IDS.J02, 'JOULE PROFILE', 'Clasificación de tareas', 'Implementar clasificador de operaciones', 'critical', [JOULE_SCOPE_IDS.J01]),
+    makeJouleReq(JOULE_SCOPE_IDS.J03, 'JOULE PREDICT', 'Estimación de recursos', 'Implementar estimador basado en historial', 'high', [JOULE_SCOPE_IDS.J02]),
+    makeJouleReq(JOULE_SCOPE_IDS.J04, 'JOULE OPTIMIZE', 'Selección de rutas', 'Implementar algoritmo de optimización', 'critical', [JOULE_SCOPE_IDS.J03]),
+    makeJouleReq(JOULE_SCOPE_IDS.J05, 'JOULE EXECUTE', 'Ejecución controlada', 'Implementar ejecutor con límites', 'high', [JOULE_SCOPE_IDS.J04]),
+    makeJouleReq(JOULE_SCOPE_IDS.J06, 'JOULE VERIFY', 'Verificación independiente', 'Implementar verificador de resultados', 'critical', [JOULE_SCOPE_IDS.J05]),
+    makeJouleReq(JOULE_SCOPE_IDS.J07, 'JOULE LEARN', 'Aprendizaje adaptativo', 'Implementar actualización de experiencia', 'high', [JOULE_SCOPE_IDS.J06]),
+    makeJouleReq(JOULE_SCOPE_IDS.J08, 'JOULE ENGINE', 'Motor central', 'Coordinar todos los componentes', 'critical', [JOULE_SCOPE_IDS.J07]),
+    makeJouleReq(JOULE_SCOPE_IDS.J09, 'JOULE POLICIES', 'Políticas de recursos', 'Implementar catálogo de políticas', 'high', [JOULE_SCOPE_IDS.J08]),
+    makeJouleReq(JOULE_SCOPE_IDS.J10, 'JOULE DASHBOARD', 'Centro de mando', 'Implementar interfaz de control', 'high', [JOULE_SCOPE_IDS.J08]),
+    makeJouleReq(JOULE_SCOPE_IDS.J11, 'JOULE SHADOW', 'Modo Shadow', 'Implementar observación sin modificación', 'high', [JOULE_SCOPE_IDS.J08]),
+    makeJouleReq(JOULE_SCOPE_IDS.J12, 'JOULE CANARY', 'Modo Canary', 'Implementar activación gradual', 'medium', [JOULE_SCOPE_IDS.J11]),
+    makeJouleReq(JOULE_SCOPE_IDS.J13, 'JOULE KILLSWITCH', 'Interruptor de reversión', 'Implementar mecanismo de desactivación', 'critical', [JOULE_SCOPE_IDS.J08]),
+    makeJouleReq(JOULE_SCOPE_IDS.J14, 'JOULE INTEGRATION', 'Integración con almacenamiento', 'Integrar JOULE con persistencia', 'high', [JOULE_SCOPE_IDS.J08]),
+  ];
 }

@@ -1,7 +1,11 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react';
 import type { DataStore, Project, Task, Artifact, Evidence, AppSettings } from '../types';
 import type { ScopeRequirement, QualityGate } from '../types/scope';
-import { loadStore, saveStore, createProject, updateProject, deleteProject, createTask, updateTask, deleteTask, createArtifact, updateArtifact, deleteArtifact, createEvidence, updateEvidence, deleteEvidence, importData, exportData, resetStore, createScopeRequirement, updateScopeRequirement, deleteScopeRequirement, updateQualityGate } from '../services/storage';
+import type { JouleState } from '../types/joule';
+import type { JouleMATSState } from '../types/joule-mats';
+import type { ToolManifest } from '../types/control-plane';
+import type { IntegrationConnector } from '../types/integrations';
+import { loadStore, saveStore, createProject, updateProject, deleteProject, createTask, updateTask, deleteTask, createArtifact, updateArtifact, deleteArtifact, createEvidence, updateEvidence, deleteEvidence, importData, exportData, resetStore, createScopeRequirement, updateScopeRequirement, deleteScopeRequirement, updateQualityGate, updateJouleState } from '../services/storage';
 
 interface DataContextType {
   store: DataStore;
@@ -33,6 +37,14 @@ interface DataContextType {
   removeScopeRequirement: (id: string) => void;
   // Quality Gates (Phase 0.1)
   editQualityGate: (id: string, input: Partial<QualityGate>) => void;
+  // JOULE (Phase 1)
+  updateJouleState: (jouleState: JouleState) => void;
+  // JOULE MATS (Phase 4)
+  updateJouleMATS: (jouleMATS: JouleMATSState) => void;
+  // Phase 5 - Tool Factory
+  addTool: (tool: ToolManifest) => void;
+  // Phase 6 - Universal Integrations Hub
+  updateIntegrations: (integrations: IntegrationConnector[]) => void;
 }
 
 const DataContext = createContext<DataContextType | null>(null);
@@ -131,6 +143,26 @@ export function DataProvider({ children }: { children: ReactNode }) {
     setStore(s => updateQualityGate(s, id, input));
   }, []);
 
+  // JOULE operations
+  const updateJouleStateFn = useCallback((jouleState: JouleState) => {
+    setStore(s => updateJouleState(s, jouleState));
+  }, []);
+
+  // JOULE MATS operations (Phase 4)
+  const updateJouleMATS = useCallback((jouleMATS: JouleMATSState) => {
+    setStore(s => ({ ...s, jouleMATS }));
+  }, []);
+
+  // Phase 5 - Tool Factory operations
+  const addTool = useCallback((tool: ToolManifest) => {
+    setStore(s => ({ ...s, tools: [...(s.tools || []), tool] }));
+  }, []);
+
+  // Phase 6 - Universal Integrations Hub operations
+  const updateIntegrations = useCallback((integrations: IntegrationConnector[]) => {
+    setStore(s => ({ ...s, integrations }));
+  }, []);
+
   return (
     <DataContext.Provider value={{
       store, addProject, editProject, removeProject,
@@ -140,6 +172,10 @@ export function DataProvider({ children }: { children: ReactNode }) {
       updateSettings, exportAllData, importAllData, resetAllData,
       addScopeRequirement, editScopeRequirement, removeScopeRequirement,
       editQualityGate,
+      updateJouleState: updateJouleStateFn,
+      updateJouleMATS,
+      addTool,
+      updateIntegrations,
     }}>
       {children}
     </DataContext.Provider>

@@ -86,6 +86,24 @@ export interface DataStore {
   // Phase 0.1 — Matriz de Alcance y Puertas de Calidad
   scopeMatrix?: import('./scope').ScopeRequirement[];
   qualityGates?: import('./scope').QualityGate[];
+  // Phase 1 — JOULE Adaptive Resource Optimization Engine
+  jouleState?: import('./joule').JouleState;
+  // Phase 2 — Universal API Fabric
+  apiFabricState?: import('./api-fabric').APIFabricState;
+  // Phase 4 — JOULE MATS (Multi Agent Training System)
+  jouleMATS?: import('./joule-mats').JouleMATSState;
+  // Phase 5 — JOULE AI COMPUTE CONTROL PLANE
+  tools?: import('./control-plane').ToolManifest[];
+  models?: import('./control-plane').ModelManifest[];
+  // Phase 6 — Universal Integrations Hub
+  integrations?: import('./integrations').IntegrationConnector[];
+  // Phase 9 — JOULE FREE TRAINING CENTER
+  trainingAlgorithms?: import('./training').TrainingAlgorithm[];
+  trainingDatasets?: import('./training').TrainingDataset[];
+  trainingJobs?: import('./training').TrainingJob[];
+  trainingQuotas?: import('./training').TrainingQuota[];
+  globalBudget?: import('./training').GlobalBudget;
+  donationState?: import('./training').DonationSystemState;
 }
 
 export const SCHEMA_VERSION = '0.1.0';
