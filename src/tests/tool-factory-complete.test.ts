@@ -52,6 +52,27 @@ describe('Tool Factory: fifteen generators', () => {
     });
   }
 
+  it('typechecks generated React components against the actual TypeScript and React types', () => {
+    const sources = new Map<string, string>();
+    for (const template of all) {
+      const source = createToolFromSpecification(specification(template.category)).generatedCode;
+      sources.set(ts.sys.resolvePath('src/Generated' + template.category + '.tsx'), source);
+    }
+    const options: ts.CompilerOptions = {
+      target: ts.ScriptTarget.ES2020, module: ts.ModuleKind.ESNext,
+      moduleResolution: ts.ModuleResolutionKind.Bundler, jsx: ts.JsxEmit.ReactJSX,
+      strict: true, skipLibCheck: true, noEmit: true, esModuleInterop: true
+    };
+    const host = ts.createCompilerHost(options);
+    const originalRead = host.readFile.bind(host);
+    const originalExists = host.fileExists.bind(host);
+    host.readFile = file => sources.get(file) ?? originalRead(file);
+    host.fileExists = file => sources.has(file) || originalExists(file);
+    const program = ts.createProgram([...sources.keys()], options, host);
+    const diagnostics = ts.getPreEmitDiagnostics(program);
+    expect(diagnostics.map(d => ts.flattenDiagnosticMessageText(d.messageText, '\\n'))).toEqual([]);
+  });
+
   it('exports a structurally valid ZIP with project files', async () => {
     const {manifest, generatedCode} = createToolFromSpecification(specification('crud'));
     const files = buildViteProjectFiles(manifest, generatedCode);
