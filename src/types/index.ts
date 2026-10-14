@@ -86,6 +86,8 @@ export interface DataStore {
   // Phase 0.1 — Matriz de Alcance y Puertas de Calidad
   scopeMatrix?: import('./scope').ScopeRequirement[];
   qualityGates?: import('./scope').QualityGate[];
+  // Phase 1 — JOULE Adaptive Resource Optimization Engine
+  jouleState?: import('./joule').JouleState;
 }
 
 export const SCHEMA_VERSION = '0.1.0';

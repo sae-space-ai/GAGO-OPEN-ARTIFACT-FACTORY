@@ -2,7 +2,7 @@
 
 **Factoría abierta de artefactos digitales y aplicaciones de inteligencia artificial**
 
-Versión: 0.1.1 | Fase 0.1 | Licencia: MIT
+Versión: 1.0.0 | Fase 1 | Licencia: MIT
 
 ## Descripción
 
@@ -29,6 +29,17 @@ La Fase Cero establece los fundamentos técnicos: una aplicación web funcional 
 - **Panel de Progreso**: Indicadores calculados a partir de datos reales
 - **Integración Qwen**: Selección de requisitos para generar órdenes de desarrollo
 - **Migración Compatible**: Preserva datos de la Fase 0 mediante migración de esquema
+
+### Fase 1 — JOULE Adaptive Resource Optimization Engine
+- **Motor JOULE**: 7 componentes coordinados (Observe, Profile, Predict, Optimize, Execute, Verify, Learn)
+- **Modo Shadow**: Observación sin modificación del comportamiento funcional
+- **Modo Canary**: Activación gradual con evidencia requerida
+- **Kill Switch**: Interruptor de reversión inmediata
+- **Políticas de Recursos**: Catálogo con políticas Reference, Conservative, Shadow y Canary
+- **Centro de Mando JOULE**: Panel con métricas, decisiones y controles
+- **Algoritmo de Optimización**: Selección adaptativa de rutas con restricciones de seguridad
+- **Mapa de Experiencia**: Registro histórico que solo aprende de observaciones verificadas
+- **Métrica Central**: Coste por resultado correcto (incluye todos los intentos)
 
 ## Requisitos
 

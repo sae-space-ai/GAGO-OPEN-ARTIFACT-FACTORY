@@ -24,6 +24,24 @@ export const INITIAL_SCOPE_IDS: Record<ScopeModule, string> = {
   M16: 'scope-m16-publishing',
 };
 
+// Phase 1 — JOULE requirements
+export const JOULE_SCOPE_IDS = {
+  J01: 'scope-j01-observe',
+  J02: 'scope-j02-profile',
+  J03: 'scope-j03-predict',
+  J04: 'scope-j04-optimize',
+  J05: 'scope-j05-execute',
+  J06: 'scope-j06-verify',
+  J07: 'scope-j07-learn',
+  J08: 'scope-j08-engine',
+  J09: 'scope-j09-policies',
+  J10: 'scope-j10-dashboard',
+  J11: 'scope-j11-shadow',
+  J12: 'scope-j12-canary',
+  J13: 'scope-j13-killswitch',
+  J14: 'scope-j14-integration',
+};
+
 function makeRequirement(
   code: ScopeModule,
   name: string,
@@ -322,7 +340,69 @@ export function getInitialScopeRequirements(): ScopeRequirement[] {
  */
 export function installInitialScope(existing: ScopeRequirement[]): ScopeRequirement[] {
   const existingIds = new Set(existing.map(r => r.id));
-  const initial = getInitialScopeRequirements();
+  const initial = [...getInitialScopeRequirements(), ...getJouleScopeRequirements()];
   const toAdd = initial.filter(r => !existingIds.has(r.id));
   return [...existing, ...toAdd];
+}
+
+/**
+ * Requisitos de JOULE (Fase 1).
+ */
+function getJouleScopeRequirements(): ScopeRequirement[] {
+  const now = new Date().toISOString();
+
+  function makeJouleReq(
+    id: string,
+    name: string,
+    description: string,
+    objective: string,
+    priority: 'critical' | 'high' | 'medium' | 'low',
+    dependencies: string[]
+  ): ScopeRequirement {
+    return {
+      id,
+      code: 'M01', // Se asignará el código correcto según el ID
+      phase: '1',
+      module: 'JOULE',
+      name,
+      functionalDescription: description,
+      technicalObjective: objective,
+      priority,
+      dependencies,
+      executor: 'human',
+      implementationStatus: 'implemented',
+      testStatus: 'not_tested',
+      verificationStatus: 'not_verified',
+      acceptanceCriteria: [],
+      evidenceIds: [],
+      relatedProjectIds: [],
+      relatedTaskIds: [],
+      relatedArtifactIds: [],
+      actionType: 'local_ui',
+      actionReference: 'src/services/joule/',
+      blockers: [],
+      observations: '',
+      versionRef: 'phase-1-joule',
+      createdAt: now,
+      updatedAt: now,
+      archived: false,
+    };
+  }
+
+  return [
+    makeJouleReq(JOULE_SCOPE_IDS.J01, 'JOULE OBSERVE', 'Medición de operaciones reales', 'Implementar componente de observación', 'critical', []),
+    makeJouleReq(JOULE_SCOPE_IDS.J02, 'JOULE PROFILE', 'Clasificación de tareas', 'Implementar clasificador de operaciones', 'critical', [JOULE_SCOPE_IDS.J01]),
+    makeJouleReq(JOULE_SCOPE_IDS.J03, 'JOULE PREDICT', 'Estimación de recursos', 'Implementar estimador basado en historial', 'high', [JOULE_SCOPE_IDS.J02]),
+    makeJouleReq(JOULE_SCOPE_IDS.J04, 'JOULE OPTIMIZE', 'Selección de rutas', 'Implementar algoritmo de optimización', 'critical', [JOULE_SCOPE_IDS.J03]),
+    makeJouleReq(JOULE_SCOPE_IDS.J05, 'JOULE EXECUTE', 'Ejecución controlada', 'Implementar ejecutor con límites', 'high', [JOULE_SCOPE_IDS.J04]),
+    makeJouleReq(JOULE_SCOPE_IDS.J06, 'JOULE VERIFY', 'Verificación independiente', 'Implementar verificador de resultados', 'critical', [JOULE_SCOPE_IDS.J05]),
+    makeJouleReq(JOULE_SCOPE_IDS.J07, 'JOULE LEARN', 'Aprendizaje adaptativo', 'Implementar actualización de experiencia', 'high', [JOULE_SCOPE_IDS.J06]),
+    makeJouleReq(JOULE_SCOPE_IDS.J08, 'JOULE ENGINE', 'Motor central', 'Coordinar todos los componentes', 'critical', [JOULE_SCOPE_IDS.J07]),
+    makeJouleReq(JOULE_SCOPE_IDS.J09, 'JOULE POLICIES', 'Políticas de recursos', 'Implementar catálogo de políticas', 'high', [JOULE_SCOPE_IDS.J08]),
+    makeJouleReq(JOULE_SCOPE_IDS.J10, 'JOULE DASHBOARD', 'Centro de mando', 'Implementar interfaz de control', 'high', [JOULE_SCOPE_IDS.J08]),
+    makeJouleReq(JOULE_SCOPE_IDS.J11, 'JOULE SHADOW', 'Modo Shadow', 'Implementar observación sin modificación', 'high', [JOULE_SCOPE_IDS.J08]),
+    makeJouleReq(JOULE_SCOPE_IDS.J12, 'JOULE CANARY', 'Modo Canary', 'Implementar activación gradual', 'medium', [JOULE_SCOPE_IDS.J11]),
+    makeJouleReq(JOULE_SCOPE_IDS.J13, 'JOULE KILLSWITCH', 'Interruptor de reversión', 'Implementar mecanismo de desactivación', 'critical', [JOULE_SCOPE_IDS.J08]),
+    makeJouleReq(JOULE_SCOPE_IDS.J14, 'JOULE INTEGRATION', 'Integración con almacenamiento', 'Integrar JOULE con persistencia', 'high', [JOULE_SCOPE_IDS.J08]),
+  ];
 }

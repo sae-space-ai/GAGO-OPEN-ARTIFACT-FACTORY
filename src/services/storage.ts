@@ -3,13 +3,15 @@
 import { v4 as uuidv4 } from 'uuid';
 import type { DataStore, Project, Task, Artifact, Evidence, AppSettings } from '../types';
 import type { ScopeRequirement, QualityGate } from '../types/scope';
+import type { JouleState } from '../types/joule';
 import { installInitialScope } from './initial-scope';
 import { installInitialGates } from './quality-gates';
+import { jouleCreateInitialState } from './joule/engine';
 
 const STORAGE_KEY = 'gago-factory-data';
 
-// New schema version for Phase 0.1
-export const CURRENT_SCHEMA_VERSION = '0.1.1';
+// New schema version for Phase 1
+export const CURRENT_SCHEMA_VERSION = '1.0.0';
 
 function getDefaultSettings(): AppSettings {
   const saved = localStorage.getItem('gago-theme');
@@ -30,6 +32,7 @@ function getDefaultStore(): DataStore {
     settings: getDefaultSettings(),
     scopeMatrix: installInitialScope([]),
     qualityGates: installInitialGates([]),
+    jouleState: jouleCreateInitialState(),
   };
 }
 
@@ -45,38 +48,56 @@ function validateStore(data: unknown): data is DataStore {
 }
 
 /**
- * Migrates data from Phase 0 (schema 0.1.0) to Phase 0.1 (schema 0.1.1).
- * Adds scopeMatrix and qualityGates fields if missing.
+ * Migrates data from Phase 0 (schema 0.1.0) or Phase 0.1 (schema 0.1.1) to Phase 1 (schema 1.0.0).
+ * Adds scopeMatrix, qualityGates, and jouleState fields if missing.
  * Does not delete or modify existing data.
  */
 function migrateStore(data: DataStore): DataStore {
+  const extended = data as DataStore & {
+    scopeMatrix?: ScopeRequirement[];
+    qualityGates?: QualityGate[];
+    jouleState?: JouleState;
+  };
+
   if (data.version === CURRENT_SCHEMA_VERSION) {
-    // Ensure scope matrix and gates are installed idempotently
+    // Ensure scope matrix, gates, and JOULE state are installed idempotently
     return {
       ...data,
       scopeMatrix: installInitialScope(data.scopeMatrix || []),
       qualityGates: installInitialGates(data.qualityGates || []),
+      jouleState: extended.jouleState || jouleCreateInitialState(),
     };
   }
 
-  // Migration from 0.1.0 to 0.1.1
+  // Migration from 0.1.0 to 1.0.0 (Phase 0 → Phase 1)
   if (data.version === '0.1.0') {
-    const extended = data as DataStore & { scopeMatrix?: ScopeRequirement[]; qualityGates?: QualityGate[] };
     return {
       ...data,
       version: CURRENT_SCHEMA_VERSION,
       scopeMatrix: installInitialScope(extended.scopeMatrix || []),
       qualityGates: installInitialGates(extended.qualityGates || []),
+      jouleState: extended.jouleState || jouleCreateInitialState(),
+    };
+  }
+
+  // Migration from 0.1.1 to 1.0.0 (Phase 0.1 → Phase 1)
+  if (data.version === '0.1.1') {
+    return {
+      ...data,
+      version: CURRENT_SCHEMA_VERSION,
+      scopeMatrix: installInitialScope(extended.scopeMatrix || []),
+      qualityGates: installInitialGates(extended.qualityGates || []),
+      jouleState: extended.jouleState || jouleCreateInitialState(),
     };
   }
 
   // Unknown version: try to preserve data but add missing fields
-  const extended = data as DataStore & { scopeMatrix?: ScopeRequirement[]; qualityGates?: QualityGate[] };
   return {
     ...data,
     version: CURRENT_SCHEMA_VERSION,
     scopeMatrix: installInitialScope(extended.scopeMatrix || []),
     qualityGates: installInitialGates(extended.qualityGates || []),
+    jouleState: extended.jouleState || jouleCreateInitialState(),
   };
 }
 
@@ -210,6 +231,14 @@ export function updateQualityGate(store: DataStore, id: string, input: Partial<Q
   return {
     ...store,
     qualityGates: (store.qualityGates || []).map(g => g.id === id ? { ...g, ...input, updatedAt: new Date().toISOString() } : g),
+  };
+}
+
+// JOULE operations (Phase 1)
+export function updateJouleState(store: DataStore, jouleState: JouleState): DataStore {
+  return {
+    ...store,
+    jouleState,
   };
 }
 
