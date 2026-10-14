@@ -1,7 +1,9 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react';
 import type { DataStore, Project, Task, Artifact, Evidence, AppSettings } from '../types';
 import type { ScopeRequirement, QualityGate } from '../types/scope';
-import type { JouleState } from '../types/joule';
+import type { JouleState, JouleMeasurement } from '../types/joule';
+import { jouleRecordMeasurement } from '../services/joule';
+import { shouldObserveOllamaShadow } from '../services/ollama-joule-observability';
 import type { JouleMATSState } from '../types/joule-mats';
 import type { ToolManifest } from '../types/control-plane';
 import type { IntegrationConnector } from '../types/integrations';
@@ -39,6 +41,7 @@ interface DataContextType {
   editQualityGate: (id: string, input: Partial<QualityGate>) => void;
   // JOULE (Phase 1)
   updateJouleState: (jouleState: JouleState) => void;
+  recordOllamaShadowMeasurement: (measurement: JouleMeasurement) => void;
   // JOULE MATS (Phase 4)
   updateJouleMATS: (jouleMATS: JouleMATSState) => void;
   // Phase 5 - Tool Factory
@@ -148,6 +151,15 @@ export function DataProvider({ children }: { children: ReactNode }) {
     setStore(s => updateJouleState(s, jouleState));
   }, []);
 
+  // Local Qwen inferencing is only observed in SHADOW; no automatic routing.
+  // Functional state update prevents overwriting concurrent project/tool edits.
+  const recordOllamaShadowMeasurement = useCallback((measurement: JouleMeasurement) => {
+    setStore(s => {
+      if (!shouldObserveOllamaShadow(s.jouleState)) return s;
+      return { ...s, jouleState: jouleRecordMeasurement(s.jouleState!, measurement, 'ai_request') };
+    });
+  }, []);
+
   // JOULE MATS operations (Phase 4)
   const updateJouleMATS = useCallback((jouleMATS: JouleMATSState) => {
     setStore(s => ({ ...s, jouleMATS }));
@@ -173,6 +185,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
       addScopeRequirement, editScopeRequirement, removeScopeRequirement,
       editQualityGate,
       updateJouleState: updateJouleStateFn,
+      recordOllamaShadowMeasurement,
       updateJouleMATS,
       addTool,
       updateIntegrations,
