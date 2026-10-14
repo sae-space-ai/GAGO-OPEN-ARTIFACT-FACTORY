@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { LayoutDashboard, FolderKanban, ListTodo, Package, Shield, Terminal, Settings, Link2, Menu, X, Factory, Target, ShieldCheck, Zap, Wrench, Brain, Gift } from 'lucide-react';
+import { LayoutDashboard, FolderKanban, ListTodo, Package, Shield, Terminal, Settings, Link2, Menu, X, Factory, Target, ShieldCheck, Zap, Wrench, Brain, Cpu, Gift } from 'lucide-react';
 
 const navItems = [
   { to: '/', icon: LayoutDashboard, label: 'Overview' },
@@ -20,6 +20,7 @@ const navItems = [
   { to: '/free-training', icon: Gift, label: 'Free Training' },
   { to: '/qwen', icon: Terminal, label: 'Órdenes Qwen' },
   { to: '/integrations', icon: Link2, label: 'Integraciones' },
+  { to: '/integrations/ollama-local', icon: Cpu, label: 'Ollama Local' },
   { to: '/settings', icon: Settings, label: 'Configuración' },
 ];
 
