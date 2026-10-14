@@ -104,6 +104,8 @@ export interface DataStore {
   trainingQuotas?: import('./training').TrainingQuota[];
   globalBudget?: import('./training').GlobalBudget;
   donationState?: import('./training').DonationSystemState;
+  // Phase 10 — System Connections
+  systemConnections?: import('../services/system-connection-manager').SystemConnectionState;
 }
 
 export const SCHEMA_VERSION = '0.1.0';

@@ -61,10 +61,13 @@ export default function ToolFactory() {
     setSelectedCategory(category);
     const template = templates.find(t => t.category === category);
     if (template) {
+      // PROBLEMA 1: Cargar entradas y salidas predeterminadas
       setSpec({
         ...spec,
         category,
-        description: template.description
+        description: template.description,
+        inputs: template.defaultInputs,
+        outputs: template.defaultOutputs
       });
     }
   };
