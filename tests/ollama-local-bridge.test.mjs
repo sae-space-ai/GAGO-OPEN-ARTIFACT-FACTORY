@@ -1,5 +1,6 @@
 import test, { before, after } from 'node:test';
 import assert from 'node:assert/strict';
+import http from 'node:http';
 import { createBridge, validOrigin, validModelName, safePrompt, validToken } from '../scripts/ollama-local-bridge.mjs';
 
 const ORIGIN='https://factory.example.test';
@@ -82,6 +83,12 @@ test('denies unsupported HTTP actions',async()=>{
   assert.equal(r.status,404);
 });
 test('host header must point to loopback hostname',async()=>{
-  const r=await call('/health',{headers:{Host:'example.com:11435'}});
-  assert.equal(r.status,403);
+  const status=await new Promise((resolve,reject)=>{
+    const req=http.request(BASE+'/health',{
+      headers:{Host:'example.com:11435',Origin:ORIGIN,Authorization:'Bearer '+TOKEN}
+    }, res=>{res.resume();res.on('end',()=>resolve(res.statusCode));});
+    req.on('error',reject);
+    req.end();
+  });
+  assert.equal(status,403);
 });
