@@ -1,5 +1,58 @@
 # Changelog — GAGO Open Artifact Factory
 
+## [8.0.0] — Fase 8 — JOULE AUTONOMOUS APPROVAL ENGINE
+
+### Añadido
+- **JOULE AUTONOMOUS APPROVAL ENGINE**: Sistema de revisión y aprobación automática de módulos
+- **Module Discovery Engine**: Descubrimiento automático de 20+ módulos registrados
+- **Dependency Analyzer**: Análisis completo de dependencias con detección de ciclos
+- **Risk Classification Engine**: Clasificación de riesgo (LOW, MEDIUM, HIGH, CRITICAL)
+- **Approval Engine**: Motor de evaluación y aprobación con políticas configurables
+- **Test Evidence Collector**: Recolección y validación de evidencias de pruebas
+- **Approval Dashboard**: Interfaz profesional con estadísticas en tiempo real
+- **14 estados de aprobación**: Desde DISCOVERED hasta AUTO_APPROVED
+- **Botón "Revisar y Aprobar Todos los Módulos"**: Evaluación masiva automatizada
+- **Pruebas unitarias completas**: Cobertura de todos los componentes del motor
+- **Documentación técnica**: Informe completo de la Fase 8
+
+### Modificado
+- `src/types/approval.ts`: Nuevos tipos para el motor de aprobación
+- `src/services/approval/`: 6 archivos de servicios del motor
+- `src/pages/ApprovalDashboard.tsx`: Panel de aprobación profesional
+- `src/tests/approval.test.ts`: Pruebas unitarias completas
+- `src/App.tsx`: Nueva ruta `/approval`
+- `src/components/Layout.tsx`: Nueva entrada de navegación "Approval Engine"
+- `docs/CHANGELOG.md`: Registro de cambios de la Fase 8
+- `docs/FASE_8_INFORME.md`: Documentación completa de la Fase 8
+
+### No modificado (protección Fases 0-7)
+- Todos los módulos de fases anteriores continúan funcionando sin cambios
+- Motor JOULE, API Fabric, Connection Recovery, JOULE MATS preservados
+- Tool Factory, Model Registry, Universal Integrations Hub intactos
+- Todas las rutas existentes operativas
+- Persistencia de datos de todas las fases anteriores preservada
+
+### Características Técnicas
+- Descubrimiento automático de módulos
+- Análisis de dependencias con detección de ciclos
+- Clasificación de riesgo basada en múltiples criterios
+- Evaluación con criterios objetivos y verificables
+- Aprobación automática para módulos de bajo riesgo
+- Revisión manual obligatoria para módulos críticos
+- Detección de aprobaciones obsoletas
+- Historial inmutable de evaluaciones
+- Políticas de aprobación configurables
+- Integración completa con Quality Gates
+
+### Resultados de Compilación
+```
+✓ 1431 modules transformed
+✓ built successfully
+✓ Sin errores de TypeScript
+```
+
+---
+
 ## [4.0.0] — Fase 4 — JOULE Multi Agent Training System
 
 ### Añadido

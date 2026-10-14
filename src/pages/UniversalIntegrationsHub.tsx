@@ -7,7 +7,7 @@ import { INTEGRATION_CATEGORY_LABELS, INTEGRATION_STATUS_LABELS, AUTH_TYPE_LABEL
 import { Link2, CheckCircle, XCircle, AlertCircle, Settings, Zap, RefreshCw, Download, Upload } from 'lucide-react';
 
 export default function UniversalIntegrationsHub() {
-  const { store, updateStore } = useData();
+  const { store, updateIntegrations } = useData();
   const [connectors, setConnectors] = useState<IntegrationConnector[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<IntegrationCategory | 'all'>('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -22,7 +22,7 @@ export default function UniversalIntegrationsHub() {
   useEffect(() => {
     if (!store.integrations) {
       const initialConnectors = installUniversalConnectors([]);
-      updateStore({ ...store, integrations: initialConnectors });
+      updateIntegrations(initialConnectors);
       setConnectors(initialConnectors);
     } else {
       setConnectors(store.integrations);
