@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { LayoutDashboard, FolderKanban, ListTodo, Package, Shield, Terminal, Settings, Link2, Menu, X, Factory, Target, ShieldCheck, Zap, Wrench, Brain, Gift } from 'lucide-react';
+import { LayoutDashboard, FolderKanban, ListTodo, Package, Shield, Terminal, Settings, Link2, Menu, X, Factory, Target, ShieldCheck, Zap, Wrench, Brain, Gift, Orbit } from 'lucide-react';
 
 const navItems = [
   { to: '/', icon: LayoutDashboard, label: 'Overview' },
+  { to: '/civilizacion-algoritmica', icon: Orbit, label: 'Civilización Algorítmica' },
   { to: '/projects', icon: FolderKanban, label: 'Proyectos' },
   { to: '/tasks', icon: ListTodo, label: 'Tareas' },
   { to: '/artifacts', icon: Package, label: 'Artefactos' },
