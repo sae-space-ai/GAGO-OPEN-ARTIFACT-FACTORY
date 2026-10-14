@@ -340,9 +340,97 @@ export function getInitialScopeRequirements(): ScopeRequirement[] {
  */
 export function installInitialScope(existing: ScopeRequirement[]): ScopeRequirement[] {
   const existingIds = new Set(existing.map(r => r.id));
-  const initial = [...getInitialScopeRequirements(), ...getJouleScopeRequirements()];
+  const initial = [...getInitialScopeRequirements(), ...getJouleScopeRequirements(), ...getAPIFabricScopeRequirements()];
   const toAdd = initial.filter(r => !existingIds.has(r.id));
   return [...existing, ...toAdd];
+}
+
+// Phase 2 — API Fabric requirements
+export const API_FABRIC_SCOPE_IDS = {
+  API201: 'scope-api201-capability-inventory',
+  API202: 'scope-api202-connector-registry',
+  API203: 'scope-api203-auto-discovery',
+  API204: 'scope-api204-auth-manager',
+  API205: 'scope-api205-zero-cost-policy',
+  API206: 'scope-api206-quota-manager',
+  API207: 'scope-api207-github-adapter',
+  API208: 'scope-api208-vercel-adapter',
+  API209: 'scope-api209-qwen-adapter',
+  API210: 'scope-api210-ollama-adapter',
+  API211: 'scope-api211-browser-inference',
+  API212: 'scope-api212-joule-connection',
+  API213: 'scope-api213-document-connectors',
+  API214: 'scope-api214-orchestrator',
+  API215: 'scope-api215-fallback',
+  API216: 'scope-api216-health-monitor',
+  API217: 'scope-api217-control-center',
+  API218: 'scope-api218-tests-security',
+};
+
+/**
+ * Requisitos de API Fabric (Fase 2).
+ */
+function getAPIFabricScopeRequirements(): ScopeRequirement[] {
+  const now = new Date().toISOString();
+
+  function makeAPIReq(
+    id: string,
+    name: string,
+    description: string,
+    objective: string,
+    priority: 'critical' | 'high' | 'medium' | 'low',
+    dependencies: string[]
+  ): ScopeRequirement {
+    return {
+      id,
+      code: 'M01',
+      phase: '2',
+      module: 'API Fabric',
+      name,
+      functionalDescription: description,
+      technicalObjective: objective,
+      priority,
+      dependencies,
+      executor: 'human',
+      implementationStatus: 'implemented',
+      testStatus: 'not_tested',
+      verificationStatus: 'not_verified',
+      acceptanceCriteria: [],
+      evidenceIds: [],
+      relatedProjectIds: [],
+      relatedTaskIds: [],
+      relatedArtifactIds: [],
+      actionType: 'local_ui',
+      actionReference: 'src/services/api-fabric/',
+      blockers: [],
+      observations: '',
+      versionRef: 'phase-2-api-fabric',
+      createdAt: now,
+      updatedAt: now,
+      archived: false,
+    };
+  }
+
+  return [
+    makeAPIReq(API_FABRIC_SCOPE_IDS.API201, 'Inventario de Capacidades', 'Descubrir capacidades de módulos', 'Implementar Capability Discovery Engine', 'critical', []),
+    makeAPIReq(API_FABRIC_SCOPE_IDS.API202, 'Registro de Conectores', 'Catálogo central de APIs', 'Implementar Connector Registry', 'critical', []),
+    makeAPIReq(API_FABRIC_SCOPE_IDS.API203, 'Descubrimiento Automático', 'Autoconexión de servicios gratuitos', 'Implementar autoConnectAvailableProviders', 'high', [API_FABRIC_SCOPE_IDS.API201, API_FABRIC_SCOPE_IDS.API202]),
+    makeAPIReq(API_FABRIC_SCOPE_IDS.API204, 'Gestión de Autenticación', 'Manejo seguro de credenciales', 'Implementar Authentication Manager', 'critical', []),
+    makeAPIReq(API_FABRIC_SCOPE_IDS.API205, 'Política de Coste Cero', 'Bloqueo de operaciones pagadas', 'Implementar Free Tier Policy Engine', 'critical', []),
+    makeAPIReq(API_FABRIC_SCOPE_IDS.API206, 'Control de Cuotas', 'Gestión de límites de uso', 'Implementar Quota and Budget Manager', 'high', []),
+    makeAPIReq(API_FABRIC_SCOPE_IDS.API207, 'Adaptador GitHub', 'Integración con GitHub API', 'Implementar conector para GitHub', 'high', [API_FABRIC_SCOPE_IDS.API202]),
+    makeAPIReq(API_FABRIC_SCOPE_IDS.API208, 'Adaptador Vercel', 'Integración con Vercel API', 'Implementar conector para Vercel', 'medium', [API_FABRIC_SCOPE_IDS.API202]),
+    makeAPIReq(API_FABRIC_SCOPE_IDS.API209, 'Adaptador Qwen', 'Integración con Qwen API', 'Implementar conector para Qwen', 'high', [API_FABRIC_SCOPE_IDS.API202, API_FABRIC_SCOPE_IDS.API204]),
+    makeAPIReq(API_FABRIC_SCOPE_IDS.API210, 'Adaptador Ollama', 'Integración con Ollama local', 'Implementar conector para Ollama', 'high', [API_FABRIC_SCOPE_IDS.API202]),
+    makeAPIReq(API_FABRIC_SCOPE_IDS.API211, 'Inferencia en Navegador', 'Ejecución local de modelos', 'Evaluar WebGPU y alternativas', 'medium', [API_FABRIC_SCOPE_IDS.API210]),
+    makeAPIReq(API_FABRIC_SCOPE_IDS.API212, 'Conexión JOULE', 'Integración con motor JOULE', 'Conectar API Fabric con JOULE', 'critical', [API_FABRIC_SCOPE_IDS.API202]),
+    makeAPIReq(API_FABRIC_SCOPE_IDS.API213, 'Conectores Documentales', 'Google Drive y almacenamiento', 'Implementar conectores opcionales', 'low', [API_FABRIC_SCOPE_IDS.API202, API_FABRIC_SCOPE_IDS.API204]),
+    makeAPIReq(API_FABRIC_SCOPE_IDS.API214, 'Orquestador de Integraciones', 'Coordinación de operaciones', 'Implementar Integration Orchestrator', 'critical', [API_FABRIC_SCOPE_IDS.API201, API_FABRIC_SCOPE_IDS.API202, API_FABRIC_SCOPE_IDS.API205]),
+    makeAPIReq(API_FABRIC_SCOPE_IDS.API215, 'Sistema de Fallback', 'Recuperación ante fallos', 'Implementar Fallback Manager', 'high', [API_FABRIC_SCOPE_IDS.API214]),
+    makeAPIReq(API_FABRIC_SCOPE_IDS.API216, 'Monitor de Conectividad', 'Verificación de salud', 'Implementar API Health Monitor', 'medium', [API_FABRIC_SCOPE_IDS.API202]),
+    makeAPIReq(API_FABRIC_SCOPE_IDS.API217, 'Centro de Control', 'Interfaz de gestión', 'Implementar API Control Center', 'high', [API_FABRIC_SCOPE_IDS.API214]),
+    makeAPIReq(API_FABRIC_SCOPE_IDS.API218, 'Pruebas y Seguridad', 'Validación continua', 'Implementar pruebas y auditoría', 'critical', [API_FABRIC_SCOPE_IDS.API214]),
+  ];
 }
 
 /**

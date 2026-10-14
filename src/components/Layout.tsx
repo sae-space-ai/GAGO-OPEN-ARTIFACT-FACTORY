@@ -11,6 +11,7 @@ const navItems = [
   { to: '/scope', icon: Target, label: 'Matriz de Alcance' },
   { to: '/gates', icon: ShieldCheck, label: 'Puertas de Calidad' },
   { to: '/joule', icon: Zap, label: 'JOULE' },
+  { to: '/api-fabric', icon: Link2, label: 'API Fabric' },
   { to: '/qwen', icon: Terminal, label: 'Órdenes Qwen' },
   { to: '/integrations', icon: Link2, label: 'Integraciones' },
   { to: '/settings', icon: Settings, label: 'Configuración' },

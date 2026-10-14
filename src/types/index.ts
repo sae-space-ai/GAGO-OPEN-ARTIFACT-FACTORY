@@ -88,6 +88,8 @@ export interface DataStore {
   qualityGates?: import('./scope').QualityGate[];
   // Phase 1 — JOULE Adaptive Resource Optimization Engine
   jouleState?: import('./joule').JouleState;
+  // Phase 2 — Universal API Fabric
+  apiFabricState?: import('./api-fabric').APIFabricState;
 }
 
 export const SCHEMA_VERSION = '0.1.0';

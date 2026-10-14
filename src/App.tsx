@@ -12,6 +12,7 @@ const Evidence = lazy(() => import('./pages/Evidence'));
 const ScopeMatrix = lazy(() => import('./pages/ScopeMatrix'));
 const QualityGates = lazy(() => import('./pages/QualityGates'));
 const JouleDashboard = lazy(() => import('./pages/JouleDashboard'));
+const APIControlCenter = lazy(() => import('./pages/APIControlCenter'));
 const QwenGenerator = lazy(() => import('./pages/QwenGenerator'));
 const Settings = lazy(() => import('./pages/Settings'));
 const Integrations = lazy(() => import('./pages/Integrations'));
@@ -43,6 +44,7 @@ export default function App() {
                 <Route path="/scope" element={<ScopeMatrix />} />
                 <Route path="/gates" element={<QualityGates />} />
                 <Route path="/joule" element={<JouleDashboard />} />
+                <Route path="/api-fabric" element={<APIControlCenter />} />
                 <Route path="/qwen" element={<QwenGenerator />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/integrations" element={<Integrations />} />

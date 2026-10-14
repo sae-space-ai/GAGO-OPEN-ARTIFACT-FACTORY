@@ -7,11 +7,14 @@ import type { JouleState } from '../types/joule';
 import { installInitialScope } from './initial-scope';
 import { installInitialGates } from './quality-gates';
 import { jouleCreateInitialState } from './joule/engine';
+import { installInitialConnectors } from './api-fabric/connector-registry';
+import { installDiscoveredCapabilities } from './api-fabric/capability-discovery';
+import { ZERO_COST_POLICY } from './api-fabric/free-tier-policy';
 
 const STORAGE_KEY = 'gago-factory-data';
 
 // New schema version for Phase 1
-export const CURRENT_SCHEMA_VERSION = '1.0.0';
+export const CURRENT_SCHEMA_VERSION = '2.0.0';
 
 function getDefaultSettings(): AppSettings {
   const saved = localStorage.getItem('gago-theme');
@@ -33,6 +36,14 @@ function getDefaultStore(): DataStore {
     scopeMatrix: installInitialScope([]),
     qualityGates: installInitialGates([]),
     jouleState: jouleCreateInitialState(),
+    apiFabricState: {
+      connectors: installInitialConnectors([]),
+      capabilityRequirements: installDiscoveredCapabilities([]),
+      quotaUsage: {},
+      budgetPolicy: ZERO_COST_POLICY,
+      integrationEvidence: [],
+      version: '2.0.0',
+    },
   };
 }
 
@@ -48,8 +59,8 @@ function validateStore(data: unknown): data is DataStore {
 }
 
 /**
- * Migrates data from Phase 0 (schema 0.1.0) or Phase 0.1 (schema 0.1.1) to Phase 1 (schema 1.0.0).
- * Adds scopeMatrix, qualityGates, and jouleState fields if missing.
+ * Migrates data from Phase 0 (schema 0.1.0) or Phase 0.1 (schema 0.1.1) to Phase 1 (schema 1.0.0) or Phase 2 (schema 2.0.0).
+ * Adds scopeMatrix, qualityGates, jouleState, and apiFabricState fields if missing.
  * Does not delete or modify existing data.
  */
 function migrateStore(data: DataStore): DataStore {
@@ -57,19 +68,28 @@ function migrateStore(data: DataStore): DataStore {
     scopeMatrix?: ScopeRequirement[];
     qualityGates?: QualityGate[];
     jouleState?: JouleState;
+    apiFabricState?: import('../types/api-fabric').APIFabricState;
   };
 
   if (data.version === CURRENT_SCHEMA_VERSION) {
-    // Ensure scope matrix, gates, and JOULE state are installed idempotently
+    // Ensure scope matrix, gates, JOULE state, and API Fabric are installed idempotently
     return {
       ...data,
       scopeMatrix: installInitialScope(data.scopeMatrix || []),
       qualityGates: installInitialGates(data.qualityGates || []),
       jouleState: extended.jouleState || jouleCreateInitialState(),
+      apiFabricState: extended.apiFabricState || {
+        connectors: installInitialConnectors([]),
+        capabilityRequirements: installDiscoveredCapabilities([]),
+        quotaUsage: {},
+        budgetPolicy: ZERO_COST_POLICY,
+        integrationEvidence: [],
+        version: '2.0.0',
+      },
     };
   }
 
-  // Migration from 0.1.0 to 1.0.0 (Phase 0 → Phase 1)
+  // Migration from 0.1.0 to 2.0.0 (Phase 0 → Phase 2)
   if (data.version === '0.1.0') {
     return {
       ...data,
@@ -77,10 +97,18 @@ function migrateStore(data: DataStore): DataStore {
       scopeMatrix: installInitialScope(extended.scopeMatrix || []),
       qualityGates: installInitialGates(extended.qualityGates || []),
       jouleState: extended.jouleState || jouleCreateInitialState(),
+      apiFabricState: extended.apiFabricState || {
+        connectors: installInitialConnectors([]),
+        capabilityRequirements: installDiscoveredCapabilities([]),
+        quotaUsage: {},
+        budgetPolicy: ZERO_COST_POLICY,
+        integrationEvidence: [],
+        version: '2.0.0',
+      },
     };
   }
 
-  // Migration from 0.1.1 to 1.0.0 (Phase 0.1 → Phase 1)
+  // Migration from 0.1.1 to 2.0.0 (Phase 0.1 → Phase 2)
   if (data.version === '0.1.1') {
     return {
       ...data,
@@ -88,6 +116,33 @@ function migrateStore(data: DataStore): DataStore {
       scopeMatrix: installInitialScope(extended.scopeMatrix || []),
       qualityGates: installInitialGates(extended.qualityGates || []),
       jouleState: extended.jouleState || jouleCreateInitialState(),
+      apiFabricState: extended.apiFabricState || {
+        connectors: installInitialConnectors([]),
+        capabilityRequirements: installDiscoveredCapabilities([]),
+        quotaUsage: {},
+        budgetPolicy: ZERO_COST_POLICY,
+        integrationEvidence: [],
+        version: '2.0.0',
+      },
+    };
+  }
+
+  // Migration from 1.0.0 to 2.0.0 (Phase 1 → Phase 2)
+  if (data.version === '1.0.0') {
+    return {
+      ...data,
+      version: CURRENT_SCHEMA_VERSION,
+      scopeMatrix: installInitialScope(extended.scopeMatrix || []),
+      qualityGates: installInitialGates(extended.qualityGates || []),
+      jouleState: extended.jouleState || jouleCreateInitialState(),
+      apiFabricState: extended.apiFabricState || {
+        connectors: installInitialConnectors([]),
+        capabilityRequirements: installDiscoveredCapabilities([]),
+        quotaUsage: {},
+        budgetPolicy: ZERO_COST_POLICY,
+        integrationEvidence: [],
+        version: '2.0.0',
+      },
     };
   }
 
@@ -98,6 +153,14 @@ function migrateStore(data: DataStore): DataStore {
     scopeMatrix: installInitialScope(extended.scopeMatrix || []),
     qualityGates: installInitialGates(extended.qualityGates || []),
     jouleState: extended.jouleState || jouleCreateInitialState(),
+    apiFabricState: extended.apiFabricState || {
+      connectors: installInitialConnectors([]),
+      capabilityRequirements: installDiscoveredCapabilities([]),
+      quotaUsage: {},
+      budgetPolicy: ZERO_COST_POLICY,
+      integrationEvidence: [],
+      version: '2.0.0',
+    },
   };
 }
 

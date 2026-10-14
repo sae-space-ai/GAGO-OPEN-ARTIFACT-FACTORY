@@ -2,7 +2,7 @@
 
 **Factoría abierta de artefactos digitales y aplicaciones de inteligencia artificial**
 
-Versión: 1.0.0 | Fase 1 | Licencia: MIT
+Versión: 2.0.0 | Fase 2 | Licencia: MIT
 
 ## Descripción
 
@@ -40,6 +40,17 @@ La Fase Cero establece los fundamentos técnicos: una aplicación web funcional 
 - **Algoritmo de Optimización**: Selección adaptativa de rutas con restricciones de seguridad
 - **Mapa de Experiencia**: Registro histórico que solo aprende de observaciones verificadas
 - **Métrica Central**: Coste por resultado correcto (incluye todos los intentos)
+
+### Fase 2 — Universal API Integration and Zero Cost Orchestration
+- **Universal API Fabric**: Infraestructura común de conectividad para todos los módulos
+- **Connector Registry**: Registro central con catálogo de APIs (GitHub, Vercel, Qwen, Ollama, JOULE, Supabase, Google Drive, n8n)
+- **Capability Discovery Engine**: Descubrimiento automático de capacidades necesarias
+- **Free Tier Policy Engine**: Política de coste cero por defecto (presupuesto = 0 EUR)
+- **Quota and Budget Manager**: Gestión de cuotas y límites de uso
+- **Integration Orchestrator**: Coordinador de operaciones de integración
+- **API Control Center**: Centro de control visual de todas las integraciones
+- **Modo Offline-First**: La aplicación funciona sin conexiones externas
+- **Seguridad**: Las credenciales nunca se almacenan en el frontend
 
 ## Requisitos
 

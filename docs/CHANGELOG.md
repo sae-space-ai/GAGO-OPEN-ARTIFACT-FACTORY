@@ -1,5 +1,41 @@
 # Changelog — GAGO Open Artifact Factory
 
+## [2.0.0] — Fase 2 — Universal API Integration and Zero Cost Orchestration
+
+### Añadido
+- **Universal API Fabric**: Infraestructura común de conectividad para todos los módulos
+- **Connector Registry**: Registro central de conectores con catálogo inicial (GitHub, Vercel, Qwen, Ollama, JOULE, Supabase, Google Drive, n8n)
+- **Capability Discovery Engine**: Descubrimiento automático de capacidades necesarias
+- **Free Tier Policy Engine**: Política de coste cero por defecto (presupuesto = 0 EUR)
+- **Quota and Budget Manager**: Gestión de cuotas y límites de uso
+- **Integration Orchestrator**: Coordinador de operaciones de integración
+- **API Control Center**: Centro de control visual de todas las integraciones
+- **18 requisitos adicionales** (API201-API218) en la matriz de alcance
+- **Pruebas automatizadas**: Tests para Connector Registry, Free Tier Policy, Capability Discovery, Quota Manager y Orchestrator
+
+### Modificado
+- `src/types/index.ts`: DataStore ampliado con campo opcional `apiFabricState`
+- `src/services/storage.ts`: Migración no destructiva de Fase 1 a Fase 2, versión de esquema 2.0.0
+- `src/services/initial-scope.ts`: 18 requisitos de API Fabric añadidos
+- `src/components/Layout.tsx`: Nueva entrada de navegación "API Fabric"
+- `src/App.tsx`: Nueva ruta `/api-fabric`
+- `docs/CHANGELOG.md`: Registro de cambios de la Fase 2
+
+### No modificado (protección Fases 0, 0.1 y 1)
+- Proyectos, tareas, artefactos, evidencias, matriz de alcance, puertas de calidad y motor JOULE continúan funcionando sin cambios
+- Todas las rutas existentes operativas
+- Persistencia de datos de Fases 0, 0.1 y 1 preservada mediante migración compatible
+
+### Principios Arquitectónicos
+- Presupuesto monetario predeterminado = 0 EUR
+- No se permiten operaciones pagadas sin autorización explícita
+- Priorización de servicios gratuitos y locales
+- No se inventan integraciones sin verificación real
+- Las credenciales nunca se almacenan en el frontend
+- Modo offline-first: la aplicación funciona sin conexiones externas
+
+---
+
 ## [1.0.0] — Fase 1 — Integración Transversal de JOULE
 
 ### Añadido
