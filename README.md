@@ -2,13 +2,13 @@
 
 **Factoría abierta de artefactos digitales y aplicaciones de inteligencia artificial**
 
-Versión: 3.0.0 | Fase 3 | Licencia: MIT
+Versión: 4.0.0 | Fase 4 | Licencia: MIT
 
 ## Descripción
 
 GAGO Open Artifact Factory es una plataforma abierta de desarrollo de software y artefactos digitales. Permite gestionar proyectos, tareas, artefactos y evidencias técnicas, además de generar instrucciones estructuradas para modelos de inteligencia artificial como Qwen Coder.
 
-La Fase 3 implementa un sistema completo de verificación, autoconfiguración y recuperación de conexiones para todas las integraciones de la factoría.
+La Fase 4 implementa JOULE MATS (Multi Agent Training System), un sistema de 15 agentes especializados que entrenan y optimizan continuamente el motor JOULE mediante aprendizaje adaptativo.
 
 ## Características
 
@@ -63,6 +63,16 @@ La Fase 3 implementa un sistema completo de verificación, autoconfiguración y 
 - **Sistema de Diagnóstico**: Clasificación de errores por severidad
 - **Botón "Conectar Todo"**: Verificación masiva de todas las conexiones
 - **Pruebas Automatizadas**: Tests completos para autoconfiguración y recuperación
+
+### Fase 4 — JOULE MATS (Multi Agent Training System)
+- **15 Agentes Especializados**: Data Curator, Telemetry Analyst, Task Classifier, Synthetic Lab, Labeling and Evidence, Feature Engineer, Baseline Scientist, Policy Trainer, Cost Optimizer, Latency Optimizer, Energy Optimizer, Quality and Reliability, Adversarial Trainer, Independent Evaluator, Training Governor
+- **Orquestador Central**: Coordinación de ciclos de entrenamiento completos
+- **Algoritmo de Bandido Contextual**: Aprendizaje adaptativo con restricciones de calidad
+- **Centro de Entrenamiento**: Visualización en tiempo real de los 15 agentes
+- **Objetivo J25**: Reducir 25% el coste por resultado correcto manteniendo calidad
+- **Modos Shadow/Canary/Activo**: Despliegue progresivo de políticas entrenadas
+- **Evaluación Independiente**: Validación rigurosa antes de aprobar políticas
+- **Pruebas Unitarias**: Cobertura completa de agentes y orquestador
 
 ## Requisitos
 

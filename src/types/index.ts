@@ -90,6 +90,8 @@ export interface DataStore {
   jouleState?: import('./joule').JouleState;
   // Phase 2 — Universal API Fabric
   apiFabricState?: import('./api-fabric').APIFabricState;
+  // Phase 4 — JOULE MATS (Multi Agent Training System)
+  jouleMATS?: import('./joule-mats').JouleMATSState;
 }
 
 export const SCHEMA_VERSION = '0.1.0';

@@ -1,5 +1,70 @@
 # Changelog — GAGO Open Artifact Factory
 
+## [4.0.0] — Fase 4 — JOULE Multi Agent Training System
+
+### Añadido
+- **JOULE MATS (Multi Agent Training System)**: Sistema de entrenamiento adaptativo con 15 agentes especializados
+- **15 Agentes Especializados**:
+  - Agente 01 - Data Curator: Recolección y preparación de datos
+  - Agente 02 - Telemetry Analyst: Análisis de telemetría
+  - Agente 03 - Task Classifier: Clasificación de tareas
+  - Agente 04 - Synthetic Lab: Generación de datos sintéticos
+  - Agente 05 - Labeling and Evidence: Etiquetado y validación
+  - Agente 06 - Feature Engineer: Ingeniería de características
+  - Agente 07 - Baseline Scientist: Establecimiento de línea base
+  - Agente 08 - Policy Trainer: Entrenamiento de políticas (bandido contextual)
+  - Agente 09 - Cost Optimizer: Optimización de costes
+  - Agente 10 - Latency Optimizer: Optimización de latencia
+  - Agente 11 - Energy Optimizer: Optimización energética
+  - Agente 12 - Quality and Reliability: Evaluación de calidad
+  - Agente 13 - Adversarial Trainer: Pruebas adversariales
+  - Agente 14 - Independent Evaluator: Evaluación independiente
+  - Agente 15 - Training Governor: Gobernanza del entrenamiento
+- **Orquestador Central**: Coordinación de ciclos de entrenamiento completos
+- **Algoritmo de Bandido Contextual**: Aprendizaje adaptativo con restricciones de calidad
+- **Centro de Entrenamiento**: Interfaz visual para los 15 agentes con controles en tiempo real
+- **Objetivo Experimental J25**: Procedimiento para verificar reducción del 25% en coste por resultado correcto
+- **Modos de Despliegue**: Shadow (observación), Canary (activación gradual), Activo
+- **Evaluación Independiente**: Validación rigurosa antes de aprobar políticas
+- **Pruebas Unitarias**: Cobertura completa de agentes y orquestador
+
+### Modificado
+- `src/types/joule-mats.ts`: Nuevos tipos para el sistema multiagente
+- `src/services/joule-mats/`: Módulo completo con orquestador y 15 agentes
+- `src/pages/JouleTrainingCenter.tsx`: Centro de entrenamiento visual
+- `src/tests/joule-mats.test.ts`: Pruebas unitarias completas
+- `src/types/index.ts`: Añadido jouleMATS a DataStore
+- `src/context/DataContext.tsx`: Añadido updateJouleMATS
+- `src/App.tsx`: Nueva ruta `/training`
+- `src/components/Layout.tsx`: Nueva entrada de navegación "Training Center"
+- `docs/CHANGELOG.md`: Registro de cambios de la Fase 4
+- `docs/FASE_4_INFORME.md`: Documentación completa de la Fase 4
+- `README.md`: Actualizado a versión 4.0.0
+
+### No modificado (protección Fases 0, 0.1, 1, 2 y 3)
+- Todos los módulos de fases anteriores continúan funcionando sin cambios
+- Motor JOULE original preservado y extendido
+- Universal API Fabric intacto
+- Sistema de Connection Recovery operativo
+- Persistencia de datos de todas las fases anteriores preservada
+
+### Características Técnicas
+- **Sin GPU obligatoria**: Funciona con TypeScript/Node.js en el navegador
+- **Sin modelos de lenguaje**: No entrena LLMs desde cero
+- **Aprendizaje incremental**: Actualizaciones sin reentrenamientos completos
+- **Separación estricta**: Entrenamiento y evaluación independientes
+- **Calidad obligatoria**: No se aprueban políticas con calidad degradada
+- **Presupuesto cero**: Sin costes monetarios por defecto
+
+### Resultados de Compilación
+```
+✓ 1426 modules transformed
+✓ built in 4.12s
+✓ Sin errores de TypeScript
+```
+
+---
+
 ## [3.0.0] — Fase 3 — Automatic Configuration and Connection Recovery
 
 ### Añadido

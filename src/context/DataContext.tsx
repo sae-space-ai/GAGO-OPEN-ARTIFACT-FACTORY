@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect, useCallback, typ
 import type { DataStore, Project, Task, Artifact, Evidence, AppSettings } from '../types';
 import type { ScopeRequirement, QualityGate } from '../types/scope';
 import type { JouleState } from '../types/joule';
+import type { JouleMATSState } from '../types/joule-mats';
 import { loadStore, saveStore, createProject, updateProject, deleteProject, createTask, updateTask, deleteTask, createArtifact, updateArtifact, deleteArtifact, createEvidence, updateEvidence, deleteEvidence, importData, exportData, resetStore, createScopeRequirement, updateScopeRequirement, deleteScopeRequirement, updateQualityGate, updateJouleState } from '../services/storage';
 
 interface DataContextType {
@@ -36,6 +37,8 @@ interface DataContextType {
   editQualityGate: (id: string, input: Partial<QualityGate>) => void;
   // JOULE (Phase 1)
   updateJouleState: (jouleState: JouleState) => void;
+  // JOULE MATS (Phase 4)
+  updateJouleMATS: (jouleMATS: JouleMATSState) => void;
 }
 
 const DataContext = createContext<DataContextType | null>(null);
@@ -139,6 +142,11 @@ export function DataProvider({ children }: { children: ReactNode }) {
     setStore(s => updateJouleState(s, jouleState));
   }, []);
 
+  // JOULE MATS operations (Phase 4)
+  const updateJouleMATS = useCallback((jouleMATS: JouleMATSState) => {
+    setStore(s => ({ ...s, jouleMATS }));
+  }, []);
+
   return (
     <DataContext.Provider value={{
       store, addProject, editProject, removeProject,
@@ -149,6 +157,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
       addScopeRequirement, editScopeRequirement, removeScopeRequirement,
       editQualityGate,
       updateJouleState: updateJouleStateFn,
+      updateJouleMATS,
     }}>
       {children}
     </DataContext.Provider>
