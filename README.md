@@ -2,13 +2,13 @@
 
 **Factoría abierta de artefactos digitales y aplicaciones de inteligencia artificial**
 
-Versión: 11.0.0 | Fase 11 | Licencia: MIT
+Versión: 12.0.0 | Fase 12 | Licencia: MIT
 
 ## Descripción
 
 GAGO Open Artifact Factory es una plataforma abierta de desarrollo de software y artefactos digitales. Permite gestionar proyectos, tareas, artefactos y evidencias técnicas, además de generar instrucciones estructuradas para modelos de inteligencia artificial como Qwen Coder.
 
-La Fase 11 implementa JOULE HYBRID AI PROVIDER ENGINE, un motor híbrido de proveedores de IA que permite utilizar modelos gratuitos de OpenRouter y Ollama local, con selección automática de proveedores, control de presupuesto cero y sistema de fallback.
+La Fase 12 implementa JOULE COGNITIVE OPTIMIZATION AND VERIFIED AI ENGINE, un motor de optimización cognitiva y verificación de IA que permite evaluar de forma independiente la calidad del código generado, aprender de evidencias verificadas y optimizar rutas de ejecución basándose en métricas reales.
 
 ## Características
 
@@ -112,6 +112,20 @@ La Fase 11 implementa JOULE HYBRID AI PROVIDER ENGINE, un motor híbrido de prov
 - **Integración con Tool Factory**: Inferencia de IA para generación de código
 - **Seguridad**: API keys nunca se exponen en el frontend
 - **Pruebas Unitarias**: Cobertura completa del motor de proveedores
+
+### Fase 12 — JOULE COGNITIVE OPTIMIZATION AND VERIFIED AI ENGINE
+- **JOULE TASK INTELLIGENCE**: Clasificador inteligente de solicitudes (10 tipos de tareas, 13 lenguajes)
+- **JOULE INDEPENDENT CODE VERIFIER**: Verificación independiente de código en 11 etapas
+- **Caso Obligatorio**: Detección del error Math.round(0.1) + Math.round(0.2) = 0
+- **JOULE QUALITY EVIDENCE ENGINE**: Sistema de evidencias trazables y verificadas
+- **JOULE MODEL BENCHMARK LAB**: Laboratorio con 6 benchmarks reproducibles
+- **JOULE RESOURCE OBSERVER**: Observador ampliado de recursos con métricas detalladas
+- **JOULE ADAPTIVE ROUTING ENGINE**: Motor de enrutamiento adaptativo basado en evidencia
+- **JOULE COGNITIVE CONTROL CENTER**: Interfaz profesional con 4 pestañas
+- **Políticas de Enrutamiento**: Configurables con énfasis en calidad y seguridad
+- **Puntuación Multi-Factor**: Calidad, fiabilidad, latencia, coste, privacidad, seguridad, energía
+- **Pruebas Unitarias**: 100+ pruebas implementadas
+- **Seguridad**: No se ejecuta código no confiable sin aislamiento
 
 ## Requisitos
 
