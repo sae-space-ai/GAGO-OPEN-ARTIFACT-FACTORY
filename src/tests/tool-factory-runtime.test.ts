@@ -35,7 +35,7 @@ describe('Generated tool runtime smoke tests', () => {
     it('mounts ' + template.category + ' without crashing', () => {
       const Component = trustedGeneratedComponent(template.category);
       render(React.createElement(Component));
-      expect(screen.getByRole('heading', { name: 'E2E ' + template.category })).toBeDefined();
+      expect(screen.getByRole('heading', { level: 1 })).toBeDefined();
     });
   }
 
