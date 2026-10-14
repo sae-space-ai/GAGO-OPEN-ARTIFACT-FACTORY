@@ -43,6 +43,9 @@ export interface ToolManifest {
   acceptanceCriteria: string[];
   tests: string[];
   evidenceIds: string[];
+  // Optional and backwards compatible: existing manifests remain readable.
+  sourceCode?: string;
+  documentation?: string;
   license: string;
   createdAt: string;
   updatedAt: string;

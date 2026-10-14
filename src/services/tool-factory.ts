@@ -3,6 +3,7 @@
 
 import type { ToolManifest, ToolSpecification, ToolCategory } from '../types/control-plane';
 import { generateId } from './storage';
+import { generateCategoryCode } from './tool-code-generators';
 
 /**
  * Plantillas de herramientas disponibles
@@ -204,9 +205,16 @@ export function validateToolSpecification(spec: ToolSpecification): {
     errors.push('El nombre es obligatorio');
   }
 
-  if (!spec.category) {
-    errors.push('La categoría es obligatoria');
+  if (!spec.category || !Object.prototype.hasOwnProperty.call(TOOL_TEMPLATES, spec.category)) {
+    errors.push('La categoría no es válida');
   }
+  if (spec.name && spec.name.length > 100) errors.push('El nombre supera 100 caracteres');
+  const inNames = (spec.inputs || []).map(x => x.name.trim());
+  const outNames = (spec.outputs || []).map(x => x.name.trim());
+  if (inNames.some(n => !n)) errors.push('Las entradas necesitan nombre');
+  if (outNames.some(n => !n)) errors.push('Las salidas necesitan nombre');
+  if (new Set(inNames).size !== inNames.length) errors.push('Entradas duplicadas');
+  if (new Set(outNames).size !== outNames.length) errors.push('Salidas duplicadas');
 
   if (!spec.description || spec.description.trim().length === 0) {
     errors.push('La descripción es obligatoria');
@@ -255,7 +263,7 @@ export function createToolFromSpecification(spec: ToolSpecification): {
   }
 
   // Generar código basado en la plantilla
-  const generatedCode = generateToolCode(spec, template);
+  const generatedCode = generateToolCode(spec);
 
   // Crear manifiesto
   const manifest: ToolManifest = {
@@ -283,8 +291,10 @@ export function createToolFromSpecification(spec: ToolSpecification): {
     }]
   };
 
-  // Generar documentación
+  // Guardar código y documentación con el manifiesto permite recuperar las descargas.
   const documentation = generateDocumentation(manifest);
+  manifest.sourceCode = generatedCode;
+  manifest.documentation = documentation;
 
   return {
     manifest,
@@ -296,184 +306,8 @@ export function createToolFromSpecification(spec: ToolSpecification): {
 /**
  * Genera el código de la herramienta basado en la plantilla
  */
-function generateToolCode(spec: ToolSpecification, template: any): string {
-  // Generar código React/TypeScript basado en la categoría
-  switch (spec.category) {
-    case 'dashboard':
-      return generateDashboardCode(spec);
-    case 'form':
-      return generateFormCode(spec);
-    case 'crud':
-      return generateCrudCode(spec);
-    case 'table':
-      return generateTableCode(spec);
-    default:
-      return generateGenericCode(spec, template);
-  }
-}
-
-function generateDashboardCode(spec: ToolSpecification): string {
-  return `// ${spec.name} - Panel de Control
-import React from 'react';
-
-interface ${spec.name.replace(/\s+/g, '')}Props {
-  title: string;
-  metrics: Array<{ label: string; value: number | string }>;
-}
-
-export default function ${spec.name.replace(/\s+/g, '')}({ title, metrics }: ${spec.name.replace(/\s+/g, '')}Props) {
-  return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">{title}</h1>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {metrics.map((metric, idx) => (
-          <div key={idx} className="p-4 bg-white dark:bg-slate-800 rounded-lg shadow">
-            <p className="text-sm text-slate-600 dark:text-slate-400">{metric.label}</p>
-            <p className="text-2xl font-bold text-slate-900 dark:text-white">{metric.value}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-`;
-}
-
-function generateFormCode(spec: ToolSpecification): string {
-  return `// ${spec.name} - Formulario
-import React, { useState } from 'react';
-
-interface ${spec.name.replace(/\s+/g, '')}Props {
-  title: string;
-  onSubmit: (data: any) => void;
-}
-
-export default function ${spec.name.replace(/\s+/g, '')}({ title, onSubmit }: ${spec.name.replace(/\s+/g, '')}Props) {
-  const [formData, setFormData] = useState({});
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSubmit(formData);
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className="p-6 space-y-4">
-      <h1 className="text-2xl font-bold">{title}</h1>
-      {/* Campos del formulario */}
-      <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded">
-        Enviar
-      </button>
-    </form>
-  );
-}
-`;
-}
-
-function generateCrudCode(spec: ToolSpecification): string {
-  return `// ${spec.name} - Gestor CRUD
-import React, { useState } from 'react';
-
-interface ${spec.name.replace(/\s+/g, '')}Props {
-  entityName: string;
-}
-
-export default function ${spec.name.replace(/\s+/g, '')}({ entityName }: ${spec.name.replace(/\s+/g, '')}Props) {
-  const [items, setItems] = useState<any[]>([]);
-
-  const create = (item: any) => setItems([...items, item]);
-  const read = (id: string) => items.find(i => i.id === id);
-  const update = (id: string, updates: any) => 
-    setItems(items.map(i => i.id === id ? { ...i, ...updates } : i));
-  const del = (id: string) => setItems(items.filter(i => i.id !== id));
-
-  return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Gestor de {entityName}</h1>
-      {/* Implementación CRUD */}
-    </div>
-  );
-}
-`;
-}
-
-function generateTableCode(spec: ToolSpecification): string {
-  return `// ${spec.name} - Tabla
-import React, { useState } from 'react';
-
-interface ${spec.name.replace(/\s+/g, '')}Props {
-  title: string;
-  columns: Array<{ key: string; label: string }>;
-  data: any[];
-}
-
-export default function ${spec.name.replace(/\s+/g, '')}({ title, columns, data }: ${spec.name.replace(/\s+/g, '')}Props) {
-  const [sortKey, setSortKey] = useState<string>('');
-  const [filter, setFilter] = useState('');
-
-  const sortedData = [...data].sort((a, b) => {
-    if (!sortKey) return 0;
-    return a[sortKey] > b[sortKey] ? 1 : -1;
-  });
-
-  const filteredData = sortedData.filter(item =>
-    Object.values(item).some(val => 
-      String(val).toLowerCase().includes(filter.toLowerCase())
-    )
-  );
-
-  return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">{title}</h1>
-      <input
-        type="text"
-        placeholder="Filtrar..."
-        value={filter}
-        onChange={e => setFilter(e.target.value)}
-        className="mb-4 px-3 py-2 border rounded"
-      />
-      <table className="w-full">
-        <thead>
-          <tr>
-            {columns.map(col => (
-              <th key={col.key} onClick={() => setSortKey(col.key)} className="cursor-pointer">
-                {col.label}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {filteredData.map((row, idx) => (
-            <tr key={idx}>
-              {columns.map(col => (
-                <td key={col.key}>{row[col.key]}</td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-}
-`;
-}
-
-function generateGenericCode(spec: ToolSpecification, template: any): string {
-  return `// ${spec.name} - ${template.name}
-import React from 'react';
-
-interface ${spec.name.replace(/\s+/g, '')}Props {
-  // Definir props según entradas
-}
-
-export default function ${spec.name.replace(/\s+/g, '')}(props: ${spec.name.replace(/\s+/g, '')}Props) {
-  return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold">{/* ${spec.name} */}</h1>
-      {/* Implementación de ${template.description} */}
-    </div>
-  );
-}
-`;
+function generateToolCode(spec: ToolSpecification): string {
+  return generateCategoryCode(spec);
 }
 
 /**
@@ -509,6 +343,13 @@ ${manifest.license}
 ## Historial de Versiones
 ${manifest.versionHistory.map((v: any) => `### ${v.version} (${v.date})\n${v.changes.map((c: any) => `- ${c}`).join('\n')}`).join('\n\n')}
 `;
+}
+
+/** Devuelve copias editables de los campos predeterminados de cada plantilla. */
+export function getTemplateDefaults(category: ToolCategory): Pick<ToolSpecification, 'inputs' | 'outputs'> {
+  const template = TOOL_TEMPLATES[category];
+  if (!template) throw new Error('Plantilla desconocida');
+  return {inputs: template.defaultInputs.map(x => ({...x})), outputs: template.defaultOutputs.map(x => ({...x}))};
 }
 
 /**

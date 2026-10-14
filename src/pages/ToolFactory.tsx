@@ -3,10 +3,12 @@ import { useData } from '../context/DataContext';
 import { 
   createToolFromSpecification, 
   getAvailableTemplates, 
+  getTemplateDefaults,
   downloadToolCode,
   validateToolSpecification 
 } from '../services/tool-factory';
 import type { ToolSpecification, ToolCategory } from '../types/control-plane';
+import { downloadViteToolProject } from '../services/tool-export';
 import { TOOL_CATEGORY_LABELS } from '../types/control-plane';
 import { Wrench, Plus, Download, FileCode, CheckCircle, AlertCircle } from 'lucide-react';
 
@@ -18,8 +20,7 @@ export default function ToolFactory() {
     name: '',
     category: 'dashboard',
     description: '',
-    inputs: [],
-    outputs: [],
+    ...getTemplateDefaults('dashboard'),
     permissions: [],
     acceptanceCriteria: []
   });
@@ -52,20 +53,22 @@ export default function ToolFactory() {
   };
 
   const handleDownload = () => {
-    if (generatedTool) {
-      downloadToolCode(generatedTool.manifest, generatedTool.generatedCode);
-    }
+    if (generatedTool) downloadViteToolProject(generatedTool.manifest, generatedTool.generatedCode);
+  };
+  const handleDownloadCode = () => {
+    if (generatedTool) downloadToolCode(generatedTool.manifest, generatedTool.generatedCode);
   };
 
   const handleSelectTemplate = (category: ToolCategory) => {
-    setSelectedCategory(category);
     const template = templates.find(t => t.category === category);
     if (template) {
-      setSpec({
-        ...spec,
-        category,
-        description: template.description
-      });
+      if ((spec.inputs.length > 0 || spec.outputs.length > 0) && category !== spec.category &&
+          !window.confirm('Cambiar de plantilla reemplazará las entradas y salidas editadas. ¿Continuar?')) return;
+      setSpec(current => ({
+        ...current, category, description: template.description,
+        ...getTemplateDefaults(category)
+      }));
+      setSelectedCategory(category);
     }
   };
 
@@ -321,12 +324,12 @@ export default function ToolFactory() {
                   name: '',
                   category: 'dashboard',
                   description: '',
-                  inputs: [],
-                  outputs: [],
+                  ...getTemplateDefaults('dashboard'),
                   permissions: [],
                   acceptanceCriteria: []
                 });
                 setValidationErrors([]);
+                setSelectedCategory('dashboard');
               }}
               className="px-6 py-2 rounded-lg border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700"
             >
@@ -348,17 +351,25 @@ export default function ToolFactory() {
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-semibold text-slate-900 dark:text-white flex items-center gap-2">
               <CheckCircle className="w-6 h-6 text-green-500" />
-              Herramienta Generada: {generatedTool.manifest.name}
+              Código generado, pendiente de pruebas: {generatedTool.manifest.name}
             </h2>
             <button
               onClick={handleDownload}
               className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg"
             >
               <Download className="w-4 h-4" />
-              Descargar Código
+              Descargar proyecto Vite ZIP
             </button>
           </div>
 
+          <div className="mb-4 flex flex-wrap gap-3">
+            <button onClick={handleDownloadCode} className="px-3 py-2 rounded border border-slate-300 dark:border-slate-600">
+              Descargar componente TSX
+            </button>
+            <p role="status" className="text-sm text-amber-700 dark:text-amber-300">
+              La generación no equivale a una prueba superada. Ejecuta npm run test y npm run build en el proyecto descargado.
+            </p>
+          </div>
           <div className="mb-4">
             <h3 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
               Código Generado
@@ -419,6 +430,15 @@ export default function ToolFactory() {
                   <p>Versión: {tool.version}</p>
                   <p>Entradas: {tool.inputs.length} | Salidas: {tool.outputs.length}</p>
                 </div>
+                {tool.sourceCode ? (
+                  <button className="mt-3 px-3 py-2 rounded bg-blue-600 text-white" onClick={() => {
+                    setGeneratedTool({ manifest: tool, generatedCode: tool.sourceCode, documentation: tool.documentation || '' });
+                    setShowCreateForm(false);
+                    window.scrollTo({top: 0, behavior: 'smooth'});
+                  }}>Recuperar código y descargar</button>
+                ) : (
+                  <p className="text-xs text-amber-700 dark:text-amber-300 mt-3">Registro antiguo sin código conservado</p>
+                )}
               </div>
             ))}
           </div>
