@@ -23,6 +23,7 @@ const FreeTrainingCenter = lazy(() => import('./pages/FreeTrainingCenter'));
 const QwenGenerator = lazy(() => import('./pages/QwenGenerator'));
 const Settings = lazy(() => import('./pages/Settings'));
 const Integrations = lazy(() => import('./pages/Integrations'));
+const OllamaLocal = lazy(() => import('./pages/OllamaLocal'));
 
 function LoadingFallback() {
   return (
@@ -62,6 +63,7 @@ export default function App() {
                 <Route path="/qwen" element={<QwenGenerator />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/integrations" element={<Integrations />} />
+                <Route path="/integrations/ollama-local" element={<OllamaLocal />} />
               </Routes>
             </Suspense>
           </Layout>

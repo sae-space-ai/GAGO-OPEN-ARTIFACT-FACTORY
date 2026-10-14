@@ -29,7 +29,7 @@ export default function JouleDashboard() {
 
   function handleActivate(mode: JouleMode) {
     if (!jouleState) return;
-    const newState = jouleActivate(jouleState, mode);
+    const newState = jouleActivate(jouleState, mode, mode === 'shadow' ? 'policy-shadow' : undefined);
     updateJouleState(newState);
     setToast({ message: `JOULE activado en modo ${JOULE_MODE_LABELS[mode]}`, type: 'success' });
   }
