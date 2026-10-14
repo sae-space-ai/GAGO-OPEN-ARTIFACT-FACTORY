@@ -1,13 +1,95 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useData } from '../context/DataContext';
-import { FolderKanban, ListTodo, Package, Shield, Plus, Wifi, WifiOff, Database, Globe } from 'lucide-react';
+import { FolderKanban, ListTodo, Package, Shield, Plus, Wifi, WifiOff, Database, Globe, RefreshCw, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
 import { getSystemStatus } from '../services/storage';
+import { checkAllConnections, type SystemConnectionState, type SystemConnection } from '../services/system-connection-manager';
 import { Link } from 'react-router-dom';
 import { PROJECT_STATUS_LABELS, TASK_STATUS_LABELS } from '../types';
 
 export default function Dashboard() {
   const { store } = useData();
   const system = getSystemStatus();
+  const [connectionState, setConnectionState] = useState<SystemConnectionState | null>(null);
+  const [isChecking, setIsChecking] = useState(false);
+
+  // Comprobar conexiones al cargar el componente
+  useEffect(() => {
+    handleCheckConnections();
+  }, []);
+
+  const handleCheckConnections = async () => {
+    setIsChecking(true);
+    try {
+      const state = await checkAllConnections();
+      setConnectionState(state);
+    } catch (error) {
+      console.error('Error al comprobar conexiones:', error);
+    } finally {
+      setIsChecking(false);
+    }
+  };
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'VERIFIED':
+        return <CheckCircle className="w-3.5 h-3.5 text-green-600 dark:text-green-400" />;
+      case 'CONNECTED':
+        return <CheckCircle className="w-3.5 h-3.5 text-green-600 dark:text-green-400" />;
+      case 'CONFIGURED':
+        return <AlertCircle className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />;
+      case 'AUTH_REQUIRED':
+        return <AlertCircle className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />;
+      case 'ERROR':
+      case 'DISCONNECTED':
+        return <XCircle className="w-3.5 h-3.5 text-red-600 dark:text-red-400" />;
+      case 'CONNECTING':
+        return <RefreshCw className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 animate-spin" />;
+      default:
+        return <AlertCircle className="w-3.5 h-3.5 text-slate-500 dark:text-slate-500" />;
+    }
+  };
+
+  const getStatusText = (connection: SystemConnection | null) => {
+    if (!connection) return 'No verificado';
+    
+    switch (connection.status) {
+      case 'VERIFIED':
+        return 'Verificado';
+      case 'CONNECTED':
+        return 'Conectado';
+      case 'CONFIGURED':
+        return 'Configurado';
+      case 'AUTH_REQUIRED':
+        return 'Autorización requerida';
+      case 'ERROR':
+      case 'DISCONNECTED':
+        return 'Error';
+      case 'CONNECTING':
+        return 'Comprobando...';
+      case 'NOT_CONFIGURED':
+        return 'No configurado';
+      default:
+        return connection.status;
+    }
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'VERIFIED':
+      case 'CONNECTED':
+        return 'text-green-600 dark:text-green-400';
+      case 'CONFIGURED':
+      case 'AUTH_REQUIRED':
+        return 'text-amber-600 dark:text-amber-400';
+      case 'ERROR':
+      case 'DISCONNECTED':
+        return 'text-red-600 dark:text-red-400';
+      case 'CONNECTING':
+        return 'text-blue-600 dark:text-blue-400';
+      default:
+        return 'text-slate-500 dark:text-slate-500';
+    }
+  };
 
   const activeProjects = store.projects.filter(p => !p.archived);
   const pendingTasks = store.tasks.filter(t => t.status === 'pending' || t.status === 'in_progress');
@@ -116,7 +198,17 @@ export default function Dashboard() {
 
         {/* System status */}
         <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-5">
-          <h3 className="text-sm font-semibold text-slate-900 dark:text-white mb-4">Estado del sistema</h3>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-sm font-semibold text-slate-900 dark:text-white">Estado del sistema</h3>
+            <button
+              onClick={handleCheckConnections}
+              disabled={isChecking}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors disabled:opacity-50"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${isChecking ? 'animate-spin' : ''}`} />
+              {isChecking ? 'Comprobando...' : 'Comprobar'}
+            </button>
+          </div>
           <div className="space-y-3">
             <div className="flex items-center justify-between text-sm">
               <span className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
@@ -138,20 +230,59 @@ export default function Dashboard() {
               <span className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
                 <Shield className="w-4 h-4" /> GitHub
               </span>
-              <span className="text-slate-500 dark:text-slate-500 text-xs">No configurado</span>
+              <span className={`flex items-center gap-1.5 ${getStatusColor(connectionState?.connections.github?.status || 'NOT_CONFIGURED')}`}>
+                {connectionState && getStatusIcon(connectionState.connections.github.status)}
+                <span className="text-xs">{getStatusText(connectionState?.connections.github || null)}</span>
+              </span>
             </div>
+            {connectionState?.connections.github && connectionState.connections.github.lastChecked && (
+              <div className="ml-6 text-xs text-slate-500 dark:text-slate-500">
+                Última comprobación: {new Date(connectionState.connections.github.lastChecked).toLocaleString('es-ES')}
+              </div>
+            )}
+            {connectionState?.connections.github && connectionState.connections.github.details && (
+              <div className="ml-6 text-xs text-slate-600 dark:text-slate-400">
+                {connectionState.connections.github.details}
+              </div>
+            )}
             <div className="flex items-center justify-between text-sm">
               <span className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
                 <Globe className="w-4 h-4" /> Vercel
               </span>
-              <span className="text-slate-500 dark:text-slate-500 text-xs">No configurado</span>
+              <span className={`flex items-center gap-1.5 ${getStatusColor(connectionState?.connections.vercel?.status || 'NOT_CONFIGURED')}`}>
+                {connectionState && getStatusIcon(connectionState.connections.vercel.status)}
+                <span className="text-xs">{getStatusText(connectionState?.connections.vercel || null)}</span>
+              </span>
             </div>
+            {connectionState?.connections.vercel && connectionState.connections.vercel.lastChecked && (
+              <div className="ml-6 text-xs text-slate-500 dark:text-slate-500">
+                Última comprobación: {new Date(connectionState.connections.vercel.lastChecked).toLocaleString('es-ES')}
+              </div>
+            )}
+            {connectionState?.connections.vercel && connectionState.connections.vercel.details && (
+              <div className="ml-6 text-xs text-slate-600 dark:text-slate-400">
+                {connectionState.connections.vercel.details}
+              </div>
+            )}
             <div className="flex items-center justify-between text-sm">
               <span className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
                 <Package className="w-4 h-4" /> Qwen Coder
               </span>
-              <span className="text-slate-500 dark:text-slate-500 text-xs">No conectado</span>
+              <span className={`flex items-center gap-1.5 ${getStatusColor(connectionState?.connections.qwen?.status || 'NOT_CONFIGURED')}`}>
+                {connectionState && getStatusIcon(connectionState.connections.qwen.status)}
+                <span className="text-xs">{getStatusText(connectionState?.connections.qwen || null)}</span>
+              </span>
             </div>
+            {connectionState?.connections.qwen && connectionState.connections.qwen.lastChecked && (
+              <div className="ml-6 text-xs text-slate-500 dark:text-slate-500">
+                Última comprobación: {new Date(connectionState.connections.qwen.lastChecked).toLocaleString('es-ES')}
+              </div>
+            )}
+            {connectionState?.connections.qwen && connectionState.connections.qwen.details && (
+              <div className="ml-6 text-xs text-slate-600 dark:text-slate-400">
+                {connectionState.connections.qwen.details}
+              </div>
+            )}
           </div>
           {blockedTasks.length > 0 && (
             <div className="mt-4 p-3 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800">
