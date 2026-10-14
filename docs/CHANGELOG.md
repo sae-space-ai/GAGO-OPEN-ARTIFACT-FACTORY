@@ -1,5 +1,61 @@
 # Changelog — GAGO Open Artifact Factory
 
+## [3.0.0] — Fase 3 — Automatic Configuration and Connection Recovery
+
+### Añadido
+- **Motor de Autoconfiguración**: Verificación real de conectividad para todas las integraciones
+- **Motor de Recuperación de Conexiones**: Diagnóstico automático de errores y planes de recuperación
+- **Centro de Control de Conexiones**: Interfaz unificada para gestionar todas las conexiones
+- **Verificación de GitHub**: Comprobación de acceso público a la API (60 req/hora sin autenticación)
+- **Verificación de Vercel**: Comprobación de configuración local (vercel.json)
+- **Verificación de Ollama**: Comprobación de disponibilidad del servicio local
+- **Verificación de JOULE**: Comprobación del estado del motor de optimización
+- **Verificación de Red**: Comprobación de conectividad general
+- **Verificación de Almacenamiento**: Comprobación de localStorage
+- **Sistema de Diagnóstico**: Clasificación de errores por severidad (CRITICAL, HIGH, MEDIUM, LOW)
+- **Acciones de Recuperación**: Recomendaciones automáticas (WAIT_AND_RETRY, PROVIDE_CREDENTIALS, etc.)
+- **Botón "Conectar Todo"**: Verificación masiva de todas las conexiones
+- **Resumen de Diagnóstico**: Conteo de errores por severidad y recomendaciones
+- **10 requisitos adicionales** (P3_01-P3_10) en la matriz de alcance
+- **Pruebas automatizadas**: Tests completos para autoconfiguración y recuperación
+
+### Modificado
+- `src/types/phase3.ts`: Nuevos tipos para estados de conexión, errores y recuperación
+- `src/services/auto-config.ts`: Motor de verificación de conexiones
+- `src/services/connection-recovery.ts`: Motor de diagnóstico y recuperación
+- `src/pages/ConnectionControlCenter.tsx`: Centro de control de conexiones
+- `src/tests/phase3.test.ts`: Pruebas unitarias completas
+- `src/services/initial-scope.ts`: 10 requisitos de Fase 3 añadidos
+- `src/components/Layout.tsx`: Nueva entrada de navegación "Conexiones"
+- `src/App.tsx`: Nueva ruta `/connections`
+- `docs/CHANGELOG.md`: Registro de cambios de la Fase 3
+- `docs/FASE_3_INFORME.md`: Documentación completa de la Fase 3
+
+### No modificado (protección Fases 0, 0.1, 1 y 2)
+- Proyectos, tareas, artefactos, evidencias, matriz de alcance, puertas de calidad y motor JOULE continúan funcionando sin cambios
+- Universal API Fabric y todos sus componentes preservados
+- Todas las rutas existentes operativas
+- Persistencia de datos de todas las fases anteriores preservada
+
+### Características de Seguridad
+- Las credenciales nunca se almacenan en el navegador
+- No se utilizan variables de entorno VITE para secretos
+- Se respetan los límites de tasa de API
+- No se realizan operaciones que puedan generar cargos
+- Validación de todas las respuestas de red
+- Manejo seguro de errores CORS
+
+### Principios Arquitectónicos
+- Verificación real de conectividad (no simulada)
+- Autoconfiguración segura y no destructiva
+- Recuperación automática cuando es posible
+- Intervención manual cuando es necesario
+- Coste cero por defecto
+- Protección completa de credenciales
+- Integración con todas las fases anteriores
+
+---
+
 ## [2.0.0] — Fase 2 — Universal API Integration and Zero Cost Orchestration
 
 ### Añadido

@@ -2,13 +2,13 @@
 
 **Factoría abierta de artefactos digitales y aplicaciones de inteligencia artificial**
 
-Versión: 2.0.0 | Fase 2 | Licencia: MIT
+Versión: 3.0.0 | Fase 3 | Licencia: MIT
 
 ## Descripción
 
 GAGO Open Artifact Factory es una plataforma abierta de desarrollo de software y artefactos digitales. Permite gestionar proyectos, tareas, artefactos y evidencias técnicas, además de generar instrucciones estructuradas para modelos de inteligencia artificial como Qwen Coder.
 
-La Fase Cero establece los fundamentos técnicos: una aplicación web funcional con persistencia local, arquitectura modular y preparación para integraciones futuras.
+La Fase 3 implementa un sistema completo de verificación, autoconfiguración y recuperación de conexiones para todas las integraciones de la factoría.
 
 ## Características
 
@@ -51,6 +51,18 @@ La Fase Cero establece los fundamentos técnicos: una aplicación web funcional 
 - **API Control Center**: Centro de control visual de todas las integraciones
 - **Modo Offline-First**: La aplicación funciona sin conexiones externas
 - **Seguridad**: Las credenciales nunca se almacenan en el frontend
+
+### Fase 3 — Automatic Configuration and Connection Recovery
+- **Motor de Autoconfiguración**: Verificación real de conectividad para todas las integraciones
+- **Motor de Recuperación**: Diagnóstico automático de errores y planes de recuperación
+- **Centro de Control de Conexiones**: Interfaz unificada para gestionar todas las conexiones
+- **Verificación de GitHub**: Comprobación de acceso público a la API
+- **Verificación de Vercel**: Comprobación de configuración local
+- **Verificación de Ollama**: Comprobación de disponibilidad del servicio local
+- **Verificación de JOULE**: Comprobación del estado del motor de optimización
+- **Sistema de Diagnóstico**: Clasificación de errores por severidad
+- **Botón "Conectar Todo"**: Verificación masiva de todas las conexiones
+- **Pruebas Automatizadas**: Tests completos para autoconfiguración y recuperación
 
 ## Requisitos
 

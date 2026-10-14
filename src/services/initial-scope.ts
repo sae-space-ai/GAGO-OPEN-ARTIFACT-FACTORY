@@ -335,12 +335,88 @@ export function getInitialScopeRequirements(): ScopeRequirement[] {
 }
 
 /**
+ * Requisitos de la Fase 3 - Automatic Configuration and Connection Recovery
+ */
+const PHASE3_SCOPE_IDS = {
+  P3_01: 'scope-p3-01-connection-verification',
+  P3_02: 'scope-p3-02-auto-configuration',
+  P3_03: 'scope-p3-03-error-recovery',
+  P3_04: 'scope-p3-04-connection-control-center',
+  P3_05: 'scope-p3-05-github-integration',
+  P3_06: 'scope-p3-06-vercel-integration',
+  P3_07: 'scope-p3-07-ollama-integration',
+  P3_08: 'scope-p3-08-joule-connection',
+  P3_09: 'scope-p3-09-security-validation',
+  P3_10: 'scope-p3-10-testing',
+};
+
+function getPhase3ScopeRequirements(): ScopeRequirement[] {
+  const now = new Date().toISOString();
+
+  function makePhase3Req(
+    id: string,
+    name: string,
+    description: string,
+    objective: string,
+    priority: 'critical' | 'high' | 'medium' | 'low',
+    dependencies: string[]
+  ): ScopeRequirement {
+    return {
+      id,
+      code: 'M01',
+      phase: '3',
+      module: 'Conexiones',
+      name,
+      functionalDescription: description,
+      technicalObjective: objective,
+      priority,
+      dependencies,
+      executor: 'human',
+      implementationStatus: 'implemented',
+      testStatus: 'not_tested',
+      verificationStatus: 'not_verified',
+      acceptanceCriteria: [],
+      evidenceIds: [],
+      relatedProjectIds: [],
+      relatedTaskIds: [],
+      relatedArtifactIds: [],
+      actionType: 'local_ui',
+      actionReference: 'src/services/auto-config.ts',
+      blockers: [],
+      observations: '',
+      versionRef: 'phase-3-connections',
+      createdAt: now,
+      updatedAt: now,
+      archived: false,
+    };
+  }
+
+  return [
+    makePhase3Req(PHASE3_SCOPE_IDS.P3_01, 'Verificación de Conexiones', 'Verificar conectividad real', 'Implementar sistema de verificación de conexiones', 'critical', []),
+    makePhase3Req(PHASE3_SCOPE_IDS.P3_02, 'Autoconfiguración', 'Configuración automática segura', 'Implementar Automatic Configuration Engine', 'critical', [PHASE3_SCOPE_IDS.P3_01]),
+    makePhase3Req(PHASE3_SCOPE_IDS.P3_03, 'Recuperación de Errores', 'Diagnóstico y reparación automática', 'Implementar Connection Recovery Engine', 'high', [PHASE3_SCOPE_IDS.P3_01]),
+    makePhase3Req(PHASE3_SCOPE_IDS.P3_04, 'Centro de Control de Conexiones', 'Interfaz de gestión de conexiones', 'Implementar Connection Control Center', 'high', [PHASE3_SCOPE_IDS.P3_02, PHASE3_SCOPE_IDS.P3_03]),
+    makePhase3Req(PHASE3_SCOPE_IDS.P3_05, 'Integración GitHub', 'Verificación de API pública', 'Implementar verificación de GitHub', 'high', [PHASE3_SCOPE_IDS.P3_01]),
+    makePhase3Req(PHASE3_SCOPE_IDS.P3_06, 'Integración Vercel', 'Verificación de configuración', 'Implementar verificación de Vercel', 'medium', [PHASE3_SCOPE_IDS.P3_01]),
+    makePhase3Req(PHASE3_SCOPE_IDS.P3_07, 'Integración Ollama', 'Verificación de servicio local', 'Implementar verificación de Ollama', 'high', [PHASE3_SCOPE_IDS.P3_01]),
+    makePhase3Req(PHASE3_SCOPE_IDS.P3_08, 'Conexión JOULE', 'Verificación del motor', 'Implementar verificación de JOULE', 'critical', [PHASE3_SCOPE_IDS.P3_01]),
+    makePhase3Req(PHASE3_SCOPE_IDS.P3_09, 'Validación de Seguridad', 'Protección de credenciales', 'Implementar validaciones de seguridad', 'critical', [PHASE3_SCOPE_IDS.P3_02]),
+    makePhase3Req(PHASE3_SCOPE_IDS.P3_10, 'Pruebas de Fase 3', 'Validación de funcionalidades', 'Implementar pruebas de conexiones', 'critical', [PHASE3_SCOPE_IDS.P3_01, PHASE3_SCOPE_IDS.P3_02, PHASE3_SCOPE_IDS.P3_03]),
+  ];
+}
+
+/**
  * Instala los requisitos iniciales de forma idempotente.
  * No duplica registros si ya existen.
  */
 export function installInitialScope(existing: ScopeRequirement[]): ScopeRequirement[] {
   const existingIds = new Set(existing.map(r => r.id));
-  const initial = [...getInitialScopeRequirements(), ...getJouleScopeRequirements(), ...getAPIFabricScopeRequirements()];
+  const initial = [
+    ...getInitialScopeRequirements(),
+    ...getJouleScopeRequirements(),
+    ...getAPIFabricScopeRequirements(),
+    ...getPhase3ScopeRequirements()
+  ];
   const toAdd = initial.filter(r => !existingIds.has(r.id));
   return [...existing, ...toAdd];
 }
