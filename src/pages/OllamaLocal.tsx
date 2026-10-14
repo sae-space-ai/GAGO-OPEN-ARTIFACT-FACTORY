@@ -1,4 +1,7 @@
 import React, {useState} from 'react';
+import {useData} from '../context/DataContext';
+import {jouleObserveStart} from '../services/joule';
+import {shouldObserveOllamaShadow,finishOllamaShadowObservation} from '../services/ollama-joule-observability';
 import {Link} from 'react-router-dom';
 import { Cpu, ShieldCheck, RefreshCw, Send, LockKeyhole, ArrowLeft } from 'lucide-react';
 import {
@@ -7,6 +10,7 @@ import {
 } from '../services/local-ollama';
 
 export default function OllamaLocal() {
+  const {store,recordOllamaShadowMeasurement}=useData();
   // Ephemeral pairing secret: never stored in localStorage, app state or URLs.
   const [token,setToken]=useState('');
   const [status,setStatus]=useState<'PENDING'|'TESTING'|'VERIFIED'|'FAILED'>('PENDING');
@@ -37,11 +41,20 @@ export default function OllamaLocal() {
   async function run(){
     if(status!=='VERIFIED'||!selected||!prompt.trim())return;
     setError('');setWorking(true);setAnswer('');setLastMetrics(null);
+    // Observation never changes the model, prompt, route, execution or permissions.
+    const observe = shouldObserveOllamaShadow(store.jouleState);
+    const ctx = observe ? jouleObserveStart(
+      'ollama-inference:'+selected,'ollama-local:'+selected,'ai_request'
+    ) : null;
     try{
       const result=await chatWithLocalOllama(token,selected,prompt);
       setAnswer(result.answer);
       setLastMetrics(result.metrics);
-    }catch(e){setError(e instanceof Error?e.message:'Error al solicitar inferencia');}
+      if(ctx)recordOllamaShadowMeasurement(finishOllamaShadowObservation(ctx,true));
+    }catch(e){
+      setError(e instanceof Error?e.message:'Error al solicitar inferencia');
+      if(ctx)recordOllamaShadowMeasurement(finishOllamaShadowObservation(ctx,false));
+    }
     finally{setWorking(false);}
   }
 
@@ -105,10 +118,17 @@ export default function OllamaLocal() {
       {lastMetrics&&<p className="text-xs text-slate-500 dark:text-slate-400">Tokens generados informados por Ollama: {lastMetrics.evalCount??'no disponible'}. Duración informada: {lastMetrics.totalDurationNs!==null?(lastMetrics.totalDurationNs/1e9).toFixed(2)+' s':'no disponible'}.</p>}
     </section>
     <section className="rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-800">
-      <h2 className="text-lg font-semibold">3. Preparación de JOULE</h2>
+      <h2 className="text-lg font-semibold">3. Observación de JOULE</h2>
       <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
         El conector expone una ruta de proveedor local compatible con los contratos de JOULE.
-        No se activa JOULE, no se sustituye la política de referencia ni se promete ahorro de recursos.
+        {shouldObserveOllamaShadow(store.jouleState)
+          ? ' Shadow registra las duraciones y los resultados de solicitudes nuevas, sin modificar su ejecución.'
+          : ' Activa Shadow en el panel JOULE para registrar futuras inferencias; no se activa automáticamente.'}
+        No se sustituye la política de referencia ni se promete ahorro de recursos.
+      </p>
+      <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
+        La respuesta de un modelo nunca constituye verificación independiente. Los contadores Verificadas y Decisiones Shadow seguirán a cero
+        hasta que existan pruebas verificadoras y un evaluador de rutas real, respectivamente.
       </p>
       <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
         Ruta: {route?.id||'pendiente'} · Disponibilidad: {route?.available?'verificada para el catálogo':'pendiente'} · Confianza de calidad: desconocida · API facturable: no.
