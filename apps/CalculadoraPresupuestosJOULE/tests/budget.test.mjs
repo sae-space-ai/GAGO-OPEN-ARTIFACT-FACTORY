@@ -1,0 +1,15 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {calculate,parseCents,formatEUR,SAMPLE,loadDocument,exportDocument,InvalidBudget} from '../src/budget.ts';
+const copy=()=>structuredClone(SAMPLE);
+test('55 euro reference example',()=>{const x=calculate(copy());assert.equal(x.totalCents,5500n);assert.equal(formatEUR(x.totalCents),'55,00 €');});
+test('hourly rate 0.50 and 160h costs 80 euro',()=>{const x=copy();x.resources=[{id:'gpu',name:'GPU',category:'compute',quantity:1,unitPrice:'0.50',period:'hour'}];assert.equal(calculate(x).totalCents,8000n);});
+test('daily rate uses configured days',()=>{const x=copy();x.resources=[{id:'net',name:'Network',category:'network',quantity:2,unitPrice:'0.13',period:'day'}];assert.equal(calculate(x).totalCents,780n);});
+test('zero price works',()=>{const x=copy();x.resources[0].unitPrice='0';assert.equal(calculate(x).totalCents,3500n);});
+test('0.10+0.20 exact cents',()=>{assert.equal(parseCents('0.10')+parseCents('0.20'),30n);});
+test('10pct contingency',()=>{const x=copy();x.contingencyPercent=10;assert.equal(calculate(x).totalCents,6050n);});
+test('invalid quantities and period rejected',()=>{for(const n of [0,-1,1.5,1000001]){const x=copy();x.resources[0].quantity=n;assert.throws(()=>calculate(x),InvalidBudget);}});
+test('invalid prices rejected',()=>{for(const p of ['-1','1.234','NaN','01','999999999'])assert.throws(()=>parseCents(p),InvalidBudget);});
+test('bounds checked',()=>{const x=copy();x.monthlyHours=0;assert.throws(()=>calculate(x),InvalidBudget);});
+test('duplicate ids rejected',()=>{const x=copy();x.resources[0].id=x.resources[1].id;assert.throws(()=>calculate(x),InvalidBudget);});
+test('export import round trip',()=>{const x=copy();assert.deepEqual(loadDocument(exportDocument(x,calculate(x))),x);});
+test('invalid import rejected',()=>{assert.throws(()=>loadDocument({version:2,input:copy()}),InvalidBudget);});
+test('too many rows rejected',()=>{const x=copy();x.resources=Array.from({length:101},(_,i)=>({...SAMPLE.resources[0],id:String(i)}));assert.throws(()=>calculate(x),InvalidBudget);});
