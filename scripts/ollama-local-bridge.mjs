@@ -1,6 +1,7 @@
 // Companion process on the user's OWN Windows PC. No cloud service, no public listener.
 // Usage (PowerShell): $env:GAGO_ALLOWED_ORIGIN="https://YOUR-FACTORY.vercel.app"; npm run ollama:bridge
 import http from 'node:http';
+import { pathToFileURL } from 'node:url';
 import { randomBytes, timingSafeEqual } from 'node:crypto';
 
 export const HOST = '127.0.0.1';
@@ -123,4 +124,4 @@ export function startBridge(){
   });
   return server;
 }
-if(process.argv[1] && import.meta.url===new URL('file://'+process.argv[1].replace(/\\/g,'/')).href){startBridge();}
+if(process.argv[1] && import.meta.url===pathToFileURL(process.argv[1]).href){startBridge();}
