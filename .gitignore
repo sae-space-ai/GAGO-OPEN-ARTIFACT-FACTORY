@@ -1,5 +1,39 @@
+# Dependencies
 node_modules/
-.next/
+
+# Build output
 dist/
 build/
+
+# Environment files
+.env
+.env.local
+.env.production
+*.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
 *.log
+npm-debug.log*
+
+# Test coverage
+coverage/
+
+# Temporary files
+tmp/
+temp/
+
+# Credentials (never commit)
+*.pem
+*.key
+secrets/
+.next/
