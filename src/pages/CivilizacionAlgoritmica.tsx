@@ -2,9 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import {
   ArrowRight, ArrowUpRight, Activity, BrainCircuit, Cpu, Layers3,
-  Network, ShieldCheck, Workflow, FolderKanban, Sparkles,
-  ScanLine, Database, Fingerprint, Radio, Box, ChevronRight,
-  Command, BookOpen, Gauge, CircleDot
+  Network, ShieldCheck, Sparkles,
+  ScanLine, Database, Fingerprint, Box, ChevronRight,
+  Command, Gauge, CircleDot
 } from 'lucide-react';
 import { useData } from '../context/DataContext';
 import '../styles/civilizacion-algoritmica.css';
