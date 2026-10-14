@@ -22,6 +22,7 @@ const ApprovalDashboard = lazy(() => import('./pages/ApprovalDashboard'));
 const FreeTrainingCenter = lazy(() => import('./pages/FreeTrainingCenter'));
 const AIProviderControlCenter = lazy(() => import('./pages/AIProviderControlCenter'));
 const JouleCognitiveControlCenter = lazy(() => import('./pages/JouleCognitiveControlCenter'));
+const CivilizacionAlgoritmica = lazy(() => import('./pages/CivilizacionAlgoritmica'));
 const QwenGenerator = lazy(() => import('./pages/QwenGenerator'));
 const Settings = lazy(() => import('./pages/Settings'));
 const Integrations = lazy(() => import('./pages/Integrations'));
@@ -63,6 +64,7 @@ export default function App() {
                 <Route path="/free-training" element={<FreeTrainingCenter />} />
                 <Route path="/ai-providers" element={<AIProviderControlCenter />} />
                 <Route path="/joule-cognitive" element={<JouleCognitiveControlCenter />} />
+                <Route path="/civilizacion-algoritmica" element={<CivilizacionAlgoritmica />} />
                 <Route path="/qwen" element={<QwenGenerator />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/integrations" element={<Integrations />} />

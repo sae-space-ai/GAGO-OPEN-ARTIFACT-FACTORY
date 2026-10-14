@@ -10,6 +10,24 @@ permissions:
   contents: read
 
 jobs:
+  civilizacion-algoritmica:
+    name: Civilización Algorítmica — diseño sin regresiones
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.x
+          cache: npm
+      - name: Install
+        run: npm ci
+      - name: Verify portal routes, read-only data and accessibility
+        run: node --test tests/civilizacion-algoritmica.test.mjs
+      - name: TypeScript check
+        run: npm run typecheck
+      - name: Vite build
+        run: npm run build
+
   build:
     runs-on: ubuntu-latest
 
