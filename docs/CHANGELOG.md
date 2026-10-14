@@ -1,5 +1,61 @@
 # Changelog — GAGO Open Artifact Factory
 
+## [11.0.0] — Fase 11 — JOULE HYBRID AI PROVIDER ENGINE
+
+### Añadido
+- **AI Provider Manager**: Motor central de gestión de proveedores de IA
+- **OpenRouter Adapter**: Adaptador completo para OpenRouter con modelos gratuitos verificados
+- **Ollama Adapter Mejorado**: Adaptador para Ollama local (ahora opcional, no obligatorio)
+- **AI Provider Selector**: Algoritmo inteligente de selección de proveedores con fallback automático
+- **Control de Presupuesto**: Sistema de presupuesto cero por defecto
+- **Control de Cuotas**: Gestión de límites de uso por proveedor
+- **Sistema de Fallback**: Recuperación automática ante fallos de proveedores
+- **AI Provider Control Center**: Interfaz profesional para gestión de proveedores
+- **Integración con JOULE**: Selección optimizada de proveedores
+- **Integración con Tool Factory**: Inferencia de IA para generación de código
+- **13 Requisitos en Matriz de Alcance**: AI1101-AI1113
+- **Pruebas Unitarias**: ai-provider.test.ts con cobertura completa
+
+### Características Principales
+- **Modelos Gratuitos Verificados**: Llama 3.2, Llama 3.1, Gemma 2, Mistral 7B, Qwen 2
+- **Presupuesto Cero**: Solo se utilizan modelos gratuitos, sin cargos automáticos
+- **Fallback Automático**: Si un proveedor falla, se intenta con el siguiente
+- **Ollama Opcional**: El sistema funciona sin Ollama, usando proveedores remotos gratuitos
+- **Seguridad**: API keys nunca se exponen en el frontend
+- **Cuotas**: Control estricto de límites de uso
+- **Estadísticas**: Métricas de uso, latencia y coste
+
+### Modificado
+- `src/types/ai-provider.ts`: Nuevos tipos para proveedores de IA
+- `src/types/index.ts`: Añadido aiProviderState a DataStore
+- `src/types/scope.ts`: Añadidas fases 5-11 a ScopePhase
+- `src/services/ai-provider/manager.ts`: Nuevo gestor de proveedores
+- `src/services/ai-provider/openrouter-adapter.ts`: Nuevo adaptador OpenRouter
+- `src/services/ai-provider/ollama-adapter.ts`: Nuevo adaptador Ollama mejorado
+- `src/services/ai-provider/selector.ts`: Nuevo selector de proveedores
+- `src/services/ai-provider/index.ts`: Índice del módulo
+- `src/pages/AIProviderControlCenter.tsx`: Nueva interfaz de control
+- `src/App.tsx`: Nueva ruta /ai-providers
+- `src/components/Layout.tsx`: Nueva entrada de navegación
+- `src/services/initial-scope.ts`: 13 requisitos de Fase 11 añadidos
+- `src/tests/ai-provider.test.ts`: Nuevas pruebas unitarias
+
+### No modificado (protección Fases 0-10)
+- Todos los módulos de fases anteriores continúan funcionando sin cambios
+- JOULE Engine, JOULE MATS, Control Plane, Approval Engine preservados
+- Tool Factory, Free Training Center, Universal Integrations Hub intactos
+- Todas las rutas existentes operativas
+- Persistencia de datos de todas las fases anteriores preservada
+
+### Resultados de Compilación
+```
+✓ 1458 modules transformed
+✓ built in 6.31s
+✓ Sin errores de TypeScript
+```
+
+---
+
 ## [10.0.0] — Fase 10 — Final Integration Repair and Production Readiness
 
 ### Añadido

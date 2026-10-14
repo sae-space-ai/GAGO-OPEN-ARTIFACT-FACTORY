@@ -415,7 +415,8 @@ export function installInitialScope(existing: ScopeRequirement[]): ScopeRequirem
     ...getInitialScopeRequirements(),
     ...getJouleScopeRequirements(),
     ...getAPIFabricScopeRequirements(),
-    ...getPhase3ScopeRequirements()
+    ...getPhase3ScopeRequirements(),
+    ...getAIProviderScopeRequirements()
   ];
   const toAdd = initial.filter(r => !existingIds.has(r.id));
   return [...existing, ...toAdd];
@@ -506,6 +507,84 @@ function getAPIFabricScopeRequirements(): ScopeRequirement[] {
     makeAPIReq(API_FABRIC_SCOPE_IDS.API216, 'Monitor de Conectividad', 'Verificación de salud', 'Implementar API Health Monitor', 'medium', [API_FABRIC_SCOPE_IDS.API202]),
     makeAPIReq(API_FABRIC_SCOPE_IDS.API217, 'Centro de Control', 'Interfaz de gestión', 'Implementar API Control Center', 'high', [API_FABRIC_SCOPE_IDS.API214]),
     makeAPIReq(API_FABRIC_SCOPE_IDS.API218, 'Pruebas y Seguridad', 'Validación continua', 'Implementar pruebas y auditoría', 'critical', [API_FABRIC_SCOPE_IDS.API214]),
+  ];
+}
+
+// Phase 11 — AI Provider Engine requirements
+export const AI_PROVIDER_SCOPE_IDS = {
+  AI1101: 'scope-ai1101-provider-manager',
+  AI1102: 'scope-ai1102-openrouter-adapter',
+  AI1103: 'scope-ai1103-ollama-adapter',
+  AI1104: 'scope-ai1104-provider-selector',
+  AI1105: 'scope-ai1105-budget-control',
+  AI1106: 'scope-ai1106-quota-control',
+  AI1107: 'scope-ai1107-fallback-system',
+  AI1108: 'scope-ai1108-joule-integration',
+  AI1109: 'scope-ai1109-tool-factory-integration',
+  AI1110: 'scope-ai1110-agent-integration',
+  AI1111: 'scope-ai1111-provider-center',
+  AI1112: 'scope-ai1112-security',
+  AI1113: 'scope-ai1113-testing',
+};
+
+/**
+ * Requisitos de AI Provider Engine (Fase 11).
+ */
+function getAIProviderScopeRequirements(): ScopeRequirement[] {
+  const now = new Date().toISOString();
+
+  function makeAIReq(
+    id: string,
+    name: string,
+    description: string,
+    objective: string,
+    priority: 'critical' | 'high' | 'medium' | 'low',
+    dependencies: string[]
+  ): ScopeRequirement {
+    return {
+      id,
+      code: 'M01',
+      phase: '11',
+      module: 'AI Provider Engine',
+      name,
+      functionalDescription: description,
+      technicalObjective: objective,
+      priority,
+      dependencies,
+      executor: 'human',
+      implementationStatus: 'implemented',
+      testStatus: 'not_tested',
+      verificationStatus: 'not_verified',
+      acceptanceCriteria: [],
+      evidenceIds: [],
+      relatedProjectIds: [],
+      relatedTaskIds: [],
+      relatedArtifactIds: [],
+      actionType: 'local_ui',
+      actionReference: 'src/services/ai-provider/',
+      blockers: [],
+      observations: '',
+      versionRef: 'phase-11-ai-provider',
+      createdAt: now,
+      updatedAt: now,
+      archived: false,
+    };
+  }
+
+  return [
+    makeAIReq(AI_PROVIDER_SCOPE_IDS.AI1101, 'AI Provider Manager', 'Gestión centralizada de proveedores', 'Implementar AIProviderManager', 'critical', []),
+    makeAIReq(AI_PROVIDER_SCOPE_IDS.AI1102, 'Adaptador OpenRouter', 'Integración con OpenRouter', 'Implementar conector para OpenRouter', 'critical', [AI_PROVIDER_SCOPE_IDS.AI1101]),
+    makeAIReq(AI_PROVIDER_SCOPE_IDS.AI1103, 'Adaptador Ollama', 'Integración con Ollama local', 'Implementar conector para Ollama', 'high', [AI_PROVIDER_SCOPE_IDS.AI1101]),
+    makeAIReq(AI_PROVIDER_SCOPE_IDS.AI1104, 'Selector de Proveedores', 'Selección inteligente de proveedores', 'Implementar algoritmo de selección', 'critical', [AI_PROVIDER_SCOPE_IDS.AI1101]),
+    makeAIReq(AI_PROVIDER_SCOPE_IDS.AI1105, 'Control de Presupuesto', 'Gestión de presupuesto cero', 'Implementar AIProviderBudgetGuard', 'critical', [AI_PROVIDER_SCOPE_IDS.AI1101]),
+    makeAIReq(AI_PROVIDER_SCOPE_IDS.AI1106, 'Control de Cuotas', 'Gestión de límites de uso', 'Implementar AIQuotaManager', 'high', [AI_PROVIDER_SCOPE_IDS.AI1101]),
+    makeAIReq(AI_PROVIDER_SCOPE_IDS.AI1107, 'Sistema de Fallback', 'Recuperación ante fallos', 'Implementar ProviderFallbackManager', 'high', [AI_PROVIDER_SCOPE_IDS.AI1104]),
+    makeAIReq(AI_PROVIDER_SCOPE_IDS.AI1108, 'Integración JOULE', 'Conexión con motor JOULE', 'Integrar AI Provider con JOULE', 'critical', [AI_PROVIDER_SCOPE_IDS.AI1104]),
+    makeAIReq(AI_PROVIDER_SCOPE_IDS.AI1109, 'Integración Tool Factory', 'Conexión con Tool Factory', 'Integrar AI Provider con Tool Factory', 'high', [AI_PROVIDER_SCOPE_IDS.AI1104]),
+    makeAIReq(AI_PROVIDER_SCOPE_IDS.AI1110, 'Integración Agentes', 'Conexión con agentes', 'Integrar AI Provider con agentes', 'medium', [AI_PROVIDER_SCOPE_IDS.AI1104]),
+    makeAIReq(AI_PROVIDER_SCOPE_IDS.AI1111, 'Centro de Proveedores', 'Interfaz de gestión', 'Implementar AI Provider Control Center', 'high', [AI_PROVIDER_SCOPE_IDS.AI1101]),
+    makeAIReq(AI_PROVIDER_SCOPE_IDS.AI1112, 'Seguridad', 'Protección de credenciales', 'Implementar gestión segura de API keys', 'critical', [AI_PROVIDER_SCOPE_IDS.AI1101]),
+    makeAIReq(AI_PROVIDER_SCOPE_IDS.AI1113, 'Pruebas', 'Validación continua', 'Implementar pruebas unitarias', 'critical', [AI_PROVIDER_SCOPE_IDS.AI1101]),
   ];
 }
 

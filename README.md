@@ -2,13 +2,13 @@
 
 **Factoría abierta de artefactos digitales y aplicaciones de inteligencia artificial**
 
-Versión: 10.0.0 | Fase 10 | Licencia: MIT
+Versión: 11.0.0 | Fase 11 | Licencia: MIT
 
 ## Descripción
 
 GAGO Open Artifact Factory es una plataforma abierta de desarrollo de software y artefactos digitales. Permite gestionar proyectos, tareas, artefactos y evidencias técnicas, además de generar instrucciones estructuradas para modelos de inteligencia artificial como Qwen Coder.
 
-La Fase 10 completa la corrección definitiva de los problemas de configuración y conectividad del sistema, implementando adaptadores reales para GitHub, Vercel y Qwen, y estableciendo un sistema de gestión de conexiones que proporciona información verificable en tiempo real.
+La Fase 11 implementa JOULE HYBRID AI PROVIDER ENGINE, un motor híbrido de proveedores de IA que permite utilizar modelos gratuitos de OpenRouter y Ollama local, con selección automática de proveedores, control de presupuesto cero y sistema de fallback.
 
 ## Características
 
@@ -98,6 +98,20 @@ La Fase 10 completa la corrección definitiva de los problemas de configuración
 - **10 Estados de Conexión**: VERIFIED, CONNECTED, CONFIGURED, AUTH_REQUIRED, etc.
 - **Pruebas Unitarias**: Cobertura completa de todos los adaptadores
 - **Corrección de Problemas**: GitHub, Vercel y Qwen ahora muestran estados reales
+
+### Fase 11 — JOULE HYBRID AI PROVIDER ENGINE
+- **AI Provider Manager**: Motor central de gestión de proveedores de IA
+- **OpenRouter Adapter**: Adaptador completo con modelos gratuitos verificados (Llama 3.2, Llama 3.1, Gemma 2, Mistral 7B, Qwen 2)
+- **Ollama Adapter Mejorado**: Adaptador para Ollama local (ahora opcional, no obligatorio)
+- **AI Provider Selector**: Algoritmo inteligente de selección con fallback automático
+- **Control de Presupuesto**: Sistema de presupuesto cero por defecto
+- **Control de Cuotas**: Gestión de límites de uso por proveedor
+- **Sistema de Fallback**: Recuperación automática ante fallos de proveedores
+- **AI Provider Control Center**: Interfaz profesional para gestión de proveedores
+- **Integración con JOULE**: Selección optimizada de proveedores
+- **Integración con Tool Factory**: Inferencia de IA para generación de código
+- **Seguridad**: API keys nunca se exponen en el frontend
+- **Pruebas Unitarias**: Cobertura completa del motor de proveedores
 
 ## Requisitos
 

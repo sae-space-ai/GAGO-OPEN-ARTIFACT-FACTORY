@@ -106,6 +106,8 @@ export interface DataStore {
   donationState?: import('./training').DonationSystemState;
   // Phase 10 — System Connections
   systemConnections?: import('../services/system-connection-manager').SystemConnectionState;
+  // Phase 11 — AI Provider Engine
+  aiProviderState?: import('./ai-provider').AIProviderState;
 }
 
 export const SCHEMA_VERSION = '0.1.0';
