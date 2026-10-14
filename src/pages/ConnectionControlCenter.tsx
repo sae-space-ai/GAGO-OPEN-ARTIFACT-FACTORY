@@ -2,6 +2,7 @@
 // Phase 3: Real-time connection status and management
 
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useData } from '../context/DataContext';
 import {
   verifyGitHubPublicAccess,
@@ -265,6 +266,10 @@ export default function ConnectionControlCenter() {
         </button>
       </div>
 
+      <div className="mb-5 rounded-lg border border-blue-200 bg-blue-50 p-4 dark:border-blue-900 dark:bg-blue-950/30">
+        <p className="text-sm text-slate-700 dark:text-slate-300">Para conectar Ollama desde una web pública utiliza el puente local con emparejamiento. La verificación directa de localhost:11434 de esta pantalla no constituye un acceso autorizado desde Vercel.</p>
+        <Link to="/integrations/ollama-local" className="mt-2 inline-flex rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white">Abrir configuración segura de Ollama</Link>
+      </div>
       {/* Resumen de Diagnóstico */}
       {diagnosticSummary && (
         <div className="mb-6 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
