@@ -26,6 +26,8 @@ jobs:
         run: npm ci
       - name: Validate TypeScript
         run: npm run typecheck
+      - name: Validate JOULE Shadow observation
+        run: npx vitest run src/tests/ollama-joule-shadow.test.ts
       - name: Build Vite
         run: npm run build
 
