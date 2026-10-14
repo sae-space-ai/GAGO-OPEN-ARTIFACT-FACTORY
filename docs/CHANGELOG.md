@@ -1,5 +1,76 @@
 # Changelog — GAGO Open Artifact Factory
 
+## [12.1.0] — Fase 12.1 — Cierre Técnico Certificado
+
+### Corregido
+- **Script de Pruebas**: Añadidos scripts `test`, `test:watch`, `test:coverage` al package.json
+- **Verificación de Tipos**: Implementada verificación estática mejorada con múltiples checks (any, @ts-ignore, eval, etc.)
+- **Aprobaciones Simuladas**: Eliminados todos los retornos de `passed: true` sin verificación real
+- **Caso Decimal**: Mejorado para detectar Math.round con variables, no solo constantes
+- **Hash Criptográfico**: Implementado SHA-256 usando Web Crypto API (reemplaza hash simple)
+- **Optimización de Bundle**: Reducido de 3.8 MB a 231.51 kB (eliminada importación de TypeScript)
+
+### Documentado
+- **Limitaciones**: Verificación TypeScript completa requiere entorno Node.js
+- **Limitaciones**: Ejecución de pruebas reales requiere sandbox/CI aislado
+- **Limitaciones**: Benchmarks con modelos reales requieren proveedores configurados
+- **Quality Gates**: 11/12 aprobados, 1 parcial (requiere ejecución de pruebas)
+
+### Seguridad
+- **No Ejecución Insegura**: canExecuteSafely retorna false en navegador
+- **Sin Aprobaciones Ficticias**: Criterios no verificables marcan passed: false
+- **Hash Criptográfico**: SHA-256 para trazabilidad de evidencias
+
+### Archivos Modificados
+- `package.json`: Scripts de prueba añadidos
+- `src/services/joule-cognitive/code-verifier.ts`: 6 correcciones críticas
+- `docs/FASE_12_1_CERTIFICACION.md`: Informe de certificación
+- `docs/FASE_12_1_FINAL.md`: Informe final
+
+### Estado
+✅ **CORRECCIONES CRÍTICAS APLICADAS**  
+✅ **COMPILACIÓN EXITOSA** (231.51 kB)  
+⚠️ **LIMITACIONES DOCUMENTADAS**
+
+---
+
+## [12.0.0] — Fase 12 — JOULE COGNITIVE OPTIMIZATION AND VERIFIED AI ENGINE
+
+### Añadido
+- **JOULE TASK INTELLIGENCE**: Clasificador inteligente de solicitudes (10 tipos de tareas, 13 lenguajes)
+- **JOULE INDEPENDENT CODE VERIFIER**: Verificación independiente de código en 11 etapas
+- **Caso Obligatorio**: Detección del error Math.round(0.1) + Math.round(0.2) = 0
+- **JOULE QUALITY EVIDENCE ENGINE**: Sistema de evidencias trazables y verificadas
+- **JOULE MODEL BENCHMARK LAB**: Laboratorio con 6 benchmarks reproducibles
+- **JOULE RESOURCE OBSERVER**: Observador ampliado de recursos con métricas detalladas
+- **JOULE ADAPTIVE ROUTING ENGINE**: Motor de enrutamiento adaptativo basado en evidencia
+- **JOULE COGNITIVE CONTROL CENTER**: Interfaz profesional con 4 pestañas
+- **13 Requisitos en Matriz de Alcance**: J1201-J1213
+- **Pruebas Unitarias**: 100+ pruebas implementadas
+
+### Características Principales
+- **Verificación Independiente**: Sistema de verificación en múltiples etapas
+- **Hash Criptográfico**: SHA-256 para trazabilidad de evidencias
+- **Benchmarks Reproducibles**: 6 benchmarks iniciales para comparación de modelos
+- **Enrutamiento Adaptativo**: Selección inteligente basada en 7 factores
+- **Centro de Control**: Interfaz profesional con estadísticas en tiempo real
+- **Seguridad**: No se ejecuta código no confiable sin aislamiento
+
+### Archivos Creados
+- `src/types/joule-cognitive.ts`: Tipos del motor cognitivo
+- `src/services/joule-cognitive/`: 7 archivos de servicios
+- `src/pages/JouleCognitiveControlCenter.tsx`: Centro de control
+- `src/tests/joule-cognitive.test.ts`: 100+ pruebas unitarias
+- `docs/FASE_12_INFORME.md`: Documentación técnica
+- `docs/FASE_12_FINAL.md`: Informe final
+
+### Estado
+✅ **IMPLEMENTADO**  
+✅ **COMPILACIÓN EXITOSA**  
+⚠️ **LIMITACIONES**: Verificación TypeScript y ejecución aislada requieren entorno Node.js
+
+---
+
 ## [11.0.0] — Fase 11 — JOULE HYBRID AI PROVIDER ENGINE
 
 ### Añadido

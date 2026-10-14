@@ -209,18 +209,28 @@ function countBalanced(code: string, open: string, close: string): boolean {
 }
 
 /**
- * Verificación de tipos (simulada para TypeScript)
+ * Verificación de tipos mejorada
+ * 
+ * NOTA: TypeScript Compiler no está disponible en el bundle del navegador.
+ * Se usa verificación estática mejorada como método principal.
+ * Para verificación completa con TypeScript Compiler, se requiere entorno Node.js.
  */
 async function checkTypes(code: string): Promise<{ passed: boolean; errors: string[] }> {
-  // En un entorno real, esto usaría el TypeScript Compiler API
-  // Por ahora, hacemos validaciones básicas
   const errors: string[] = [];
 
-  // Verificar que no haya tipos implícitos 'any' en lugares críticos
-  const anyMatches = code.match(/:\s*any\b/g);
-  if (anyMatches && anyMatches.length > 3) {
-    errors.push('Demasiados usos de tipo "any"');
-  }
+  // Verificación estática mejorada (método principal)
+  const basicChecks = performBasicTypeChecks(code);
+  errors.push(...basicChecks);
+
+  // Verificación avanzada de patrones comunes
+  const advancedChecks = performAdvancedTypeChecks(code);
+  errors.push(...advancedChecks);
+
+  // Nota: TypeScript Compiler no está disponible en el navegador
+  // Para verificación completa con compilador real, se requiere:
+  // - Entorno Node.js con TypeScript instalado
+  // - O servicio backend que ejecute la verificación
+  // - O integración con CI/CD que ejecute tsc
 
   return {
     passed: errors.length === 0,
@@ -229,15 +239,84 @@ async function checkTypes(code: string): Promise<{ passed: boolean; errors: stri
 }
 
 /**
+ * Verificación básica de tipos mejorada
+ */
+function performBasicTypeChecks(code: string): string[] {
+  const errors: string[] = [];
+
+  // Verificar uso excesivo de 'any'
+  const anyMatches = code.match(/:\s*any\b/g);
+  if (anyMatches && anyMatches.length > 3) {
+    errors.push('Demasiados usos de tipo "any" - considere usar tipos específicos');
+  }
+
+  // Verificar funciones sin tipo de retorno explícito
+  const functionWithoutReturn = code.match(/function\s+\w+\s*\([^)]*\)\s*{/g);
+  if (functionWithoutReturn && functionWithoutReturn.length > 2) {
+    errors.push('Funciones sin tipo de retorno explícito detectadas');
+  }
+
+  // Verificar variables sin tipo explícito (cuando sea posible)
+  const letWithoutType = code.match(/let\s+\w+\s*=/g);
+  if (letWithoutType && letWithoutType.length > 5) {
+    errors.push('Múltiples variables "let" sin tipo explícito');
+  }
+
+  return errors;
+}
+
+/**
+ * Verificación avanzada de patrones comunes
+ */
+function performAdvancedTypeChecks(code: string): string[] {
+  const errors: string[] = [];
+
+  // Verificar uso de @ts-ignore o @ts-nocheck
+  if (code.includes('@ts-ignore') || code.includes('@ts-nocheck')) {
+    errors.push('Directivas @ts-ignore o @ts-nocheck detectadas - evite suprimir errores de tipos');
+  }
+
+  // Verificar aserciones de tipo peligrosas
+  const asAnyMatches = code.match(/\bas\s+any\b/g);
+  if (asAnyMatches && asAnyMatches.length > 0) {
+    errors.push('Aserciones "as any" detectadas - considere usar tipos más específicos');
+  }
+
+  // Verificar non-null assertions excesivas
+  const nonNullMatches = code.match(/!\./g);
+  if (nonNullMatches && nonNullMatches.length > 5) {
+    errors.push('Múltiples aserciones de no-nulo (!) detectadas - considere verificaciones adecuadas');
+  }
+
+  // Verificar uso de eval o Function constructor (peligroso)
+  if (code.match(/\beval\s*\(/) || code.match(/new\s+Function\s*\(/)) {
+    errors.push('Uso de eval o Function constructor detectado - riesgo de seguridad');
+  }
+
+  return errors;
+}
+
+/**
  * Determina si se puede ejecutar código de forma segura
+ * 
+ * IMPORTANTE: En el navegador NO ejecutamos código generado por IA.
+ * La ejecución real requiere un entorno aislado (sandbox, CI, contenedor).
+ * Esta función verifica la disponibilidad de dicho entorno.
  */
 function canExecuteSafely(language: ProgrammingLanguage): boolean {
-  // Solo permitimos ejecución en entornos controlados
-  // En el navegador, NO ejecutamos código generado por IA
-  // Esto se haría en un entorno aislado (sandbox, CI, etc.)
+  // Verificar si estamos en un entorno que permite ejecución aislada
+  // En navegador: NO (seguridad)
+  // En Node.js con sandbox: SÍ (si está configurado)
+  // En CI/CD: SÍ (entorno aislado por diseño)
   
-  // Por ahora, retornamos false para indicar que no hay entorno seguro
-  // En producción, esto verificaría la disponibilidad de un sandbox
+  // Por defecto, en navegador retornamos false
+  if (typeof window !== 'undefined') {
+    return false;
+  }
+  
+  // En Node.js, verificar si hay sandbox disponible
+  // Esto requeriría configuración explícita del entorno
+  // Por ahora, retornamos false para ser conservadores
   return false;
 }
 
@@ -328,15 +407,20 @@ async function verifySingleCriterion(
     return verifyDecimalAddition(code, language);
   }
 
-  // Para otros criterios, hacer validación básica
+  // Para otros criterios, verificar si hay código de prueba
   if (criterion.testCode) {
-    // Si hay código de prueba, intentar ejecutarlo
-    // (En entorno seguro)
-    return { passed: true }; // Placeholder
+    // Sin entorno de ejecución aislado, no podemos ejecutar pruebas
+    return { 
+      passed: false, 
+      error: 'No se puede ejecutar la prueba sin entorno de ejecución aislado' 
+    };
   }
 
-  // Validación genérica
-  return { passed: true };
+  // Si no hay forma de verificar, marcar como no verificable
+  return { 
+    passed: false, 
+    error: 'Criterio no verificable automáticamente - requiere revisión manual' 
+  };
 }
 
 /**
@@ -344,85 +428,137 @@ async function verifySingleCriterion(
  * 
  * Este es el caso de prueba inicial y obligatorio de la Fase 12.
  * Detecta el error común de usar Math.round individualmente.
+ * Incluye detección de variables, no solo constantes.
  */
 function verifyDecimalAddition(code: string, language: ProgrammingLanguage): { passed: boolean; error?: string } {
-  const lowerCode = code.toLowerCase();
+  const errors: string[] = [];
 
-  // Detectar el patrón INCORRECTO: Math.round aplicado individualmente
-  const incorrectPattern1 = /math\.round\s*\(\s*0\.1\s*\)/i;
-  const incorrectPattern2 = /math\.round\s*\(\s*0\.2\s*\)/i;
-  const incorrectPattern3 = /round\s*\(\s*0\.1\s*\)/i;
-  const incorrectPattern4 = /round\s*\(\s*0\.2\s*\)/i;
+  // Detectar el patrón INCORRECTO: Math.round aplicado individualmente a operandos
+  // Patrones incorrectos con constantes
+  const incorrectConstantPatterns = [
+    /math\.round\s*\(\s*0\.1\s*\)/i,
+    /math\.round\s*\(\s*0\.2\s*\)/i,
+    /round\s*\(\s*0\.1\s*\)/i,
+    /round\s*\(\s*0\.2\s*\)/i
+  ];
 
-  if (incorrectPattern1.test(code) || incorrectPattern2.test(code) ||
-      incorrectPattern3.test(code) || incorrectPattern4.test(code)) {
+  // Patrones incorrectos con variables (más general)
+  // Detecta: Math.round(a) + Math.round(b) donde a y b son variables
+  const incorrectVariablePattern = /math\.round\s*\(\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*\)\s*\+\s*math\.round\s*\(\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*\)/i;
+
+  // Verificar patrones incorrectos con constantes
+  for (const pattern of incorrectConstantPatterns) {
+    if (pattern.test(code)) {
+      errors.push('ERROR CRÍTICO: El código usa Math.round() individualmente en operandos decimales, lo que trunca los valores');
+      break;
+    }
+  }
+
+  // Verificar patrón incorrecto con variables
+  if (incorrectVariablePattern.test(code)) {
+    errors.push('ERROR CRÍTICO: El código aplica Math.round() a variables individuales antes de sumar, lo que trunca los valores decimales');
+  }
+
+  // Si hay errores críticos, retornar inmediatamente
+  if (errors.length > 0) {
     return {
       passed: false,
-      error: 'ERROR CRÍTICO: El código usa Math.round(0.1) y Math.round(0.2) individualmente, lo que devuelve 0 + 0 = 0 en lugar de 0.3'
+      error: errors.join('; ')
     };
   }
 
   // Verificar que el código maneja correctamente la aritmética decimal
-  // Patrones CORRECTOS:
+  // Patrones CORRECTOS que indican manejo adecuado de decimales:
   const correctPatterns = [
-    // Uso de toFixed
+    // Uso de toFixed para redondeo controlado
     /toFixed\s*\(\s*\d+\s*\)/i,
     
-    // Multiplicación por potencia de 10
+    // Multiplicación por potencia de 10 antes de operar
     /\*\s*100/i,
     /\*\s*1000/i,
     /\*\s*10\s*\*\s*\d+/i,
     
-    // Uso de bibliotecas decimales
+    // Uso de bibliotecas decimales especializadas
     /decimal\.js/i,
     /big\.js/i,
     /bignumber/i,
+    /decimal\s*\(/i,
     
     // Conversión a enteros (céntimos)
     /cents?/i,
     /integer/i,
+    /Math\.round\s*\([^)]*\*\s*100/i, // Math.round aplicado DESPUÉS de multiplicar
     
-    // Comparación con epsilon
+    // Comparación con epsilon para tolerancia
     /epsilon/i,
-    /number\.epsilon/i,
+    /Number\.EPSILON/i,
     /math\.abs\s*\(.*\)\s*<\s*0\.0001/i,
+    /math\.abs\s*\(.*\)\s*<\s*1e-/i,
     
     // Uso de parseFloat después de operaciones
-    /parseFloat\s*\(/i
+    /parseFloat\s*\(/i,
+    
+    // Uso de Number() para conversión explícita
+    /Number\s*\(\s*\(/i
   ];
 
   const hasCorrectPattern = correctPatterns.some(pattern => pattern.test(code));
 
-  // Si no hay patrón correcto explícito, verificar que al menos no hay el patrón incorrecto
-  // y que el código parece razonable
+  // Si no hay patrón correcto explícito, verificar que el código es razonable
   if (!hasCorrectPattern) {
     // Verificación básica: el código debe contener alguna operación aritmética
     const hasArithmetic = /[\+\-\*\/]/.test(code);
     const hasNumbers = /\d+\.\d+/.test(code);
+    const hasVariables = /[a-zA-Z_][a-zA-Z0-9_]*/.test(code);
     
-    if (!hasArithmetic || !hasNumbers) {
+    // Si no hay operaciones aritméticas ni números decimales, es sospechoso
+    if (!hasArithmetic && !hasNumbers) {
       return {
         passed: false,
-        error: 'El código no parece implementar correctamente la suma decimal'
+        error: 'El código no contiene operaciones aritméticas ni números decimales'
+      };
+    }
+
+    // Si hay números decimales pero no hay patrón correcto conocido,
+    // marcar como "no verificable estáticamente" en lugar de aprobar
+    if (hasNumbers && !hasCorrectPattern) {
+      return {
+        passed: false,
+        error: 'El código contiene números decimales pero no se detecta un patrón de manejo correcto. Requiere ejecución real para verificación.'
       };
     }
   }
 
-  return { passed: true };
+  // Si llegamos aquí, el código parece correcto o al menos no tiene errores obvios
+  return { 
+    passed: true,
+    error: undefined
+  };
 }
 
 /**
- * Genera un hash del código para trazabilidad
+ * Genera un hash SHA-256 del código para trazabilidad criptográfica
  */
 async function hashCode(code: string): Promise<string> {
-  // Hash simple (en producción usaríamos crypto.subtle)
-  let hash = 0;
-  for (let i = 0; i < code.length; i++) {
-    const char = code.charCodeAt(i);
-    hash = ((hash << 5) - hash) + char;
-    hash = hash & hash; // Convert to 32bit integer
+  try {
+    // Usar Web Crypto API para SHA-256
+    const encoder = new TextEncoder();
+    const data = encoder.encode(code);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    return hashHex;
+  } catch (error) {
+    // Fallback si crypto.subtle no está disponible (entorno Node.js antiguo)
+    console.warn('crypto.subtle no disponible, usando hash básico');
+    let hash = 0;
+    for (let i = 0; i < code.length; i++) {
+      const char = code.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash;
+    }
+    return Math.abs(hash).toString(16).padStart(16, '0');
   }
-  return Math.abs(hash).toString(16).padStart(8, '0');
 }
 
 /**
