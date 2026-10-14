@@ -97,6 +97,13 @@ export interface DataStore {
   models?: import('./control-plane').ModelManifest[];
   // Phase 6 — Universal Integrations Hub
   integrations?: import('./integrations').IntegrationConnector[];
+  // Phase 9 — JOULE FREE TRAINING CENTER
+  trainingAlgorithms?: import('./training').TrainingAlgorithm[];
+  trainingDatasets?: import('./training').TrainingDataset[];
+  trainingJobs?: import('./training').TrainingJob[];
+  trainingQuotas?: import('./training').TrainingQuota[];
+  globalBudget?: import('./training').GlobalBudget;
+  donationState?: import('./training').DonationSystemState;
 }
 
 export const SCHEMA_VERSION = '0.1.0';

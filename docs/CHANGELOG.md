@@ -1,5 +1,73 @@
 # Changelog — GAGO Open Artifact Factory
 
+## [9.0.0] — Fase 9 — JOULE FREE TRAINING AND DONATION SYSTEM
+
+### Añadido
+- **JOULE FREE TRAINING CENTER**: Sistema completo de entrenamiento gratuito y limitado
+- **10 algoritmos de entrenamiento**: Optimización de políticas, bandido contextual, clasificación, regresión, estimación de coste, predicción de latencia, selección de rutas, aprendizaje incremental, evaluación de políticas, referencia determinista
+- **3 modalidades de entrenamiento**: Local (navegador), Local (Node.js), Compartido
+- **Sistema de cuotas estricto**: Control por usuario y modalidad con límites claros
+- **Control de presupuesto global**: Reserva atómica de recursos compartidos
+- **Planificador de trabajos**: Cola con prioridades y gestión de estados
+- **Ejecutor en navegador**: Implementaciones de algoritmos sin dependencia de servidor
+- **Motor de evaluación**: Evaluación específica por algoritmo con métricas
+- **Algoritmo de admisión**: Validación completa de solicitudes de entrenamiento
+- **Sistema de donaciones voluntarias**: Preparado pero deshabilitado por defecto
+- **Panel de transparencia**: Información sobre donaciones y sostenibilidad
+- **Interfaz profesional**: Centro de entrenamiento con 3 pestañas funcionales
+- **Pruebas unitarias completas**: Cobertura de todos los componentes
+- **Documentación técnica**: Informes completos de la Fase 9
+
+### Modificado
+- `src/types/training.ts`: Nuevos tipos para el sistema de entrenamiento
+- `src/services/training/`: 10 archivos de servicios del sistema
+- `src/pages/FreeTrainingCenter.tsx`: Centro de entrenamiento gratuito
+- `src/tests/training.test.ts`: Pruebas unitarias completas
+- `src/types/index.ts`: Añadidos tipos de entrenamiento al DataStore
+- `src/App.tsx`: Nueva ruta `/free-training`
+- `src/components/Layout.tsx`: Nueva entrada de navegación "Free Training"
+- `docs/CHANGELOG.md`: Registro de cambios de la Fase 9
+- `docs/FASE_9_INFORME.md`: Documentación completa de la Fase 9
+- `docs/FASE_9_FINAL.md`: Informe final de la Fase 9
+
+### No modificado (protección Fases 0-8)
+- Todos los módulos de fases anteriores continúan funcionando sin cambios
+- JOULE Engine, JOULE MATS, Control Plane, Approval Engine preservados
+- Tool Factory, Model Registry, Universal Integrations Hub intactos
+- Todas las rutas existentes operativas
+- Persistencia de datos de todas las fases anteriores preservada
+
+### Características Técnicas
+- Entrenamiento local en navegador sin dependencia de servidor
+- 10 algoritmos de entrenamiento implementados
+- Sistema de cuotas con límites claros y renovables
+- Control de presupuesto global con reserva atómica
+- Planificador de trabajos con prioridades
+- Evaluación automática de resultados
+- Sistema de donaciones voluntarias preparado
+- Transparencia económica completa
+- Integración con todas las fases anteriores
+
+### Modalidades de Entrenamiento
+- **Local (Navegador)**: 100 trabajos/mes, 10 min/trabajo, ejecución en navegador
+- **Local (Node.js)**: 50 trabajos/mes, 30 min/trabajo, ejecución local
+- **Compartido**: 3 trabajos/mes, 10 min/trabajo, infraestructura compartida (pendiente)
+
+### Sistema de Donaciones
+- **Estado**: Deshabilitado (requiere configuración de proveedor)
+- **Proveedores preparados**: Stripe, PayPal, GitHub Sponsors, Open Collective
+- **Principios**: Voluntarias, no obligatorias, transparencia total
+- **Transparencia**: Panel público con métricas agregadas
+
+### Resultados de Compilación
+```
+✓ 1450 modules transformed
+✓ built in 4.64s
+✓ Sin errores de TypeScript
+```
+
+---
+
 ## [8.0.0] — Fase 8 — JOULE AUTONOMOUS APPROVAL ENGINE
 
 ### Añadido

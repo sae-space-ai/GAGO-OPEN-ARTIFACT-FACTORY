@@ -2,13 +2,13 @@
 
 **Factoría abierta de artefactos digitales y aplicaciones de inteligencia artificial**
 
-Versión: 4.0.0 | Fase 4 | Licencia: MIT
+Versión: 9.0.0 | Fase 9 | Licencia: MIT
 
 ## Descripción
 
 GAGO Open Artifact Factory es una plataforma abierta de desarrollo de software y artefactos digitales. Permite gestionar proyectos, tareas, artefactos y evidencias técnicas, además de generar instrucciones estructuradas para modelos de inteligencia artificial como Qwen Coder.
 
-La Fase 4 implementa JOULE MATS (Multi Agent Training System), un sistema de 15 agentes especializados que entrenan y optimizan continuamente el motor JOULE mediante aprendizaje adaptativo.
+La Fase 9 implementa JOULE FREE TRAINING AND DONATION SYSTEM, un sistema completo de entrenamiento gratuito y limitado para algoritmos de IA, junto con un mecanismo opcional de donaciones voluntarias para sostener el servicio.
 
 ## Características
 
@@ -73,6 +73,21 @@ La Fase 4 implementa JOULE MATS (Multi Agent Training System), un sistema de 15 
 - **Modos Shadow/Canary/Activo**: Despliegue progresivo de políticas entrenadas
 - **Evaluación Independiente**: Validación rigurosa antes de aprobar políticas
 - **Pruebas Unitarias**: Cobertura completa de agentes y orquestador
+
+### Fase 9 — JOULE FREE TRAINING AND DONATION SYSTEM
+- **JOULE FREE TRAINING CENTER**: Sistema completo de entrenamiento gratuito y limitado
+- **10 Algoritmos de Entrenamiento**: Optimización de políticas, bandido contextual, clasificación, regresión, estimación de coste, predicción de latencia, selección de rutas, aprendizaje incremental, evaluación de políticas, referencia determinista
+- **3 Modalidades de Entrenamiento**: Local (navegador), Local (Node.js), Compartido
+- **Sistema de Cuotas**: Control estricto por usuario y modalidad
+- **Control de Presupuesto Global**: Reserva atómica de recursos compartidos
+- **Planificador de Trabajos**: Cola con prioridades y gestión de estados
+- **Ejecutor en Navegador**: Implementaciones de algoritmos sin dependencia de servidor
+- **Motor de Evaluación**: Evaluación específica por algoritmo con métricas
+- **Algoritmo de Admisión**: Validación completa de solicitudes
+- **Sistema de Donaciones Voluntarias**: Preparado pero deshabilitado por defecto
+- **Panel de Transparencia**: Información sobre donaciones y sostenibilidad
+- **Interfaz Profesional**: Centro de entrenamiento con 3 pestañas funcionales
+- **Pruebas Unitarias**: Cobertura completa de todos los componentes
 
 ## Requisitos
 
