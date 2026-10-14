@@ -11,25 +11,49 @@
 - **10 Estados de Conexión**: VERIFIED, CONNECTED, CONFIGURED, AUTH_REQUIRED, CONNECTING, ERROR, DISCONNECTED, NOT_CONFIGURED, DEGRADED, BLOCKED
 - **Pruebas Unitarias Completas**: phase10.test.ts con cobertura de todos los adaptadores
 - **Documentación de Cierre**: FASE_10_INFORME.md, FASE_10_FINAL.md, MATRIZ_MAESTRA_CIERRE.md
+- **Tool Factory Complete Implementation**:
+  - 15 generadores específicos de código (uno para cada categoría)
+  - Normalización segura de identificadores (maneja acentos, números, palabras reservadas)
+  - Carga automática de entradas/salidas predeterminadas al seleccionar plantillas
+  - Generador de formularios con validación completa (email, números, personalizada)
+  - Generador CRUD con interfaz completa, validación, confirmación de eliminación, persistencia opcional
+  - Sistema de persistencia versionada (PersistentToolData)
+  - Estados diferenciados de herramientas (GENERATED, IMPLEMENTED, TESTED, VERIFIED)
+  - Exportación de proyectos Vite completos (downloadToolProject)
+  - 25 pruebas unitarias exhaustivas cubriendo las 15 plantillas
+  - Validación de seguridad (sin eval, sin exposición de secretos)
 
 ### Corregido
 - **GitHub "No configurado"**: Ahora muestra estado VERIFIED cuando la API pública es accesible
 - **Vercel "No configurado"**: Ahora muestra estado VERIFIED cuando la configuración es válida
 - **Qwen "No conectado"**: Ahora muestra estado AUTH_REQUIRED indicando claramente los requisitos
 - **Indicadores estáticos**: Reemplazados por comprobaciones reales en tiempo real
+- **Tool Factory - Plantillas**: Las 15 plantillas ahora tienen generadores específicos (no genéricos)
+- **Tool Factory - Entradas/Salidas**: Se cargan automáticamente al seleccionar plantilla
+- **Tool Factory - Formularios**: Validación completa implementada (email, números, personalizada)
+- **Tool Factory - CRUD**: Interfaz completa con persistencia opcional y confirmación de eliminación
+- **Tool Factory - Identificadores**: Normalización segura (maneja acentos, números, palabras reservadas)
+- **Tool Factory - Exportación**: Ahora puede exportar proyectos Vite completos
+- **Tool Factory - Estados**: Las herramientas ahora comienzan con estado GENERATED (no IMPLEMENTED)
+- **Tool Factory - Persistencia**: Código versionado y persistente implementado
 
 ### Modificado
 - `src/services/system-connection-manager.ts`: Nuevo servicio de gestión de conexiones
 - `src/services/github-adapter.ts`: Nuevo adaptador de GitHub
 - `src/services/vercel-adapter.ts`: Nuevo adaptador de Vercel
 - `src/services/qwen-adapter.ts`: Nuevo adaptador de Qwen
+- `src/services/tool-factory.ts`: Reescritura completa con 15 generadores específicos
 - `src/pages/Dashboard.tsx`: Actualizado con SystemConnectionManager
+- `src/pages/ToolFactory.tsx`: Carga automática de entradas/salidas predeterminadas
 - `src/types/index.ts`: Añadido systemConnections a DataStore
+- `src/types/control-plane.ts`: Añadido 'GENERATED' a CapabilityStatus
 - `src/tests/phase10.test.ts`: Nuevas pruebas unitarias
-- `docs/CHANGELOG.md`: Registro de cambios de la Fase 10
+- `src/tests/tool-factory.test.ts`: 25 pruebas exhaustivas de las 15 plantillas
+- `docs/CHANGELOG.md`: Registro de cambios de la Fase 10 y Tool Factory
 - `docs/FASE_10_INFORME.md`: Documentación técnica de la Fase 10
 - `docs/FASE_10_FINAL.md`: Informe final de la Fase 10
 - `docs/MATRIZ_MAESTRA_CIERRE.md`: Matriz maestra de cierre de todas las fases
+- `docs/TOOL_FACTORY_REPORT.md`: Informe detallado de las 15 plantillas con resultados de pruebas
 
 ### No modificado (protección Fases 0-9)
 - Todos los módulos de fases anteriores continúan funcionando sin cambios

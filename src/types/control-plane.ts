@@ -1,7 +1,7 @@
 // GAGO Open Artifact Factory - Phase 5 Types
 // JOULE AI COMPUTE CONTROL PLANE
 
-export type CapabilityStatus = 'IMPLEMENTED' | 'CONFIGURED' | 'CONNECTED' | 'VERIFIED' | 'BLOCKED' | 'PLANNED';
+export type CapabilityStatus = 'GENERATED' | 'IMPLEMENTED' | 'CONFIGURED' | 'CONNECTED' | 'VERIFIED' | 'BLOCKED' | 'PLANNED';
 
 export type ToolCategory = 
   | 'dashboard'
@@ -285,6 +285,7 @@ export const TOOL_CATEGORY_LABELS: Record<ToolCategory, string> = {
 };
 
 export const CAPABILITY_STATUS_LABELS: Record<CapabilityStatus, string> = {
+  GENERATED: 'Generado',
   IMPLEMENTED: 'Implementado',
   CONFIGURED: 'Configurado',
   CONNECTED: 'Conectado',
