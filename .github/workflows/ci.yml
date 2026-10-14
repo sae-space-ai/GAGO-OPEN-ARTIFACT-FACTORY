@@ -10,6 +10,24 @@ permissions:
   contents: read
 
 jobs:
+
+  tool-factory:
+    name: Tool Factory — 15 templates
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.x
+          cache: npm
+      - run: npm ci
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Build
+        run: npm run build
+      - name: Validate 15 generators and generated behavior
+        run: npx vitest run src/tests/tool-factory.test.ts src/tests/tool-factory-complete.test.ts src/tests/tool-factory-runtime.test.ts
+
   build:
     runs-on: ubuntu-latest
 
