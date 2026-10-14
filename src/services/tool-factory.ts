@@ -263,7 +263,7 @@ export function createToolFromSpecification(spec: ToolSpecification): {
   }
 
   // Generar código basado en la plantilla
-  const generatedCode = generateToolCode(spec, template);
+  const generatedCode = generateToolCode(spec);
 
   // Crear manifiesto
   const manifest: ToolManifest = {
