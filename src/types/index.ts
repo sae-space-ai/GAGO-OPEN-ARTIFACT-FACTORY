@@ -95,6 +95,8 @@ export interface DataStore {
   // Phase 5 — JOULE AI COMPUTE CONTROL PLANE
   tools?: import('./control-plane').ToolManifest[];
   models?: import('./control-plane').ModelManifest[];
+  // Phase 6 — Universal Integrations Hub
+  integrations?: import('./integrations').IntegrationConnector[];
 }
 
 export const SCHEMA_VERSION = '0.1.0';
