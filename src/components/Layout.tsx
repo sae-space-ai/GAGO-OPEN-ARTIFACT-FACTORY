@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { LayoutDashboard, FolderKanban, ListTodo, Package, Shield, Terminal, Settings, Link2, Menu, X, Factory, Target, ShieldCheck, Zap, Wrench, Brain, Gift } from 'lucide-react';
+import { LayoutDashboard, FolderKanban, ListTodo, Package, Shield, Terminal, Settings, Link2, Menu, X, Factory, Target, ShieldCheck, Zap, Wrench, Calculator, Brain, Gift } from 'lucide-react';
 
 const navItems = [
   { to: '/', icon: LayoutDashboard, label: 'Overview' },
@@ -15,6 +15,7 @@ const navItems = [
   { to: '/connections', icon: Link2, label: 'Conexiones' },
   { to: '/training', icon: Target, label: 'Training Center' },
   { to: '/tools', icon: Wrench, label: 'Tool Factory' },
+  { to: '/tools/calculadora-presupuestos-joule', icon: Calculator, label: 'Calculadora JOULE' },
   { to: '/models', icon: Brain, label: 'Model Registry' },
   { to: '/approval', icon: ShieldCheck, label: 'Approval Engine' },
   { to: '/free-training', icon: Gift, label: 'Free Training' },

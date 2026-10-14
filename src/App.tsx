@@ -17,6 +17,7 @@ const APIControlCenter = lazy(() => import('./pages/APIControlCenter'));
 const ConnectionControlCenter = lazy(() => import('./pages/ConnectionControlCenter'));
 const JouleTrainingCenter = lazy(() => import('./pages/JouleTrainingCenter'));
 const ToolFactory = lazy(() => import('./pages/ToolFactory'));
+const CalculadoraPresupuestosJOULE = lazy(() => import('./pages/CalculadoraPresupuestosJOULE'));
 const ModelRegistry = lazy(() => import('./pages/ModelRegistry'));
 const ApprovalDashboard = lazy(() => import('./pages/ApprovalDashboard'));
 const FreeTrainingCenter = lazy(() => import('./pages/FreeTrainingCenter'));
@@ -56,6 +57,7 @@ export default function App() {
                 <Route path="/connections" element={<ConnectionControlCenter />} />
                 <Route path="/training" element={<JouleTrainingCenter />} />
                 <Route path="/tools" element={<ToolFactory />} />
+                <Route path="/tools/calculadora-presupuestos-joule" element={<CalculadoraPresupuestosJOULE />} />
                 <Route path="/models" element={<ModelRegistry />} />
                 <Route path="/approval" element={<ApprovalDashboard />} />
                 <Route path="/free-training" element={<FreeTrainingCenter />} />

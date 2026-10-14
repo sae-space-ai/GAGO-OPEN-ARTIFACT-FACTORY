@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useData } from '../context/DataContext';
 import { 
   createToolFromSpecification, 
@@ -80,6 +81,21 @@ export default function ToolFactory() {
           Generador de herramientas digitales con plantillas verificadas
         </p>
       </div>
+
+      <section className="mb-6 flex flex-col gap-4 rounded-xl border border-blue-200 bg-blue-50 p-5 dark:border-blue-800 dark:bg-blue-950/30 md:flex-row md:items-center md:justify-between">
+        <div>
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-white">CalculadoraPresupuestosJOULE</h2>
+          <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
+            Herramienta integrada de presupuestos: cálculo exacto en céntimos, tarifas por periodo, límites e importación y exportación JSON/CSV.
+          </p>
+          <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+            No crea una segunda herramienta ni modifica registros existentes. Datos independientes guardados en tu navegador.
+          </p>
+        </div>
+        <Link to="/tools/calculadora-presupuestos-joule" className="shrink-0 rounded-lg bg-blue-600 px-5 py-3 text-center text-sm font-semibold text-white hover:bg-blue-700">
+          Abrir calculadora
+        </Link>
+      </section>
 
       {/* Estadísticas */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
@@ -419,6 +435,11 @@ export default function ToolFactory() {
                   <p>Versión: {tool.version}</p>
                   <p>Entradas: {tool.inputs.length} | Salidas: {tool.outputs.length}</p>
                 </div>
+                {(tool.category === 'budget_calculator' || tool.name?.toLowerCase().replace(/[^a-z0-9]/g, '') === 'calculadorapresupuestosjoule') && (
+                  <Link to="/tools/calculadora-presupuestos-joule" className="mt-3 inline-flex rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
+                    Abrir calculadora funcional
+                  </Link>
+                )}
               </div>
             ))}
           </div>
