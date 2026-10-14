@@ -92,6 +92,9 @@ export interface DataStore {
   apiFabricState?: import('./api-fabric').APIFabricState;
   // Phase 4 — JOULE MATS (Multi Agent Training System)
   jouleMATS?: import('./joule-mats').JouleMATSState;
+  // Phase 5 — JOULE AI COMPUTE CONTROL PLANE
+  tools?: import('./control-plane').ToolManifest[];
+  models?: import('./control-plane').ModelManifest[];
 }
 
 export const SCHEMA_VERSION = '0.1.0';

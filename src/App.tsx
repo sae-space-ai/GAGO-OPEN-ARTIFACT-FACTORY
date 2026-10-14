@@ -5,6 +5,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import Layout from './components/Layout';
 
 const Dashboard = lazy(() => import('./pages/Dashboard'));
+const GlobalOverview = lazy(() => import('./pages/GlobalOverview'));
 const Projects = lazy(() => import('./pages/Projects'));
 const Tasks = lazy(() => import('./pages/Tasks'));
 const Artifacts = lazy(() => import('./pages/Artifacts'));
@@ -15,6 +16,8 @@ const JouleDashboard = lazy(() => import('./pages/JouleDashboard'));
 const APIControlCenter = lazy(() => import('./pages/APIControlCenter'));
 const ConnectionControlCenter = lazy(() => import('./pages/ConnectionControlCenter'));
 const JouleTrainingCenter = lazy(() => import('./pages/JouleTrainingCenter'));
+const ToolFactory = lazy(() => import('./pages/ToolFactory'));
+const ModelRegistry = lazy(() => import('./pages/ModelRegistry'));
 const QwenGenerator = lazy(() => import('./pages/QwenGenerator'));
 const Settings = lazy(() => import('./pages/Settings'));
 const Integrations = lazy(() => import('./pages/Integrations'));
@@ -38,7 +41,8 @@ export default function App() {
           <Layout>
             <Suspense fallback={<LoadingFallback />}>
               <Routes>
-                <Route path="/" element={<Dashboard />} />
+                <Route path="/" element={<GlobalOverview />} />
+                <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/projects" element={<Projects />} />
                 <Route path="/tasks" element={<Tasks />} />
                 <Route path="/artifacts" element={<Artifacts />} />
@@ -49,6 +53,8 @@ export default function App() {
                 <Route path="/api-fabric" element={<APIControlCenter />} />
                 <Route path="/connections" element={<ConnectionControlCenter />} />
                 <Route path="/training" element={<JouleTrainingCenter />} />
+                <Route path="/tools" element={<ToolFactory />} />
+                <Route path="/models" element={<ModelRegistry />} />
                 <Route path="/qwen" element={<QwenGenerator />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/integrations" element={<Integrations />} />

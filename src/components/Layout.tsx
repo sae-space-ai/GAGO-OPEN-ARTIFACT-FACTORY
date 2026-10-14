@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { LayoutDashboard, FolderKanban, ListTodo, Package, Shield, Terminal, Settings, Link2, Menu, X, Factory, Target, ShieldCheck, Zap } from 'lucide-react';
+import { LayoutDashboard, FolderKanban, ListTodo, Package, Shield, Terminal, Settings, Link2, Menu, X, Factory, Target, ShieldCheck, Zap, Wrench, Brain } from 'lucide-react';
 
 const navItems = [
-  { to: '/', icon: LayoutDashboard, label: 'Centro de Mando' },
+  { to: '/', icon: LayoutDashboard, label: 'Overview' },
   { to: '/projects', icon: FolderKanban, label: 'Proyectos' },
   { to: '/tasks', icon: ListTodo, label: 'Tareas' },
   { to: '/artifacts', icon: Package, label: 'Artefactos' },
@@ -14,6 +14,8 @@ const navItems = [
   { to: '/api-fabric', icon: Link2, label: 'API Fabric' },
   { to: '/connections', icon: Link2, label: 'Conexiones' },
   { to: '/training', icon: Target, label: 'Training Center' },
+  { to: '/tools', icon: Wrench, label: 'Tool Factory' },
+  { to: '/models', icon: Brain, label: 'Model Registry' },
   { to: '/qwen', icon: Terminal, label: 'Órdenes Qwen' },
   { to: '/integrations', icon: Link2, label: 'Integraciones' },
   { to: '/settings', icon: Settings, label: 'Configuración' },

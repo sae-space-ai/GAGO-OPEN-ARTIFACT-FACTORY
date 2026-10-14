@@ -3,6 +3,7 @@ import type { DataStore, Project, Task, Artifact, Evidence, AppSettings } from '
 import type { ScopeRequirement, QualityGate } from '../types/scope';
 import type { JouleState } from '../types/joule';
 import type { JouleMATSState } from '../types/joule-mats';
+import type { ToolManifest } from '../types/control-plane';
 import { loadStore, saveStore, createProject, updateProject, deleteProject, createTask, updateTask, deleteTask, createArtifact, updateArtifact, deleteArtifact, createEvidence, updateEvidence, deleteEvidence, importData, exportData, resetStore, createScopeRequirement, updateScopeRequirement, deleteScopeRequirement, updateQualityGate, updateJouleState } from '../services/storage';
 
 interface DataContextType {
@@ -39,6 +40,8 @@ interface DataContextType {
   updateJouleState: (jouleState: JouleState) => void;
   // JOULE MATS (Phase 4)
   updateJouleMATS: (jouleMATS: JouleMATSState) => void;
+  // Phase 5 - Tool Factory
+  addTool: (tool: ToolManifest) => void;
 }
 
 const DataContext = createContext<DataContextType | null>(null);
@@ -147,6 +150,11 @@ export function DataProvider({ children }: { children: ReactNode }) {
     setStore(s => ({ ...s, jouleMATS }));
   }, []);
 
+  // Phase 5 - Tool Factory operations
+  const addTool = useCallback((tool: ToolManifest) => {
+    setStore(s => ({ ...s, tools: [...(s.tools || []), tool] }));
+  }, []);
+
   return (
     <DataContext.Provider value={{
       store, addProject, editProject, removeProject,
@@ -158,6 +166,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
       editQualityGate,
       updateJouleState: updateJouleStateFn,
       updateJouleMATS,
+      addTool,
     }}>
       {children}
     </DataContext.Provider>
