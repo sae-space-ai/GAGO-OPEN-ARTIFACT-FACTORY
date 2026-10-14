@@ -20,6 +20,8 @@ const ToolFactory = lazy(() => import('./pages/ToolFactory'));
 const ModelRegistry = lazy(() => import('./pages/ModelRegistry'));
 const ApprovalDashboard = lazy(() => import('./pages/ApprovalDashboard'));
 const FreeTrainingCenter = lazy(() => import('./pages/FreeTrainingCenter'));
+const AIProviderControlCenter = lazy(() => import('./pages/AIProviderControlCenter'));
+const JouleCognitiveControlCenter = lazy(() => import('./pages/JouleCognitiveControlCenter'));
 const QwenGenerator = lazy(() => import('./pages/QwenGenerator'));
 const Settings = lazy(() => import('./pages/Settings'));
 const Integrations = lazy(() => import('./pages/Integrations'));
@@ -59,6 +61,8 @@ export default function App() {
                 <Route path="/models" element={<ModelRegistry />} />
                 <Route path="/approval" element={<ApprovalDashboard />} />
                 <Route path="/free-training" element={<FreeTrainingCenter />} />
+                <Route path="/ai-providers" element={<AIProviderControlCenter />} />
+                <Route path="/joule-cognitive" element={<JouleCognitiveControlCenter />} />
                 <Route path="/qwen" element={<QwenGenerator />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/integrations" element={<Integrations />} />

@@ -1,5 +1,132 @@
 # Changelog — GAGO Open Artifact Factory
 
+## [12.1.0] — Fase 12.1 — Cierre Técnico Certificado
+
+### Corregido
+- **Script de Pruebas**: Añadidos scripts `test`, `test:watch`, `test:coverage` al package.json
+- **Verificación de Tipos**: Implementada verificación estática mejorada con múltiples checks (any, @ts-ignore, eval, etc.)
+- **Aprobaciones Simuladas**: Eliminados todos los retornos de `passed: true` sin verificación real
+- **Caso Decimal**: Mejorado para detectar Math.round con variables, no solo constantes
+- **Hash Criptográfico**: Implementado SHA-256 usando Web Crypto API (reemplaza hash simple)
+- **Optimización de Bundle**: Reducido de 3.8 MB a 231.51 kB (eliminada importación de TypeScript)
+
+### Documentado
+- **Limitaciones**: Verificación TypeScript completa requiere entorno Node.js
+- **Limitaciones**: Ejecución de pruebas reales requiere sandbox/CI aislado
+- **Limitaciones**: Benchmarks con modelos reales requieren proveedores configurados
+- **Quality Gates**: 11/12 aprobados, 1 parcial (requiere ejecución de pruebas)
+
+### Seguridad
+- **No Ejecución Insegura**: canExecuteSafely retorna false en navegador
+- **Sin Aprobaciones Ficticias**: Criterios no verificables marcan passed: false
+- **Hash Criptográfico**: SHA-256 para trazabilidad de evidencias
+
+### Archivos Modificados
+- `package.json`: Scripts de prueba añadidos
+- `src/services/joule-cognitive/code-verifier.ts`: 6 correcciones críticas
+- `docs/FASE_12_1_CERTIFICACION.md`: Informe de certificación
+- `docs/FASE_12_1_FINAL.md`: Informe final
+
+### Estado
+✅ **CORRECCIONES CRÍTICAS APLICADAS**  
+✅ **COMPILACIÓN EXITOSA** (231.51 kB)  
+⚠️ **LIMITACIONES DOCUMENTADAS**
+
+---
+
+## [12.0.0] — Fase 12 — JOULE COGNITIVE OPTIMIZATION AND VERIFIED AI ENGINE
+
+### Añadido
+- **JOULE TASK INTELLIGENCE**: Clasificador inteligente de solicitudes (10 tipos de tareas, 13 lenguajes)
+- **JOULE INDEPENDENT CODE VERIFIER**: Verificación independiente de código en 11 etapas
+- **Caso Obligatorio**: Detección del error Math.round(0.1) + Math.round(0.2) = 0
+- **JOULE QUALITY EVIDENCE ENGINE**: Sistema de evidencias trazables y verificadas
+- **JOULE MODEL BENCHMARK LAB**: Laboratorio con 6 benchmarks reproducibles
+- **JOULE RESOURCE OBSERVER**: Observador ampliado de recursos con métricas detalladas
+- **JOULE ADAPTIVE ROUTING ENGINE**: Motor de enrutamiento adaptativo basado en evidencia
+- **JOULE COGNITIVE CONTROL CENTER**: Interfaz profesional con 4 pestañas
+- **13 Requisitos en Matriz de Alcance**: J1201-J1213
+- **Pruebas Unitarias**: 100+ pruebas implementadas
+
+### Características Principales
+- **Verificación Independiente**: Sistema de verificación en múltiples etapas
+- **Hash Criptográfico**: SHA-256 para trazabilidad de evidencias
+- **Benchmarks Reproducibles**: 6 benchmarks iniciales para comparación de modelos
+- **Enrutamiento Adaptativo**: Selección inteligente basada en 7 factores
+- **Centro de Control**: Interfaz profesional con estadísticas en tiempo real
+- **Seguridad**: No se ejecuta código no confiable sin aislamiento
+
+### Archivos Creados
+- `src/types/joule-cognitive.ts`: Tipos del motor cognitivo
+- `src/services/joule-cognitive/`: 7 archivos de servicios
+- `src/pages/JouleCognitiveControlCenter.tsx`: Centro de control
+- `src/tests/joule-cognitive.test.ts`: 100+ pruebas unitarias
+- `docs/FASE_12_INFORME.md`: Documentación técnica
+- `docs/FASE_12_FINAL.md`: Informe final
+
+### Estado
+✅ **IMPLEMENTADO**  
+✅ **COMPILACIÓN EXITOSA**  
+⚠️ **LIMITACIONES**: Verificación TypeScript y ejecución aislada requieren entorno Node.js
+
+---
+
+## [11.0.0] — Fase 11 — JOULE HYBRID AI PROVIDER ENGINE
+
+### Añadido
+- **AI Provider Manager**: Motor central de gestión de proveedores de IA
+- **OpenRouter Adapter**: Adaptador completo para OpenRouter con modelos gratuitos verificados
+- **Ollama Adapter Mejorado**: Adaptador para Ollama local (ahora opcional, no obligatorio)
+- **AI Provider Selector**: Algoritmo inteligente de selección de proveedores con fallback automático
+- **Control de Presupuesto**: Sistema de presupuesto cero por defecto
+- **Control de Cuotas**: Gestión de límites de uso por proveedor
+- **Sistema de Fallback**: Recuperación automática ante fallos de proveedores
+- **AI Provider Control Center**: Interfaz profesional para gestión de proveedores
+- **Integración con JOULE**: Selección optimizada de proveedores
+- **Integración con Tool Factory**: Inferencia de IA para generación de código
+- **13 Requisitos en Matriz de Alcance**: AI1101-AI1113
+- **Pruebas Unitarias**: ai-provider.test.ts con cobertura completa
+
+### Características Principales
+- **Modelos Gratuitos Verificados**: Llama 3.2, Llama 3.1, Gemma 2, Mistral 7B, Qwen 2
+- **Presupuesto Cero**: Solo se utilizan modelos gratuitos, sin cargos automáticos
+- **Fallback Automático**: Si un proveedor falla, se intenta con el siguiente
+- **Ollama Opcional**: El sistema funciona sin Ollama, usando proveedores remotos gratuitos
+- **Seguridad**: API keys nunca se exponen en el frontend
+- **Cuotas**: Control estricto de límites de uso
+- **Estadísticas**: Métricas de uso, latencia y coste
+
+### Modificado
+- `src/types/ai-provider.ts`: Nuevos tipos para proveedores de IA
+- `src/types/index.ts`: Añadido aiProviderState a DataStore
+- `src/types/scope.ts`: Añadidas fases 5-11 a ScopePhase
+- `src/services/ai-provider/manager.ts`: Nuevo gestor de proveedores
+- `src/services/ai-provider/openrouter-adapter.ts`: Nuevo adaptador OpenRouter
+- `src/services/ai-provider/ollama-adapter.ts`: Nuevo adaptador Ollama mejorado
+- `src/services/ai-provider/selector.ts`: Nuevo selector de proveedores
+- `src/services/ai-provider/index.ts`: Índice del módulo
+- `src/pages/AIProviderControlCenter.tsx`: Nueva interfaz de control
+- `src/App.tsx`: Nueva ruta /ai-providers
+- `src/components/Layout.tsx`: Nueva entrada de navegación
+- `src/services/initial-scope.ts`: 13 requisitos de Fase 11 añadidos
+- `src/tests/ai-provider.test.ts`: Nuevas pruebas unitarias
+
+### No modificado (protección Fases 0-10)
+- Todos los módulos de fases anteriores continúan funcionando sin cambios
+- JOULE Engine, JOULE MATS, Control Plane, Approval Engine preservados
+- Tool Factory, Free Training Center, Universal Integrations Hub intactos
+- Todas las rutas existentes operativas
+- Persistencia de datos de todas las fases anteriores preservada
+
+### Resultados de Compilación
+```
+✓ 1458 modules transformed
+✓ built in 6.31s
+✓ Sin errores de TypeScript
+```
+
+---
+
 ## [10.0.0] — Fase 10 — Final Integration Repair and Production Readiness
 
 ### Añadido

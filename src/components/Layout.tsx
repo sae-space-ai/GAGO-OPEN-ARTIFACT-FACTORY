@@ -18,6 +18,8 @@ const navItems = [
   { to: '/models', icon: Brain, label: 'Model Registry' },
   { to: '/approval', icon: ShieldCheck, label: 'Approval Engine' },
   { to: '/free-training', icon: Gift, label: 'Free Training' },
+  { to: '/ai-providers', icon: Brain, label: 'AI Providers' },
+  { to: '/joule-cognitive', icon: Brain, label: 'JOULE Cognitive' },
   { to: '/qwen', icon: Terminal, label: 'Órdenes Qwen' },
   { to: '/integrations', icon: Link2, label: 'Integraciones' },
   { to: '/settings', icon: Settings, label: 'Configuración' },

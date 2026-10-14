@@ -106,6 +106,10 @@ export interface DataStore {
   donationState?: import('./training').DonationSystemState;
   // Phase 10 — System Connections
   systemConnections?: import('../services/system-connection-manager').SystemConnectionState;
+  // Phase 11 — AI Provider Engine
+  aiProviderState?: import('./ai-provider').AIProviderState;
+  // Phase 12 — JOULE Cognitive Optimization
+  jouleCognitiveState?: import('./joule-cognitive').JouleCognitiveState;
 }
 
 export const SCHEMA_VERSION = '0.1.0';

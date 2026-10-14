@@ -7,7 +7,7 @@ export type ScopeModule =
   | 'M07' | 'M08' | 'M09' | 'M10' | 'M11' | 'M12'
   | 'M13' | 'M14' | 'M15' | 'M16';
 
-export type ScopePhase = '0' | '0.1' | '1' | '2' | '3' | '4';
+export type ScopePhase = '0' | '0.1' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11';
 
 export type ImplementationStatus =
   | 'not_started'
