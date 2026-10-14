@@ -83,6 +83,9 @@ export interface DataStore {
   artifacts: Artifact[];
   evidence: Evidence[];
   settings: AppSettings;
+  // Phase 0.1 — Matriz de Alcance y Puertas de Calidad
+  scopeMatrix?: import('./scope').ScopeRequirement[];
+  qualityGates?: import('./scope').QualityGate[];
 }
 
 export const SCHEMA_VERSION = '0.1.0';

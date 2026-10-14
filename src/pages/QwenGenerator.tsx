@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useData } from '../context/DataContext';
 import { Toast } from '../components/UI';
 import { generateQwenOrder, downloadAsFile, copyToClipboard } from '../services/qwen-generator';
-import { Terminal, Copy, Download, AlertCircle, Plus, X } from 'lucide-react';
+import { Terminal, Copy, Download, AlertCircle, Plus, X, Target } from 'lucide-react';
+import { IMPLEMENTATION_STATUS_LABELS } from '../types/scope';
 
 export default function QwenGenerator() {
   const { store } = useData();
@@ -143,6 +144,42 @@ export default function QwenGenerator() {
               </ul>
             )}
           </div>
+
+          {/* Scope Matrix Integration */}
+          {store.scopeMatrix && store.scopeMatrix.length > 0 && (
+            <div className="border-t border-slate-200 dark:border-slate-700 pt-4">
+              <h3 className="text-sm font-semibold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+                <Target className="w-4 h-4" /> Requisitos de la Matriz (Fase 0.1)
+              </h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mb-2">
+                Selecciona requisitos pendientes para incluirlos en la orden.
+              </p>
+              <div className="max-h-48 overflow-y-auto space-y-1">
+                {store.scopeMatrix
+                  .filter(r => !r.archived && r.implementationStatus !== 'implemented' && r.implementationStatus !== 'discarded')
+                  .map(req => (
+                    <label key={req.id} className="flex items-center gap-2 text-xs p-1.5 rounded hover:bg-slate-50 dark:hover:bg-slate-700/50 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        className="rounded border-slate-300 dark:border-slate-600"
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setRequirements(prev => [...prev, `[${req.code}] ${req.name}: ${req.functionalDescription}`]);
+                            setAcceptanceCriteria(prev => [...prev, ...req.acceptanceCriteria.map(c => `[${req.code}] ${c}`)]);
+                          } else {
+                            setRequirements(prev => prev.filter(r => !r.startsWith(`[${req.code}]`)));
+                            setAcceptanceCriteria(prev => prev.filter(c => !c.startsWith(`[${req.code}]`)));
+                          }
+                        }}
+                      />
+                      <span className="font-medium text-slate-700 dark:text-slate-300">{req.code}</span>
+                      <span className="text-slate-600 dark:text-slate-400 truncate flex-1">{req.name}</span>
+                      <span className="text-[10px] text-slate-400">{IMPLEMENTATION_STATUS_LABELS[req.implementationStatus]}</span>
+                    </label>
+                  ))}
+              </div>
+            </div>
+          )}
 
           <button onClick={handleGenerate} className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium transition-colors flex items-center justify-center gap-2">
             <Terminal className="w-4 h-4" /> Generar orden

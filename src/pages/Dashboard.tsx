@@ -55,6 +55,46 @@ export default function Dashboard() {
         ))}
       </div>
 
+      {/* Scope Matrix Quick View */}
+      {store.scopeMatrix && store.scopeMatrix.length > 0 && (
+        <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-5">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-semibold text-slate-900 dark:text-white">Matriz de Alcance — Fase 0.1</h3>
+            <Link to="/scope" className="text-xs text-blue-600 dark:text-blue-400 hover:underline">Ver todo →</Link>
+          </div>
+          <div className="grid grid-cols-3 sm:grid-cols-6 gap-3 text-center">
+            <div>
+              <p className="text-lg font-bold text-slate-900 dark:text-white">{store.scopeMatrix.filter(r => !r.archived).length}</p>
+              <p className="text-[10px] text-slate-500">Total</p>
+            </div>
+            <div>
+              <p className="text-lg font-bold text-green-600 dark:text-green-400">{store.scopeMatrix.filter(r => !r.archived && r.implementationStatus === 'implemented').length}</p>
+              <p className="text-[10px] text-slate-500">Impl.</p>
+            </div>
+            <div>
+              <p className="text-lg font-bold text-teal-600 dark:text-teal-400">{store.scopeMatrix.filter(r => !r.archived && r.testStatus === 'test_passed').length}</p>
+              <p className="text-[10px] text-slate-500">Probados</p>
+            </div>
+            <div>
+              <p className="text-lg font-bold text-emerald-600 dark:text-emerald-400">{store.scopeMatrix.filter(r => !r.archived && r.verificationStatus === 'fully_verified').length}</p>
+              <p className="text-[10px] text-slate-500">Verif.</p>
+            </div>
+            <div>
+              <p className="text-lg font-bold text-red-600 dark:text-red-400">{store.scopeMatrix.filter(r => !r.archived && r.implementationStatus === 'blocked').length}</p>
+              <p className="text-[10px] text-slate-500">Bloq.</p>
+            </div>
+            <div>
+              <p className="text-lg font-bold text-blue-600 dark:text-blue-400">
+                {store.scopeMatrix.filter(r => !r.archived).length > 0
+                  ? Math.round((store.scopeMatrix.filter(r => !r.archived && r.implementationStatus === 'implemented').length / store.scopeMatrix.filter(r => !r.archived).length) * 100)
+                  : 0}%
+              </p>
+              <p className="text-[10px] text-slate-500">Avance</p>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Recent activity */}
         <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-5">

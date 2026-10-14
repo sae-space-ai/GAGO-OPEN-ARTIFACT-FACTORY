@@ -2,7 +2,7 @@
 
 **Factoría abierta de artefactos digitales y aplicaciones de inteligencia artificial**
 
-Versión: 0.1.0 | Fase Cero | Licencia: MIT
+Versión: 0.1.1 | Fase 0.1 | Licencia: MIT
 
 ## Descripción
 
@@ -12,6 +12,7 @@ La Fase Cero establece los fundamentos técnicos: una aplicación web funcional 
 
 ## Características
 
+### Fase 0 — Fundamentos
 - **Centro de Mando**: Panel principal con estadísticas y actividad reciente
 - **Gestión de Proyectos**: Crear, editar, archivar y eliminar proyectos
 - **Gestión de Tareas**: Tareas asociadas a proyectos con estados y prioridades
@@ -20,6 +21,14 @@ La Fase Cero establece los fundamentos técnicos: una aplicación web funcional 
 - **Generador de Órdenes Qwen**: Herramienta para preparar instrucciones de desarrollo
 - **Estado de Integraciones**: Visualización del estado real de cada conexión
 - **Configuración**: Tema claro/oscuro, importación/exportación de datos
+
+### Fase 0.1 — Matriz de Alcance
+- **Matriz de Alcance**: 16 requisitos iniciales con estados de implementación, pruebas y verificación
+- **Puertas de Calidad**: 8 puertas de validación (GATE 01-GATE 08) con trazabilidad
+- **Gestión de Dependencias**: Detección de ciclos y validación de grafos
+- **Panel de Progreso**: Indicadores calculados a partir de datos reales
+- **Integración Qwen**: Selección de requisitos para generar órdenes de desarrollo
+- **Migración Compatible**: Preserva datos de la Fase 0 mediante migración de esquema
 
 ## Requisitos
 

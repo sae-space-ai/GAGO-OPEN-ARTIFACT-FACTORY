@@ -1,31 +1,38 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react';
 import type { DataStore, Project, Task, Artifact, Evidence, AppSettings } from '../types';
-import { loadStore, saveStore, createProject, updateProject, deleteProject, createTask, updateTask, deleteTask, createArtifact, updateArtifact, deleteArtifact, createEvidence, updateEvidence, deleteEvidence, importData, exportData, resetStore } from '../services/storage';
+import type { ScopeRequirement, QualityGate } from '../types/scope';
+import { loadStore, saveStore, createProject, updateProject, deleteProject, createTask, updateTask, deleteTask, createArtifact, updateArtifact, deleteArtifact, createEvidence, updateEvidence, deleteEvidence, importData, exportData, resetStore, createScopeRequirement, updateScopeRequirement, deleteScopeRequirement, updateQualityGate } from '../services/storage';
 
 interface DataContextType {
   store: DataStore;
   // Projects
-  addProject: (data: Omit<Project, 'id' | 'createdAt' | 'updatedAt' | 'archived'>) => void;
-  editProject: (id: string, data: Partial<Project>) => void;
+  addProject: (input: Omit<Project, 'id' | 'createdAt' | 'updatedAt' | 'archived'>) => void;
+  editProject: (id: string, input: Partial<Project>) => void;
   removeProject: (id: string) => void;
   // Tasks
-  addTask: (data: Omit<Task, 'id' | 'createdAt' | 'updatedAt'>) => void;
-  editTask: (id: string, data: Partial<Task>) => void;
+  addTask: (input: Omit<Task, 'id' | 'createdAt' | 'updatedAt'>) => void;
+  editTask: (id: string, input: Partial<Task>) => void;
   removeTask: (id: string) => void;
   // Artifacts
-  addArtifact: (data: Omit<Artifact, 'id' | 'createdAt' | 'updatedAt'>) => void;
-  editArtifact: (id: string, data: Partial<Artifact>) => void;
+  addArtifact: (input: Omit<Artifact, 'id' | 'createdAt' | 'updatedAt'>) => void;
+  editArtifact: (id: string, input: Partial<Artifact>) => void;
   removeArtifact: (id: string) => void;
   // Evidence
-  addEvidence: (data: Omit<Evidence, 'id' | 'createdAt'>) => void;
-  editEvidence: (id: string, data: Partial<Evidence>) => void;
+  addEvidence: (input: Omit<Evidence, 'id' | 'createdAt'>) => void;
+  editEvidence: (id: string, input: Partial<Evidence>) => void;
   removeEvidence: (id: string) => void;
   // Settings
-  updateSettings: (data: Partial<AppSettings>) => void;
+  updateSettings: (input: Partial<AppSettings>) => void;
   // Import/Export
   exportAllData: () => string;
   importAllData: (json: string) => boolean;
   resetAllData: () => void;
+  // Scope Matrix (Phase 0.1)
+  addScopeRequirement: (input: Omit<ScopeRequirement, 'id' | 'createdAt' | 'updatedAt' | 'archived'>) => void;
+  editScopeRequirement: (id: string, input: Partial<ScopeRequirement>) => void;
+  removeScopeRequirement: (id: string) => void;
+  // Quality Gates (Phase 0.1)
+  editQualityGate: (id: string, input: Partial<QualityGate>) => void;
 }
 
 const DataContext = createContext<DataContextType | null>(null);
@@ -37,56 +44,56 @@ export function DataProvider({ children }: { children: ReactNode }) {
     saveStore(store);
   }, [store]);
 
-  const addProject = useCallback((data: Omit<Project, 'id' | 'createdAt' | 'updatedAt' | 'archived'>) => {
-    setStore(s => createProject(s, data));
+  const addProject = useCallback((input: Omit<Project, 'id' | 'createdAt' | 'updatedAt' | 'archived'>) => {
+    setStore(s => createProject(s, input));
   }, []);
 
-  const editProject = useCallback((id: string, data: Partial<Project>) => {
-    setStore(s => updateProject(s, id, data));
+  const editProject = useCallback((id: string, input: Partial<Project>) => {
+    setStore(s => updateProject(s, id, input));
   }, []);
 
   const removeProject = useCallback((id: string) => {
     setStore(s => deleteProject(s, id));
   }, []);
 
-  const addTask = useCallback((data: Omit<Task, 'id' | 'createdAt' | 'updatedAt'>) => {
-    setStore(s => createTask(s, data));
+  const addTask = useCallback((input: Omit<Task, 'id' | 'createdAt' | 'updatedAt'>) => {
+    setStore(s => createTask(s, input));
   }, []);
 
-  const editTask = useCallback((id: string, data: Partial<Task>) => {
-    setStore(s => updateTask(s, id, data));
+  const editTask = useCallback((id: string, input: Partial<Task>) => {
+    setStore(s => updateTask(s, id, input));
   }, []);
 
   const removeTask = useCallback((id: string) => {
     setStore(s => deleteTask(s, id));
   }, []);
 
-  const addArtifact = useCallback((data: Omit<Artifact, 'id' | 'createdAt' | 'updatedAt'>) => {
-    setStore(s => createArtifact(s, data));
+  const addArtifact = useCallback((input: Omit<Artifact, 'id' | 'createdAt' | 'updatedAt'>) => {
+    setStore(s => createArtifact(s, input));
   }, []);
 
-  const editArtifact = useCallback((id: string, data: Partial<Artifact>) => {
-    setStore(s => updateArtifact(s, id, data));
+  const editArtifact = useCallback((id: string, input: Partial<Artifact>) => {
+    setStore(s => updateArtifact(s, id, input));
   }, []);
 
   const removeArtifact = useCallback((id: string) => {
     setStore(s => deleteArtifact(s, id));
   }, []);
 
-  const addEvidence = useCallback((data: Omit<Evidence, 'id' | 'createdAt'>) => {
-    setStore(s => createEvidence(s, data));
+  const addEvidence = useCallback((input: Omit<Evidence, 'id' | 'createdAt'>) => {
+    setStore(s => createEvidence(s, input));
   }, []);
 
-  const editEvidence = useCallback((id: string, data: Partial<Evidence>) => {
-    setStore(s => updateEvidence(s, id, data));
+  const editEvidence = useCallback((id: string, input: Partial<Evidence>) => {
+    setStore(s => updateEvidence(s, id, input));
   }, []);
 
   const removeEvidence = useCallback((id: string) => {
     setStore(s => deleteEvidence(s, id));
   }, []);
 
-  const updateSettings = useCallback((data: Partial<AppSettings>) => {
-    setStore(s => ({ ...s, settings: { ...s.settings, ...data } }));
+  const updateSettings = useCallback((input: Partial<AppSettings>) => {
+    setStore(s => ({ ...s, settings: { ...s.settings, ...input } }));
   }, []);
 
   const exportAllData = useCallback(() => {
@@ -106,6 +113,24 @@ export function DataProvider({ children }: { children: ReactNode }) {
     setStore(resetStore());
   }, []);
 
+  // Scope Matrix operations
+  const addScopeRequirement = useCallback((input: Omit<ScopeRequirement, 'id' | 'createdAt' | 'updatedAt' | 'archived'>) => {
+    setStore(s => createScopeRequirement(s, input));
+  }, []);
+
+  const editScopeRequirement = useCallback((id: string, input: Partial<ScopeRequirement>) => {
+    setStore(s => updateScopeRequirement(s, id, input));
+  }, []);
+
+  const removeScopeRequirement = useCallback((id: string) => {
+    setStore(s => deleteScopeRequirement(s, id));
+  }, []);
+
+  // Quality Gates operations
+  const editQualityGate = useCallback((id: string, input: Partial<QualityGate>) => {
+    setStore(s => updateQualityGate(s, id, input));
+  }, []);
+
   return (
     <DataContext.Provider value={{
       store, addProject, editProject, removeProject,
@@ -113,6 +138,8 @@ export function DataProvider({ children }: { children: ReactNode }) {
       addArtifact, editArtifact, removeArtifact,
       addEvidence, editEvidence, removeEvidence,
       updateSettings, exportAllData, importAllData, resetAllData,
+      addScopeRequirement, editScopeRequirement, removeScopeRequirement,
+      editQualityGate,
     }}>
       {children}
     </DataContext.Provider>
