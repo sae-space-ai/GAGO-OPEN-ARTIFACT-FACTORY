@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Github, Globe, Terminal, Cpu, AlertTriangle, CheckCircle2, Clock, Wrench } from 'lucide-react';
 
 interface Integration {
@@ -66,6 +67,12 @@ export default function Integrations() {
           </p>
         </div>
       </div>
+
+      <section className="rounded-xl border border-blue-200 bg-blue-50 p-5 dark:border-blue-900 dark:bg-blue-950/30">
+        <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Ollama local · Qwen Coder</h2>
+        <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">Conexión mediante un puente que escucha solamente en tu ordenador, con autorización por origen y clave temporal. No necesita exponer Ollama a Internet.</p>
+        <Link to="/integrations/ollama-local" className="mt-4 inline-flex rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700">Configurar y probar Ollama local</Link>
+      </section>
 
       {/* Integration cards */}
       <div className="grid gap-4">
