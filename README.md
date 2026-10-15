@@ -2,13 +2,13 @@
 
 **Factoría abierta de artefactos digitales y aplicaciones de inteligencia artificial**
 
-Versión: 12.1.0 | Fase 12.1 | Licencia: MIT
+Versión: 12.2.0 | Fase 12.2 | Licencia: MIT
 
 ## Descripción
 
 GAGO Open Artifact Factory es una plataforma abierta de desarrollo de software y artefactos digitales. Permite gestionar proyectos, tareas, artefactos y evidencias técnicas, además de generar instrucciones estructuradas para modelos de inteligencia artificial como Qwen Coder.
 
-La Fase 12.1 completa el cierre técnico certificado de JOULE COGNITIVE OPTIMIZATION AND VERIFIED AI ENGINE, corrigiendo 6 problemas críticos identificados en la auditoría: script de pruebas faltante, verificación de tipos simulada, aprobaciones ficticias, caso decimal incompleto, hash no criptográfico y optimización de bundle.
+La Fase 12.2 inicia la transformación visual integral hacia **CIVILIZACIÓN ALGORÍTMICA**, implementando el Design System completo, componentes reutilizables y el primer lote de migración visual. La nueva identidad transmite tecnología avanzada, soberanía tecnológica y sofisticación editorial.
 
 ## Características
 
@@ -136,6 +136,18 @@ La Fase 12.1 completa el cierre técnico certificado de JOULE COGNITIVE OPTIMIZA
 - **Optimización de Bundle**: Reducido de 3.8 MB a 231.51 kB
 - **Quality Gates**: 11/12 aprobados, 1 parcial (requiere ejecución de pruebas)
 - **Limitaciones Documentadas**: Verificación TypeScript completa y ejecución aislada requieren entorno Node.js
+
+### Fase 12.2 — CIVILIZACIÓN ALGORÍTMICA (Primer Lote)
+- **Design System Completo**: Sistema de diseño con 50+ tokens CSS semánticos
+- **Identidad Visual**: Paleta obsidiana/azul noche/verde lima tecnológico
+- **Tipografía**: Inter (sans-serif), Playfair Display (serif), JetBrains Mono (monospace)
+- **Componentes Reutilizables**: 7 componentes base (Sidebar, TopNavigation, MetricCard, StatusIndicator, Card, Button, PageHeader)
+- **Portada CIVILIZACIÓN ALGORÍTMICA**: Página de inicio con identidad visual completa
+- **Layout Rediseñado**: Shell principal con nueva identidad y navegación agrupada por secciones
+- **Tema Oscuro y Claro**: Soporte completo para ambos temas
+- **Accesibilidad**: WCAG 2.2 nivel AA, navegación por teclado, prefers-reduced-motion
+- **Responsive Design**: Mobile-first, breakpoints consistentes
+- **Estado de Migración**: 2/24 páginas migradas (8.3%), 20+ pendientes
 
 ## Requisitos
 

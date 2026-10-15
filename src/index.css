@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* CIVILIZACIÓN ALGORÍTMICA - Design System */
+@import "./styles/civilizacion-algoritmica.css";
+
 /* GAGO Open Artifact Factory - Base Styles */
 
 :root {

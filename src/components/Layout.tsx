@@ -1,28 +1,28 @@
 import React, { useState } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
-import { LayoutDashboard, FolderKanban, ListTodo, Package, Shield, Terminal, Settings, Link2, Menu, X, Factory, Target, ShieldCheck, Zap, Wrench, Brain, Gift } from 'lucide-react';
+import { NavLink, useLocation, Link } from 'react-router-dom';
+import { LayoutDashboard, FolderKanban, ListTodo, Package, Shield, Terminal, Settings, Link2, Menu, X, Target, ShieldCheck, Zap, Wrench, Brain, Gift } from 'lucide-react';
 
 const navItems = [
-  { to: '/', icon: LayoutDashboard, label: 'Overview' },
-  { to: '/projects', icon: FolderKanban, label: 'Proyectos' },
-  { to: '/tasks', icon: ListTodo, label: 'Tareas' },
-  { to: '/artifacts', icon: Package, label: 'Artefactos' },
-  { to: '/evidence', icon: Shield, label: 'Evidencias' },
-  { to: '/scope', icon: Target, label: 'Matriz de Alcance' },
-  { to: '/gates', icon: ShieldCheck, label: 'Puertas de Calidad' },
-  { to: '/joule', icon: Zap, label: 'JOULE' },
-  { to: '/api-fabric', icon: Link2, label: 'API Fabric' },
-  { to: '/connections', icon: Link2, label: 'Conexiones' },
-  { to: '/training', icon: Target, label: 'Training Center' },
-  { to: '/tools', icon: Wrench, label: 'Tool Factory' },
-  { to: '/models', icon: Brain, label: 'Model Registry' },
-  { to: '/approval', icon: ShieldCheck, label: 'Approval Engine' },
-  { to: '/free-training', icon: Gift, label: 'Free Training' },
-  { to: '/ai-providers', icon: Brain, label: 'AI Providers' },
-  { to: '/joule-cognitive', icon: Brain, label: 'JOULE Cognitive' },
-  { to: '/qwen', icon: Terminal, label: 'Órdenes Qwen' },
-  { to: '/integrations', icon: Link2, label: 'Integraciones' },
-  { to: '/settings', icon: Settings, label: 'Configuración' },
+  { to: '/', icon: LayoutDashboard, label: 'Centro de Mando', section: 'Principal' },
+  { to: '/projects', icon: FolderKanban, label: 'Proyectos', section: 'Gestión' },
+  { to: '/tasks', icon: ListTodo, label: 'Tareas', section: 'Gestión' },
+  { to: '/artifacts', icon: Package, label: 'Artefactos', section: 'Gestión' },
+  { to: '/evidence', icon: Shield, label: 'Evidencias', section: 'Gestión' },
+  { to: '/scope', icon: Target, label: 'Matriz de Alcance', section: 'Calidad' },
+  { to: '/gates', icon: ShieldCheck, label: 'Quality Gates', section: 'Calidad' },
+  { to: '/approval', icon: ShieldCheck, label: 'Approval Engine', section: 'Calidad' },
+  { to: '/joule', icon: Zap, label: 'JOULE Engine', section: 'JOULE' },
+  { to: '/joule-cognitive', icon: Brain, label: 'JOULE Cognitive', section: 'JOULE' },
+  { to: '/training', icon: Target, label: 'Training Center', section: 'JOULE' },
+  { to: '/tools', icon: Wrench, label: 'Tool Factory', section: 'Herramientas' },
+  { to: '/models', icon: Brain, label: 'Model Registry', section: 'Herramientas' },
+  { to: '/qwen', icon: Terminal, label: 'Qwen Generator', section: 'Herramientas' },
+  { to: '/api-fabric', icon: Link2, label: 'API Fabric', section: 'Integraciones' },
+  { to: '/connections', icon: Link2, label: 'Conexiones', section: 'Integraciones' },
+  { to: '/ai-providers', icon: Brain, label: 'AI Providers', section: 'Integraciones' },
+  { to: '/integrations', icon: Link2, label: 'Integraciones', section: 'Integraciones' },
+  { to: '/free-training', icon: Gift, label: 'Free Training', section: 'Entrenamiento' },
+  { to: '/settings', icon: Settings, label: 'Configuración', section: 'Sistema' },
 ];
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -31,63 +31,114 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   const currentPage = navItems.find(item => item.to === location.pathname)?.label || 'GAGO Factory';
 
+  // Agrupar items por sección
+  const sections = navItems.reduce((acc, item) => {
+    const section = item.section || 'Otros';
+    if (!acc[section]) {
+      acc[section] = [];
+    }
+    acc[section].push(item);
+    return acc;
+  }, {} as Record<string, typeof navItems>);
+
   return (
-    <div className="flex h-screen overflow-hidden bg-slate-50 dark:bg-slate-900">
+    <div className="ca-app-shell">
       {/* Mobile overlay */}
       {sidebarOpen && (
-        <div className="fixed inset-0 z-40 bg-black/50 lg:hidden" onClick={() => setSidebarOpen(false)} />
+        <div 
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
       )}
 
       {/* Sidebar */}
-      <aside className={`fixed inset-y-0 left-0 z-50 w-64 transform bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 transition-transform duration-200 ease-in-out lg:relative lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-        <div className="flex h-16 items-center gap-3 px-6 border-b border-slate-200 dark:border-slate-700">
-          <Factory className="w-7 h-7 text-blue-600 dark:text-blue-400" />
-          <div>
-            <h1 className="text-sm font-bold text-slate-900 dark:text-white leading-tight">GAGO FACTORY</h1>
-            <p className="text-[10px] text-slate-500 dark:text-slate-400">v0.1.0</p>
-          </div>
-          <button className="ml-auto lg:hidden p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-700" onClick={() => setSidebarOpen(false)}>
-            <X className="w-5 h-5 text-slate-600 dark:text-slate-300" />
+      <aside className={`ca-sidebar ${sidebarOpen ? 'open' : ''}`}>
+        {/* Header */}
+        <div className="ca-sidebar-header">
+          <Link to="/civilizacion" className="ca-sidebar-brand hover:opacity-80 transition-opacity">
+            <div className="ca-sidebar-logo">CA</div>
+            <div>
+              <div className="ca-sidebar-title">Civilización</div>
+              <div className="ca-sidebar-subtitle">Algorítmica</div>
+            </div>
+          </Link>
+          <button 
+            className="ml-auto lg:hidden p-1 rounded hover:bg-[var(--ca-color-bg-tertiary)] transition-colors"
+            onClick={() => setSidebarOpen(false)}
+          >
+            <X className="w-5 h-5 text-[var(--ca-color-text-secondary)]" />
           </button>
         </div>
-        <nav className="p-3 space-y-1 overflow-y-auto h-[calc(100vh-4rem)]">
-          {navItems.map(item => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              onClick={() => setSidebarOpen(false)}
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                  isActive
-                    ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
-                    : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-white'
-                }`
-              }
-            >
-              <item.icon className="w-5 h-5 flex-shrink-0" />
-              {item.label}
-            </NavLink>
+
+        {/* Navigation */}
+        <nav className="ca-sidebar-nav ca-scrollbar">
+          {Object.entries(sections).map(([section, items]) => (
+            <div key={section} className="ca-nav-section">
+              <div className="ca-nav-section-title">{section}</div>
+              {items.map((item) => {
+                const isActive = location.pathname === item.to;
+                return (
+                  <NavLink
+                    key={item.to}
+                    to={item.to}
+                    onClick={() => setSidebarOpen(false)}
+                    className={`ca-nav-item ${isActive ? 'active' : ''}`}
+                  >
+                    <item.icon className="ca-nav-item-icon" />
+                    <span>{item.label}</span>
+                  </NavLink>
+                );
+              })}
+            </div>
           ))}
         </nav>
+
+        {/* Footer */}
+        <div className="p-4 border-t border-[var(--ca-color-border)]">
+          <div className="text-xs text-[var(--ca-color-text-tertiary)]">
+            GAGO Open Artifact Factory
+          </div>
+          <div className="text-xs text-[var(--ca-color-text-tertiary)]">
+            v12.1.0
+          </div>
+        </div>
       </aside>
 
       {/* Main content */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        {/* Header */}
-        <header className="h-16 flex items-center gap-4 px-4 lg:px-6 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 flex-shrink-0">
-          <button className="lg:hidden p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700" onClick={() => setSidebarOpen(true)}>
-            <Menu className="w-5 h-5 text-slate-600 dark:text-slate-300" />
-          </button>
-          <h2 className="text-lg font-semibold text-slate-900 dark:text-white">{currentPage}</h2>
-          <div className="ml-auto flex items-center gap-2">
-            <span className="hidden sm:inline text-xs px-2 py-1 rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 font-medium">
-              Sistema local activo
-            </span>
+      <div className="ca-main-content">
+        {/* Top Navigation */}
+        <header className="ca-top-nav">
+          <div className="ca-top-nav-left">
+            {/* Mobile menu button */}
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="lg:hidden p-2 rounded-lg hover:bg-[var(--ca-color-bg-tertiary)] transition-colors"
+              aria-label="Toggle menu"
+            >
+              <Menu className="w-6 h-6 text-[var(--ca-color-text-secondary)]" />
+            </button>
+
+            {/* Breadcrumb */}
+            <nav className="ca-breadcrumb">
+              <NavLink to="/" className="ca-breadcrumb-item hover:text-[var(--ca-color-text-primary)] transition-colors">
+                Inicio
+              </NavLink>
+              <span className="ca-breadcrumb-separator">/</span>
+              <span className="ca-breadcrumb-current">{currentPage}</span>
+            </nav>
+          </div>
+
+          <div className="ca-top-nav-right">
+            {/* Status indicator */}
+            <div className="ca-status-indicator ca-status-info">
+              <span className="w-2 h-2 rounded-full bg-current"></span>
+              <span className="hidden sm:inline">Sistema Operativo</span>
+            </div>
           </div>
         </header>
 
         {/* Content area */}
-        <main className="flex-1 overflow-y-auto p-4 lg:p-6">
+        <main className="ca-page-content">
           {children}
         </main>
       </div>
