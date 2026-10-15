@@ -7,16 +7,15 @@ import {
   Package, 
   Shield, 
   Wrench, 
-  Cpu, 
+  Target, 
+  Zap, 
   Brain,
-  Activity,
-  AlertTriangle,
-  CheckCircle,
   TrendingUp,
-  Target,
-  ShieldCheck,
-  Link2
+  CheckCircle,
+  AlertCircle,
+  Clock
 } from 'lucide-react';
+import { PageHeader, Card, MetricCard, StatusIndicator } from '../components/ca';
 
 export default function GlobalOverview() {
   const { store } = useData();
@@ -40,154 +39,145 @@ export default function GlobalOverview() {
   // Tareas pendientes
   const pendingTasks = store.tasks?.filter(t => t.status === 'pending' || t.status === 'in_progress') || [];
   
-  // Errores recientes (simulado - en producción vendría de observabilidad)
+  // Errores recientes
   const recentErrors = store.qualityGates?.filter(g => g.status === 'failed') || [];
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">
-          Global Overview
-        </h1>
-        <p className="text-slate-600 dark:text-slate-400">
-          Centro de mando general de GAGO Open Artifact Factory
-        </p>
-      </div>
+    <div>
+      <PageHeader 
+        title="Global Overview" 
+        subtitle="Centro de mando general de GAGO Open Artifact Factory"
+      />
 
       {/* Métricas principales */}
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-8">
-        <MetricCard
-          icon={FolderKanban}
-          label="Proyectos"
-          value={metrics.projects}
-          color="blue"
-          link="/projects"
+      <div className="ca-grid ca-grid-cols-2 md:ca-grid-cols-4 lg:ca-grid-cols-5 mb-8">
+        <MetricCard 
+          label="Proyectos" 
+          value={metrics.projects} 
+          icon={<FolderKanban className="w-6 h-6" />}
         />
-        <MetricCard
-          icon={ListTodo}
-          label="Tareas"
-          value={metrics.tasks}
-          color="green"
-          link="/tasks"
+        <MetricCard 
+          label="Tareas" 
+          value={metrics.tasks} 
+          icon={<ListTodo className="w-6 h-6" />}
         />
-        <MetricCard
-          icon={Package}
-          label="Artefactos"
-          value={metrics.artifacts}
-          color="purple"
-          link="/artifacts"
+        <MetricCard 
+          label="Artefactos" 
+          value={metrics.artifacts} 
+          icon={<Package className="w-6 h-6" />}
         />
-        <MetricCard
-          icon={Shield}
-          label="Evidencias"
-          value={metrics.evidence}
-          color="teal"
-          link="/evidence"
+        <MetricCard 
+          label="Evidencias" 
+          value={metrics.evidence} 
+          icon={<Shield className="w-6 h-6" />}
         />
-        <MetricCard
-          icon={Wrench}
-          label="Herramientas"
-          value={metrics.tools}
-          color="orange"
-          link="/tools"
+        <MetricCard 
+          label="Herramientas" 
+          value={metrics.tools} 
+          icon={<Wrench className="w-6 h-6" />}
         />
-        <MetricCard
-          icon={Target}
-          label="Requisitos"
-          value={metrics.scopeRequirements}
-          color="indigo"
-          link="/scope"
+        <MetricCard 
+          label="Requisitos" 
+          value={metrics.scopeRequirements} 
+          icon={<Target className="w-6 h-6" />}
         />
-        <MetricCard
-          icon={ShieldCheck}
-          label="Quality Gates"
-          value={metrics.qualityGates}
-          color="cyan"
-          link="/gates"
+        <MetricCard 
+          label="Quality Gates" 
+          value={metrics.qualityGates} 
+          icon={<Shield className="w-6 h-6" />}
         />
-        <MetricCard
-          icon={Brain}
-          label="Agentes"
-          value={metrics.agents}
-          color="pink"
-          link="/training"
+        <MetricCard 
+          label="Agentes" 
+          value={metrics.agents} 
+          icon={<Brain className="w-6 h-6" />}
         />
-        <MetricCard
-          icon={Link2}
-          label="Conexiones"
-          value={metrics.activeConnections}
-          color="emerald"
-          link="/connections"
+        <MetricCard 
+          label="Conexiones" 
+          value={metrics.activeConnections} 
+          icon={<Zap className="w-6 h-6" />}
         />
-        <MetricCard
-          icon={Cpu}
-          label="JOULE"
-          value={metrics.jouleEnabled ? 'ON' : 'OFF'}
-          color={metrics.jouleEnabled ? 'green' : 'slate'}
-          link="/joule"
+        <MetricCard 
+          label="JOULE" 
+          value={metrics.jouleEnabled ? 'ON' : 'OFF'} 
+          icon={<Brain className="w-6 h-6" />}
         />
       </div>
 
       {/* Acciones rápidas */}
       <div className="mb-8">
-        <h2 className="text-xl font-semibold text-slate-900 dark:text-white mb-4">
+        <h2 className="text-[var(--ca-text-2xl)] font-bold text-[var(--ca-color-text-primary)] mb-4" style={{ fontFamily: 'var(--ca-font-serif)' }}>
           Acciones Rápidas
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <QuickAction
-            icon={Wrench}
-            title="Crear Herramienta"
-            description="Genera una nueva herramienta digital"
-            link="/tools"
-            color="blue"
-          />
-          <QuickAction
-            icon={Brain}
-            title="Entrenar Agentes"
-            description="Inicia un ciclo de entrenamiento"
-            link="/training"
-            color="purple"
-          />
-          <QuickAction
-            icon={Cpu}
-            title="Configurar JOULE"
-            description="Administra el motor de optimización"
-            link="/joule"
-            color="green"
-          />
+        <div className="ca-grid ca-grid-cols-1 md:ca-grid-cols-3">
+          <Link to="/projects/new" className="ca-card hover:border-[var(--ca-color-accent-primary)] transition-all cursor-pointer block">
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-[var(--ca-color-accent-primary)]/10 rounded-lg">
+                <FolderKanban className="h-6 w-6 text-[var(--ca-color-accent-primary)]" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-[var(--ca-color-text-primary)]">Nuevo Proyecto</h3>
+                <p className="text-sm text-[var(--ca-color-text-secondary)]">Crear un proyecto</p>
+              </div>
+            </div>
+          </Link>
+
+          <Link to="/training" className="ca-card hover:border-[var(--ca-color-accent-primary)] transition-all cursor-pointer block">
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-[var(--ca-color-accent-secondary)]/10 rounded-lg">
+                <Brain className="h-6 w-6 text-[var(--ca-color-accent-secondary)]" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-[var(--ca-color-text-primary)]">Entrenar Agentes</h3>
+                <p className="text-sm text-[var(--ca-color-text-secondary)]">Iniciar ciclo de entrenamiento</p>
+              </div>
+            </div>
+          </Link>
+
+          <Link to="/joule" className="ca-card hover:border-[var(--ca-color-accent-primary)] transition-all cursor-pointer block">
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-[var(--ca-color-success)]/10 rounded-lg">
+                <Zap className="h-6 w-6 text-[var(--ca-color-success)]" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-[var(--ca-color-text-primary)]">Configurar JOULE</h3>
+                <p className="text-sm text-[var(--ca-color-text-secondary)]">Administrar motor</p>
+              </div>
+            </div>
+          </Link>
         </div>
       </div>
 
       {/* Tareas pendientes */}
       {pendingTasks.length > 0 && (
         <div className="mb-8">
-          <h2 className="text-xl font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
-            <ListTodo className="w-5 h-5" />
+          <h2 className="text-[var(--ca-text-2xl)] font-bold text-[var(--ca-color-text-primary)] mb-4 flex items-center gap-2" style={{ fontFamily: 'var(--ca-font-serif)' }}>
+            <ListTodo className="h-5 w-5 text-[var(--ca-color-accent-primary)]" />
             Tareas Pendientes ({pendingTasks.length})
           </h2>
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 divide-y divide-slate-200 dark:divide-slate-700">
-            {pendingTasks.slice(0, 5).map((task: any) => (
-              <div key={task.id} className="p-4 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-medium text-slate-900 dark:text-white">{task.title}</p>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">{task.description}</p>
+          <Card>
+            <div className="divide-y divide-[var(--ca-color-border)]">
+              {pendingTasks.slice(0, 5).map((task: any) => (
+                <div key={task.id} className="p-4 hover:bg-[var(--ca-color-bg-tertiary)] transition-colors">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-medium text-[var(--ca-color-text-primary)]">{task.title}</p>
+                      <p className="text-sm text-[var(--ca-color-text-secondary)]">{task.description}</p>
+                    </div>
+                    <StatusIndicator 
+                      status={task.status === 'pending' ? 'warning' : 'info'}
+                      label={task.status === 'pending' ? 'Pendiente' : 'En Progreso'}
+                    />
                   </div>
-                  <span className={`text-xs px-2 py-1 rounded-full ${
-                    task.status === 'pending' 
-                      ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300'
-                      : 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
-                  }`}>
-                    {task.status === 'pending' ? 'Pendiente' : 'En Progreso'}
-                  </span>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          </Card>
           {pendingTasks.length > 5 && (
-            <Link to="/tasks" className="mt-3 text-sm text-blue-600 dark:text-blue-400 hover:underline">
-              Ver todas las tareas →
-            </Link>
+            <div className="mt-3 text-center">
+              <Link to="/tasks" className="text-sm text-[var(--ca-color-accent-primary)] hover:underline">
+                Ver todas las tareas →
+              </Link>
+            </div>
           )}
         </div>
       )}
@@ -195,141 +185,110 @@ export default function GlobalOverview() {
       {/* Errores recientes */}
       {recentErrors.length > 0 && (
         <div className="mb-8">
-          <h2 className="text-xl font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2 text-red-600 dark:text-red-400">
-            <AlertTriangle className="w-5 h-5" />
+          <h2 className="text-[var(--ca-text-2xl)] font-bold mb-4 flex items-center gap-2" style={{ fontFamily: 'var(--ca-font-serif)', color: 'var(--ca-color-error)' }}>
+            <AlertCircle className="h-5 w-5" />
             Errores Recientes ({recentErrors.length})
           </h2>
-          <div className="bg-red-50 dark:bg-red-900/20 rounded-xl border border-red-200 dark:border-red-800 divide-y divide-red-200 dark:divide-red-800">
-            {recentErrors.slice(0, 3).map((gate: any) => (
-              <div key={gate.id} className="p-4">
-                <p className="font-medium text-red-900 dark:text-red-100">{gate.name}</p>
-                <p className="text-sm text-red-700 dark:text-red-300">{gate.description}</p>
-              </div>
-            ))}
+          <div className="ca-card" style={{ borderColor: 'var(--ca-color-error)' }}>
+            <div className="divide-y divide-[var(--ca-color-error)]/20">
+              {recentErrors.slice(0, 3).map((gate: any) => (
+                <div key={gate.id} className="p-4 bg-[var(--ca-color-error)]/5">
+                  <p className="font-medium text-[var(--ca-color-text-primary)]">{gate.name}</p>
+                  <p className="text-sm text-[var(--ca-color-text-secondary)]">{gate.description}</p>
+                </div>
+              ))}
+            </div>
           </div>
-          <Link to="/gates" className="mt-3 text-sm text-red-600 dark:text-red-400 hover:underline">
-            Ver todos los Quality Gates →
-          </Link>
+          <div className="mt-3 text-center">
+            <Link to="/gates" className="text-sm hover:underline" style={{ color: 'var(--ca-color-error)' }}>
+              Ver todos los Quality Gates →
+            </Link>
+          </div>
         </div>
       )}
 
       {/* Estado del sistema */}
       <div>
-        <h2 className="text-xl font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
-          <Activity className="w-5 h-5" />
+        <h2 className="text-[var(--ca-text-2xl)] font-bold text-[var(--ca-color-text-primary)] mb-4 flex items-center gap-2" style={{ fontFamily: 'var(--ca-font-serif)' }}>
+          <TrendingUp className="h-5 w-5 text-[var(--ca-color-accent-primary)]" />
           Estado del Sistema
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-5">
-            <h3 className="font-semibold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
-              <CheckCircle className="w-5 h-5 text-green-500" />
-              Módulos Activos
-            </h3>
-            <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-400">
-              <li>✓ Gestión de Proyectos</li>
-              <li>✓ Gestión de Tareas</li>
-              <li>✓ Registro de Artefactos</li>
-              <li>✓ Registro de Evidencias</li>
-              <li>✓ Matriz de Alcance</li>
-              <li>✓ Quality Gates</li>
-              <li>✓ JOULE Engine</li>
-              <li>✓ JOULE MATS (15 Agentes)</li>
-              <li>✓ API Fabric</li>
-              <li>✓ Connection Recovery</li>
-              <li>✓ Tool Factory</li>
+        <div className="ca-grid ca-grid-cols-1 md:ca-grid-cols-2">
+          <Card title="Módulos Activos">
+            <ul className="space-y-2 text-sm text-[var(--ca-color-text-secondary)]">
+              <li className="flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-[var(--ca-color-success)]" />
+                Gestión de Proyectos
+              </li>
+              <li className="flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-[var(--ca-color-success)]" />
+                Gestión de Tareas
+              </li>
+              <li className="flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-[var(--ca-color-success)]" />
+                Registro de Artefactos
+              </li>
+              <li className="flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-[var(--ca-color-success)]" />
+                Registro de Evidencias
+              </li>
+              <li className="flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-[var(--ca-color-success)]" />
+                Matriz de Alcance
+              </li>
+              <li className="flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-[var(--ca-color-success)]" />
+                Quality Gates
+              </li>
+              <li className="flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-[var(--ca-color-success)]" />
+                JOULE Engine
+              </li>
+              <li className="flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-[var(--ca-color-success)]" />
+                JOULE MATS ({metrics.agents} Agentes)
+              </li>
+              <li className="flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-[var(--ca-color-success)]" />
+                API Fabric
+              </li>
+              <li className="flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-[var(--ca-color-success)]" />
+                Connection Recovery
+              </li>
+              <li className="flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-[var(--ca-color-success)]" />
+                Tool Factory
+              </li>
             </ul>
-          </div>
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-5">
-            <h3 className="font-semibold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
-              <TrendingUp className="w-5 h-5 text-blue-500" />
-              Versión y Estado
-            </h3>
-            <div className="space-y-2 text-sm">
+          </Card>
+
+          <Card title="Versión y Estado">
+            <div className="space-y-3 text-sm">
               <div className="flex justify-between">
-                <span className="text-slate-600 dark:text-slate-400">Versión:</span>
-                <span className="font-medium text-slate-900 dark:text-white">5.0.0</span>
+                <span className="text-[var(--ca-color-text-secondary)]">Versión:</span>
+                <span className="font-medium text-[var(--ca-color-text-primary)]">12.2.0</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-600 dark:text-slate-400">Fase:</span>
-                <span className="font-medium text-slate-900 dark:text-white">5 - Control Plane</span>
+                <span className="text-[var(--ca-color-text-secondary)]">Fase:</span>
+                <span className="font-medium text-[var(--ca-color-text-primary)]">12.2 - CIVILIZACIÓN ALGORÍTMICA</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-600 dark:text-slate-400">Esquema:</span>
-                <span className="font-medium text-slate-900 dark:text-white">5.0.0</span>
+                <span className="text-[var(--ca-color-text-secondary)]">Esquema:</span>
+                <span className="font-medium text-[var(--ca-color-text-primary)]">12.2.0</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-600 dark:text-slate-400">Presupuesto:</span>
-                <span className="font-medium text-green-600 dark:text-green-400">0 EUR</span>
+                <span className="text-[var(--ca-color-text-secondary)]">Presupuesto:</span>
+                <StatusIndicator status="success" label="0 EUR" />
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-600 dark:text-slate-400">Seguridad:</span>
-                <span className="font-medium text-green-600 dark:text-green-400">Activa</span>
+                <span className="text-[var(--ca-color-text-secondary)]">Seguridad:</span>
+                <StatusIndicator status="success" label="Activa" />
               </div>
             </div>
-          </div>
+          </Card>
         </div>
       </div>
     </div>
-  );
-}
-
-// Componente auxiliar para tarjetas de métricas
-function MetricCard({ icon: Icon, label, value, color, link }: {
-  icon: React.ElementType;
-  label: string;
-  value: number | string;
-  color: string;
-  link: string;
-}) {
-  const colorClasses: Record<string, string> = {
-    blue: 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400',
-    green: 'bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400',
-    purple: 'bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400',
-    teal: 'bg-teal-50 dark:bg-teal-900/20 text-teal-600 dark:text-teal-400',
-    orange: 'bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400',
-    indigo: 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400',
-    cyan: 'bg-cyan-50 dark:bg-cyan-900/20 text-cyan-600 dark:text-cyan-400',
-    pink: 'bg-pink-50 dark:bg-pink-900/20 text-pink-600 dark:text-pink-400',
-    emerald: 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400',
-    slate: 'bg-slate-50 dark:bg-slate-700 text-slate-600 dark:text-slate-400'
-  };
-
-  return (
-    <Link
-      to={link}
-      className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-5 hover:shadow-lg transition-shadow"
-    >
-      <div className={`w-10 h-10 rounded-lg ${colorClasses[color]} flex items-center justify-center mb-3`}>
-        <Icon className="w-5 h-5" />
-      </div>
-      <p className="text-2xl font-bold text-slate-900 dark:text-white">{value}</p>
-      <p className="text-sm text-slate-500 dark:text-slate-400">{label}</p>
-    </Link>
-  );
-}
-
-// Componente auxiliar para acciones rápidas
-function QuickAction({ icon: Icon, title, description, link, color }: {
-  icon: React.ElementType;
-  title: string;
-  description: string;
-  link: string;
-  color: string;
-}) {
-  const colorClasses: Record<string, string> = {
-    blue: 'bg-blue-600 hover:bg-blue-700',
-    purple: 'bg-purple-600 hover:bg-purple-700',
-    green: 'bg-green-600 hover:bg-green-700'
-  };
-
-  return (
-    <Link
-      to={link}
-      className={`${colorClasses[color]} text-white rounded-xl p-5 hover:shadow-lg transition-all`}
-    >
-      <Icon className="w-8 h-8 mb-3" />
-      <h3 className="font-semibold text-lg mb-1">{title}</h3>
-      <p className="text-sm opacity-90">{description}</p>
-    </Link>
   );
 }
